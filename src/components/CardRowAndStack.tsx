@@ -1,14 +1,54 @@
 import React from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { Card } from './Card';
 import { colors } from '../config/colors';
+
 import * as CardSelectionTypes from '../../__generated__/CardSelection';
+import * as ReserveCardTypes from '../../__generated__/ReserveCard';
+
+const RESERVE_CARD_MUTATION = gql`
+  mutation ReserveCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
+    game(id: $gameId) {
+      takeTurn(playerId: $playerId, reserveCardById: $cardId) {
+        id
+        turns {
+          type
+        }
+        stacks {
+          cards {
+            id
+          }
+        }
+        player(id: $playerId) {
+          id
+          bank {
+            gemColor
+            quantity
+          }
+          reservedCards {
+            id
+          }
+        }
+        bank {
+          gemColor
+          quantity
+        }
+      }
+    }
+  }
+`;
 
 export const CardRowAndStack: React.FC<{
-  onSelect?: (id: string) => void;
+  playerId: string;
+  gameId: string;
   cards: CardSelectionTypes.CardSelection[];
   level: 1 | 2 | 3;
-}> = ({ cards, level, onSelect }) => {
-  const showing = cards.slice(0, 4);
+  remaining: number;
+}> = ({ cards, level, remaining, playerId, gameId }) => {
+  const [reserveCard] = useMutation<ReserveCardTypes.ReserveCard>(
+    RESERVE_CARD_MUTATION,
+    { refetchQueries: ['GameBoard'] }
+  );
 
   return (
     <div style={{ display: 'flex' }}>
@@ -33,7 +73,7 @@ export const CardRowAndStack: React.FC<{
             textAlign: 'center',
           }}
         >
-          {cards.length - showing.length} cards left
+          {remaining} cards left
         </div>
         <div
           style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}
@@ -54,8 +94,14 @@ export const CardRowAndStack: React.FC<{
           ))}
         </div>
       </div>
-      {showing.map((card, i) => (
-        <Card key={i} card={card} onSelect={onSelect ? onSelect : () => {}} />
+      {cards.map((card, i) => (
+        <Card
+          key={i}
+          card={card}
+          onSelect={() => {
+            reserveCard({ variables: { cardId: card.id, playerId, gameId } });
+          }}
+        />
       ))}
     </div>
   );

@@ -2,11 +2,23 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { GemColor } from "./globalTypes";
+import { GameState, GemColor, CardStackType } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: GameBoard
 // ====================================================
+
+export interface GameBoard_game_players_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_players {
+  __typename: "Player";
+  id: string;
+  bank: GameBoard_game_players_bank[];
+}
 
 export interface GameBoard_game_bank {
   __typename: "CostUnit";
@@ -14,76 +26,35 @@ export interface GameBoard_game_bank {
   quantity: number;
 }
 
-export interface GameBoard_game_cards_I_cost {
+export interface GameBoard_game_stacks_cards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface GameBoard_game_cards_I {
+export interface GameBoard_game_stacks_cards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: GameBoard_game_cards_I_cost[];
+  cost: GameBoard_game_stacks_cards_cost[];
 }
 
-export interface GameBoard_game_cards_II_cost {
-  __typename: "CostUnit";
-  gemColor: GemColor;
-  quantity: number;
-}
-
-export interface GameBoard_game_cards_II {
-  __typename: "Card";
-  id: string;
-  gemColor: GemColor | null;
-  pointValue: number;
-  cost: GameBoard_game_cards_II_cost[];
-}
-
-export interface GameBoard_game_cards_III_cost {
-  __typename: "CostUnit";
-  gemColor: GemColor;
-  quantity: number;
-}
-
-export interface GameBoard_game_cards_III {
-  __typename: "Card";
-  id: string;
-  gemColor: GemColor | null;
-  pointValue: number;
-  cost: GameBoard_game_cards_III_cost[];
-}
-
-export interface GameBoard_game_cards_Noble_cost {
-  __typename: "CostUnit";
-  gemColor: GemColor;
-  quantity: number;
-}
-
-export interface GameBoard_game_cards_Noble {
-  __typename: "Card";
-  id: string;
-  gemColor: GemColor | null;
-  pointValue: number;
-  cost: GameBoard_game_cards_Noble_cost[];
-}
-
-export interface GameBoard_game_cards {
+export interface GameBoard_game_stacks {
   __typename: "CardStack";
-  I: GameBoard_game_cards_I[];
-  II: GameBoard_game_cards_II[];
-  III: GameBoard_game_cards_III[];
-  Noble: GameBoard_game_cards_Noble[];
+  type: CardStackType;
+  remaining: number;
+  cards: GameBoard_game_stacks_cards[];
 }
 
 export interface GameBoard_game {
   __typename: "Game";
   id: string;
   name: string;
+  state: GameState;
+  players: GameBoard_game_players[];
   bank: GameBoard_game_bank[];
-  cards: GameBoard_game_cards;
+  stacks: GameBoard_game_stacks[];
 }
 
 export interface GameBoard {

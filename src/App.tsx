@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery, gql } from '@apollo/client';
-import { players } from './config/state';
 import { NobleCard } from './components/NobleCard';
 import { CoinStack } from './components/CoinStack';
 import { CardRowAndStack } from './components/CardRowAndStack';
@@ -9,49 +8,61 @@ import { CardRowAndStack } from './components/CardRowAndStack';
 import * as GameBoardTypes from '../__generated__/GameBoard';
 import * as GlobalTypes from '../__generated__/globalTypes';
 
-export const App: React.FC = () => {
-  const { data, loading, error } = useQuery<GameBoardTypes.GameBoard>(gql`
-    query GameBoard {
-      game(id: "8171") {
+/**
+ * Introduce error boundaries.
+ * Catch errors.
+ *
+ * Build a turn log.
+ *
+ * Build a lobby for games to be created.
+ *
+ * Build a tab switcher for player views.
+ *
+ * Build modes for different turns.
+ */
+
+const GAME_BOARD_QUERY = gql`
+  query GameBoard {
+    game(id: "1234") {
+      id
+      name
+      state
+      players {
         id
-        name
         bank {
           gemColor
           quantity
         }
+      }
+      bank {
+        gemColor
+        quantity
+      }
+      stacks {
+        type
+        remaining
         cards {
-          I {
-            ...CardSelection
-          }
-          II {
-            ...CardSelection
-          }
-          III {
-            ...CardSelection
-          }
-          Noble {
-            ...CardSelection
+          id
+          gemColor
+          pointValue
+          cost {
+            gemColor
+            quantity
           }
         }
       }
     }
+  }
+`;
 
-    fragment CardSelection on Card {
-      id
-      gemColor
-      pointValue
-      cost {
-        gemColor
-        quantity
-      }
-    }
-  `);
+export const App: React.FC = () => {
+  const { data, loading, error } = useQuery<GameBoardTypes.GameBoard>(
+    GAME_BOARD_QUERY
+  );
 
-  const [playerState, setPlayerState] = useState(players);
-  const [player, setPlayer] = useState(playerState[0]);
-
-  if (loading || error) return <div>nothing to see here :(</div>;
-  if (!data || !data.game) return <div>no game found :(</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
+  if (!data || !data.game) return <div>No game found :(</div>;
 
   // const onCardSelect = (stack: Card[], setStack: () => void) => {
   // return (id) => {
@@ -88,59 +99,70 @@ export const App: React.FC = () => {
     // }
   };
 
+  const { state, players, bank, stacks, id: gameId } = data.game;
+  if (players.length === 0) return <div>Waiting for players to join....</div>;
+
   return (
-    <div style={{ padding: 40, display: 'flex' }}>
-      <div style={{ flex: 'none' }}>
-        <div style={{ display: 'flex' }}>
-          {data.game.cards.Noble.slice(0, 5).map((card, i) => (
-            <NobleCard key={i} card={card} />
+    <>
+      <div>Game state: {state}</div>
+      <div>Players: {players.map((p) => p.id).join(', ')}</div>
+      <div style={{ padding: 40, display: 'flex' }}>
+        <div style={{ flex: 'none' }}>
+          {stacks.map(({ type, cards, remaining }) =>
+            type === 'NOBLE' ? (
+              <div key="NOBLE" style={{ display: 'flex' }}>
+                {cards.map((card, i) => (
+                  <NobleCard key={`${type}-${i}`} card={card} />
+                ))}
+              </div>
+            ) : (
+              <CardRowAndStack
+                key={type}
+                cards={cards}
+                remaining={remaining}
+                level={type === 'I' ? 1 : type === 'II' ? 2 : 3}
+                gameId={gameId}
+                playerId={players[0].id}
+              />
+            )
+          )}
+        </div>
+
+        <div style={{ flex: 'none' }}>
+          {bank.map(({ gemColor, quantity }) => (
+            <CoinStack
+              key={gemColor}
+              color={gemColor}
+              quantity={quantity}
+              onSelect={onCoinSelect}
+            />
           ))}
         </div>
-        <CardRowAndStack
-          cards={data.game.cards.III}
-          level={3}
-          // onSelect={onCardSelect(tierIIICardState, setTierIIICardState)}
-        />
-        <CardRowAndStack
-          cards={data.game.cards.II}
-          level={2}
-          // onSelect={onCardSelect(tierIICardState, setTierIICardState)}
-        />
-        <CardRowAndStack
-          cards={data.game.cards.I}
-          level={1}
-          // onSelect={onCardSelect(tierICardState, setTierICardState)}
-        />
-      </div>
 
-      <div style={{ flex: 'none' }}>
-        {data.game.bank.map(({ gemColor, quantity }) => (
-          <CoinStack
-            key={gemColor}
-            color={gemColor}
-            quantity={quantity}
-            onSelect={onCoinSelect}
-          />
-        ))}
-      </div>
-
-      <div
-        style={{
-          flex: 1,
-          backgroundColor: '#cccccc',
-          padding: 8,
-        }}
-      >
-        <div>
-          <b>Turn:</b> {player.name}
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: '#cccccc',
+            padding: 8,
+          }}
+        >
+          {players.map((player) => (
+            <div key={player.id}>
+              <div>{player.id}</div>
+              <div>
+                {player.bank.map(({ gemColor, quantity }) => (
+                  <CoinStack
+                    key={gemColor}
+                    color={gemColor}
+                    quantity={quantity}
+                    onSelect={onCoinSelect}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-
-        {/* <div style={{ display: 'flex' }}>
-          <Bank state={player.coins} onChange={onCoinSelect} />
-        </div> */}
-
-        {/* <PlayerView player={player} /> */}
       </div>
-    </div>
+    </>
   );
 };
