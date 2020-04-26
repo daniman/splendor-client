@@ -3,8 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import { Card } from './Card';
 import { colors } from '../config/colors';
 
-import * as CardSelectionTypes from '../../__generated__/CardSelection';
-import * as ReserveCardTypes from '../../__generated__/ReserveCard';
+import * as Types from '../types';
 
 const RESERVE_CARD_MUTATION = gql`
   mutation ReserveCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
@@ -14,7 +13,7 @@ const RESERVE_CARD_MUTATION = gql`
         turns {
           type
         }
-        stacks {
+        cardStacks {
           cards {
             id
           }
@@ -41,14 +40,13 @@ const RESERVE_CARD_MUTATION = gql`
 export const CardRowAndStack: React.FC<{
   playerId: string;
   gameId: string;
-  cards: CardSelectionTypes.CardSelection[];
+  cards: Types.CardSelection[];
   level: 1 | 2 | 3;
   remaining: number;
 }> = ({ cards, level, remaining, playerId, gameId }) => {
-  const [reserveCard] = useMutation<ReserveCardTypes.ReserveCard>(
-    RESERVE_CARD_MUTATION,
-    { refetchQueries: ['GameBoard'] }
-  );
+  const [reserveCard] = useMutation<Types.ReserveCard>(RESERVE_CARD_MUTATION, {
+    refetchQueries: ['GameBoard'],
+  });
 
   return (
     <div style={{ display: 'flex' }}>

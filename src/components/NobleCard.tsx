@@ -1,10 +1,10 @@
 import React from 'react';
 import { CostIndicator } from './CostIndicator';
 import { colors } from '../config/colors';
-import * as CardSelectionTypes from '../../__generated__/CardSelection';
+import * as Types from '../types';
 
 export const NobleCard: React.FC<{
-  card: CardSelectionTypes.CardSelection;
+  card: Types.CardSelection;
 }> = ({ card: { pointValue, cost } }) => (
   <div
     style={{

@@ -1,12 +1,25 @@
 import React from 'react';
+import { gql } from '@apollo/client';
 import { CostIndicator } from './CostIndicator';
 import { colors } from '../config/colors';
-import * as CardSelectionTypes from '../../__generated__/CardSelection';
+import * as Types from '../types';
+
+export const CARD_FRAGMENT = gql`
+  fragment CardSelection on Card {
+    id
+    gemColor
+    pointValue
+    cost {
+      gemColor
+      quantity
+    }
+  }
+`;
 
 export const Card: React.FC<{
   style?: any;
   onSelect: (id: string) => void;
-  card: CardSelectionTypes.CardSelection;
+  card: Types.CardSelection;
 }> = ({ style = {}, onSelect, card }) => {
   const { id, gemColor, pointValue, cost } = card;
 
@@ -31,7 +44,7 @@ export const Card: React.FC<{
     >
       <div style={{ flex: 0, display: 'flex', marginBottom: 8 }}>
         <div style={{ flex: 1, lineHeight: 1, fontSize: 32, fontWeight: 900 }}>
-          {pointValue}
+          {pointValue || ''}
         </div>
         <div
           style={{

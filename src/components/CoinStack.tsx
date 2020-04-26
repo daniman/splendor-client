@@ -1,12 +1,12 @@
 import React from 'react';
 import { colors } from '../config/colors';
-import * as GlobalTypes from '../../__generated__/globalTypes';
+import * as Types from '../types';
 
 export const CoinStack: React.FC<{
-  onSelect: (c: GlobalTypes.GemColor) => void;
+  onSelect: (c: Types.GemColor) => void;
   radius?: number;
   quantity: number;
-  color: GlobalTypes.GemColor;
+  color: Types.GemColor;
 }> = ({ onSelect, color, radius = 72, quantity }) => (
   <div
     style={{

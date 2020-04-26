@@ -2,16 +2,29 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  padding: 0;
+  padding: 40px;
   font-family: 'Lato', sans-serif;
   font-weight: 400;
+
+  background-color: rgb(18, 21, 26);
+  color: rgb(255, 255, 255);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Inconsolata', monospace;
+  color: #e83e8c;
+  word-break: break-word;
+  font-weight: 500;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.text-black {
+  color: black;
+}
+
+.width-full label {
+  width: 100%;
 }
