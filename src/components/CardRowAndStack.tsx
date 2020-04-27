@@ -1,106 +1,86 @@
 import React from 'react';
-import { useMutation, gql } from '@apollo/client';
+// import { useMutation, gql } from '@apollo/client';
 import { Card } from './Card';
-import { colors } from '../config/colors';
-
 import * as Types from '../types';
 
-const RESERVE_CARD_MUTATION = gql`
-  mutation ReserveCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
-    game(id: $gameId) {
-      takeTurn(playerId: $playerId, reserveCardById: $cardId) {
-        id
-        turns {
-          type
-        }
-        cardStacks {
-          cards {
-            id
-          }
-        }
-        player(id: $playerId) {
-          id
-          bank {
-            gemColor
-            quantity
-          }
-          reservedCards {
-            id
-          }
-        }
-        bank {
-          gemColor
-          quantity
-        }
-      }
-    }
-  }
-`;
+// reserveCard({ variables: { cardId: card.id, playerId, gameId } });
+// const [reserveCard] = useMutation<Types.ReserveCard>(RESERVE_CARD_MUTATION, {
+//   refetchQueries: ['GameBoard'],
+// });
 
 export const CardRowAndStack: React.FC<{
-  playerId: string;
-  gameId: string;
   cards: Types.CardSelection[];
+  turnCardState: Types.CardSelection | null;
   level: 1 | 2 | 3;
   remaining: number;
-}> = ({ cards, level, remaining, playerId, gameId }) => {
-  const [reserveCard] = useMutation<Types.ReserveCard>(RESERVE_CARD_MUTATION, {
-    refetchQueries: ['GameBoard'],
-  });
-
-  return (
-    <div style={{ display: 'flex' }}>
+  onSelect?: (c: Types.CardSelection) => void;
+}> = ({ cards, turnCardState, level, remaining, onSelect }) => (
+  <div style={{ display: 'flex', marginBottom: 10 }}>
+    <div
+      style={{
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        flex: 'none',
+        width: 100,
+        height: 100,
+        padding: 8,
+        borderRadius: 8,
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <div
         style={{
-          backgroundColor: colors.none,
-          margin: 10,
-          flex: 'none',
-          width: 130,
-          height: 160,
-          padding: 8,
-          borderRadius: 8,
-          color: 'white',
-          display: 'flex',
-          flexDirection: 'column',
+          flex: 1,
+          fontSize: 12,
+          textAlign: 'center',
         }}
       >
+        <code style={{ marginLeft: 10 }}>{remaining}</code>
+      </div>
+      <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
+        {new Array(level).fill(0).map((_j, i) => (
+          <div
+            key={i}
+            style={{
+              height: 6,
+              width: 6,
+              borderRadius: 6,
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              opacity: 0.8,
+              marginRight: 2,
+              marginLeft: 2,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+    {cards.map((card, i) =>
+      turnCardState && turnCardState.id === card.id ? (
         <div
+          key={card.id}
           style={{
-            flex: 1,
-            fontSize: 12,
-            textAlign: 'center',
+            marginLeft: 10,
+            width: 100,
+            height: 100,
+            display: 'flex',
+            backgroundColor: 'rgba(255,255,255,0.01)',
+            borderRadius: 8,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          {remaining} cards left
+          <code>x</code>
         </div>
-        <div
-          style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}
-        >
-          {new Array(level).fill(0).map((_j, i) => (
-            <div
-              key={i}
-              style={{
-                height: 6,
-                width: 6,
-                borderRadius: 6,
-                backgroundColor: 'white',
-                opacity: 0.8,
-                marginRight: 2,
-                marginLeft: 2,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-      {cards.map((card, i) => (
+      ) : (
         <Card
-          key={i}
+          key={card.id}
           card={card}
-          onSelect={() => {
-            reserveCard({ variables: { cardId: card.id, playerId, gameId } });
+          onSelect={(card: Types.CardSelection) => {
+            if (onSelect) onSelect(card);
           }}
         />
-      ))}
-    </div>
-  );
-};
+      )
+    )}
+  </div>
+);

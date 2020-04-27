@@ -6,14 +6,10 @@ import { GameBoard } from './components/GameBoard';
 import * as Types from './types';
 
 /**
- * - Introduce error boundaries and catch the multitude of errors there could be.
  * - Build a turn log.
  * - Build a home for games to be created, where players can access their lobby on the game route.
- * - Build a tab switcher for player views.
- * - Build modes for different turns.
- * - Look for TODOs.
  * - Build games their own routing system with :gameId.
- * - See about getting rid of color config and just using space kit.
+ * - Look for TODOs.
  */
 
 const GAME_STATE_QUERY = gql`
@@ -37,10 +33,10 @@ export const App: React.FC = () => {
     return <Lobby gameId={data.game.id} />;
   }
 
-  if (data.game.state === Types.GameState.COMPLETE) {
-    // TODO: build some sort of trophy page, maybe with a replay of turns and stuff
-    return <div>This game is complete! Thanks for playing.</div>;
-  }
+  // if (data.game.state === Types.GameState.COMPLETE) {
+  //   // TODO: build some sort of trophy page, maybe with a replay of turns and stuff
+  //   return <div>This game is complete! Thanks for playing.</div>;
+  // }
 
   return <GameBoard gameId={data.game.id} />; // ACTIVE
 };

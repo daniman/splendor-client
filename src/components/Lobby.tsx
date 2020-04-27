@@ -155,7 +155,7 @@ export const Lobby: React.FC<{
       {startError && (
         <div style={{ marginTop: 20 }}>
           <code>
-            !! {startError.graphQLErrors.map((e) => e.message).join('; ')}
+            {startError.graphQLErrors.map((e) => e.message).join('; ')}
           </code>
         </div>
       )}

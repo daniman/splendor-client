@@ -1,23 +1,24 @@
 import React from 'react';
 import { CostIndicator } from './CostIndicator';
-import { colors } from '../config/colors';
+import { colors, darkColors } from '../config/colors';
 import * as Types from '../types';
 
 export const NobleCard: React.FC<{
   card: Types.CardSelection;
-}> = ({ card: { pointValue, cost } }) => (
+  title?: string;
+}> = ({ title, card: { pointValue, cost } }) => (
   <div
     style={{
-      backgroundColor: colors.none,
-      margin: 10,
+      backgroundColor: `${colors.YELLOW}1A`,
+      marginRight: 10,
       flex: 'none',
-      width: 130,
-      height: 130,
-      padding: 8,
+      width: 100,
+      height: 100,
       borderRadius: 8,
       display: 'flex',
       flexDirection: 'column',
     }}
+    title={title || 'You cannot select Nobles. They come to you.'}
   >
     <div
       style={{
@@ -27,6 +28,8 @@ export const NobleCard: React.FC<{
         lineHeight: 1,
         fontSize: 32,
         fontWeight: 900,
+        padding: 8,
+        backgroundColor: 'rgba(255,255,255,0.05)',
       }}
     >
       <div style={{ flex: 1 }}>{pointValue}</div>👑
@@ -36,8 +39,8 @@ export const NobleCard: React.FC<{
       style={{
         flex: 1,
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        padding: 8,
       }}
     >
       {cost
@@ -47,6 +50,7 @@ export const NobleCard: React.FC<{
             key={gemColor}
             value={quantity}
             color={colors[gemColor]}
+            style={{ marginRight: 4 }}
           />
         ))}
     </div>

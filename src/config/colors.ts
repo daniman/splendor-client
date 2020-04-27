@@ -5,5 +5,13 @@ export const colors = {
   WHITE: '#673AB7',
   BLACK: '#546E7A',
   YELLOW: '#FFEB3B',
-  none: '#37474F',
+};
+
+export const darkColors = {
+  BLUE: '#00004C',
+  GREEN: '#003A00',
+  RED: '#5B0000',
+  WHITE: '#340784',
+  BLACK: '#213B47',
+  YELLOW: '#CCB808',
 };

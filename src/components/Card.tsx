@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql } from '@apollo/client';
 import { CostIndicator } from './CostIndicator';
-import { colors } from '../config/colors';
+import { colors, darkColors } from '../config/colors';
 import * as Types from '../types';
 
 export const CARD_FRAGMENT = gql`
@@ -18,31 +18,41 @@ export const CARD_FRAGMENT = gql`
 
 export const Card: React.FC<{
   style?: any;
-  onSelect: (id: string) => void;
+  onSelect?: (c: Types.CardSelection) => void;
   card: Types.CardSelection;
-}> = ({ style = {}, onSelect, card }) => {
+  title?: string;
+}> = ({ style = {}, onSelect, card, title }) => {
   const { id, gemColor, pointValue, cost } = card;
 
   return (
     <div
+      title={title || ''}
+      className={!!onSelect ? 'clickable' : ''}
       style={{
-        cursor: 'pointer',
-        margin: 10,
+        position: 'relative',
+        marginLeft: 10,
         backgroundColor: `${gemColor ? colors[gemColor] : '#FFFFFF'}1A`,
         flex: 'none',
-        width: 130,
-        height: 160,
-        padding: 8,
+        width: 100,
+        height: 100,
         borderRadius: 8,
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         ...style,
       }}
       onClick={() => {
-        onSelect(id);
+        if (onSelect) onSelect(card);
       }}
     >
-      <div style={{ flex: 0, display: 'flex', marginBottom: 8 }}>
+      <div
+        style={{
+          flex: 0,
+          display: 'flex',
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          padding: 8,
+        }}
+      >
         <div style={{ flex: 1, lineHeight: 1, fontSize: 32, fontWeight: 900 }}>
           {pointValue || ''}
         </div>
@@ -60,17 +70,18 @@ export const Card: React.FC<{
         style={{
           flex: 1,
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          padding: 8,
         }}
       >
         {cost
           .filter((c) => c.quantity > 0)
-          .map(({ gemColor, quantity }) => (
+          .map(({ gemColor, quantity }, i) => (
             <CostIndicator
               key={gemColor}
               value={quantity}
               color={colors[gemColor]}
+              style={{ marginRight: i === cost.length - 1 ? 0 : 4 }}
             />
           ))}
       </div>

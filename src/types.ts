@@ -22,77 +22,6 @@ export interface GamePage {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: ReserveCard
-// ====================================================
-
-export interface ReserveCard_game_takeTurn_turns {
-  __typename: "PurchaseCard" | "ReserveCard" | "TakeThreeGems" | "TakeTwoGems";
-  type: TurnType;
-}
-
-export interface ReserveCard_game_takeTurn_cardStacks_cards {
-  __typename: "Card";
-  id: string;
-}
-
-export interface ReserveCard_game_takeTurn_cardStacks {
-  __typename: "CardStack";
-  cards: ReserveCard_game_takeTurn_cardStacks_cards[];
-}
-
-export interface ReserveCard_game_takeTurn_player_bank {
-  __typename: "CostUnit";
-  gemColor: GemColor;
-  quantity: number;
-}
-
-export interface ReserveCard_game_takeTurn_player_reservedCards {
-  __typename: "Card";
-  id: string;
-}
-
-export interface ReserveCard_game_takeTurn_player {
-  __typename: "Player";
-  id: string;
-  bank: ReserveCard_game_takeTurn_player_bank[];
-  reservedCards: ReserveCard_game_takeTurn_player_reservedCards[];
-}
-
-export interface ReserveCard_game_takeTurn_bank {
-  __typename: "CostUnit";
-  gemColor: GemColor;
-  quantity: number;
-}
-
-export interface ReserveCard_game_takeTurn {
-  __typename: "Game";
-  id: string;
-  turns: ReserveCard_game_takeTurn_turns[];
-  cardStacks: ReserveCard_game_takeTurn_cardStacks[];
-  player: ReserveCard_game_takeTurn_player | null;
-  bank: ReserveCard_game_takeTurn_bank[];
-}
-
-export interface ReserveCard_game {
-  __typename: "GameMutation";
-  takeTurn: ReserveCard_game_takeTurn | null;
-}
-
-export interface ReserveCard {
-  game: ReserveCard_game | null;
-}
-
-export interface ReserveCardVariables {
-  gameId: string;
-  playerId: string;
-  cardId: string;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL query operation: GameBoard
 // ====================================================
 
@@ -102,16 +31,76 @@ export interface GameBoard_game_players_bank {
   quantity: number;
 }
 
+export interface GameBoard_game_players_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_players_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_players_nobles_cost[];
+}
+
+export interface GameBoard_game_players_reservedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_players_reservedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_players_reservedCards_cost[];
+}
+
+export interface GameBoard_game_players_purchasedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_players_purchasedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_players_purchasedCards_cost[];
+}
+
 export interface GameBoard_game_players {
   __typename: "Player";
   id: string;
+  score: number;
   bank: GameBoard_game_players_bank[];
+  nobles: GameBoard_game_players_nobles[];
+  reservedCards: GameBoard_game_players_reservedCards[];
+  purchasedCards: GameBoard_game_players_purchasedCards[];
 }
 
 export interface GameBoard_game_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
+}
+
+export interface GameBoard_game_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_nobles_cost[];
 }
 
 export interface GameBoard_game_cardStacks_cards_cost {
@@ -146,11 +135,280 @@ export interface GameBoard_game {
    */
   players: GameBoard_game_players[];
   bank: GameBoard_game_bank[];
+  nobles: GameBoard_game_nobles[];
   cardStacks: GameBoard_game_cardStacks[];
 }
 
 export interface GameBoard {
   game: GameBoard_game | null;
+}
+
+export interface GameBoardVariables {
+  gameId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: TakeCoins
+// ====================================================
+
+export interface TakeCoins_game_takeTurn_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface TakeCoins_game_takeTurn_player_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface TakeCoins_game_takeTurn_player {
+  __typename: "Player";
+  id: string;
+  bank: TakeCoins_game_takeTurn_player_bank[];
+}
+
+export interface TakeCoins_game_takeTurn {
+  __typename: "Game";
+  id: string;
+  bank: TakeCoins_game_takeTurn_bank[];
+  player: TakeCoins_game_takeTurn_player | null;
+}
+
+export interface TakeCoins_game {
+  __typename: "GameMutation";
+  takeTurn: TakeCoins_game_takeTurn | null;
+}
+
+export interface TakeCoins {
+  game: TakeCoins_game | null;
+}
+
+export interface TakeCoinsVariables {
+  gameId: string;
+  playerId: string;
+  gemList?: GemColor[] | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: ReserveCard
+// ====================================================
+
+export interface ReserveCard_game_takeTurn_cardStacks_cards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface ReserveCard_game_takeTurn_cardStacks_cards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCard_game_takeTurn_cardStacks_cards_cost[];
+}
+
+export interface ReserveCard_game_takeTurn_cardStacks {
+  __typename: "CardStack";
+  type: CardStackType;
+  remaining: number;
+  cards: ReserveCard_game_takeTurn_cardStacks_cards[];
+}
+
+export interface ReserveCard_game_takeTurn_player_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface ReserveCard_game_takeTurn_player_reservedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface ReserveCard_game_takeTurn_player_reservedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCard_game_takeTurn_player_reservedCards_cost[];
+}
+
+export interface ReserveCard_game_takeTurn_player {
+  __typename: "Player";
+  id: string;
+  bank: ReserveCard_game_takeTurn_player_bank[];
+  reservedCards: ReserveCard_game_takeTurn_player_reservedCards[];
+}
+
+export interface ReserveCard_game_takeTurn_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface ReserveCard_game_takeTurn {
+  __typename: "Game";
+  id: string;
+  cardStacks: ReserveCard_game_takeTurn_cardStacks[];
+  player: ReserveCard_game_takeTurn_player | null;
+  bank: ReserveCard_game_takeTurn_bank[];
+}
+
+export interface ReserveCard_game {
+  __typename: "GameMutation";
+  takeTurn: ReserveCard_game_takeTurn | null;
+}
+
+export interface ReserveCard {
+  game: ReserveCard_game | null;
+}
+
+export interface ReserveCardVariables {
+  gameId: string;
+  playerId: string;
+  cardId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: PurchaseCard
+// ====================================================
+
+export interface PurchaseCard_game_takeTurn_cardStacks_cards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_cardStacks_cards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_cardStacks_cards_cost[];
+}
+
+export interface PurchaseCard_game_takeTurn_cardStacks {
+  __typename: "CardStack";
+  type: CardStackType;
+  remaining: number;
+  cards: PurchaseCard_game_takeTurn_cardStacks_cards[];
+}
+
+export interface PurchaseCard_game_takeTurn_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_nobles_cost[];
+}
+
+export interface PurchaseCard_game_takeTurn_player_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_player_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_player_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_player_nobles_cost[];
+}
+
+export interface PurchaseCard_game_takeTurn_player_reservedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_player_reservedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_player_reservedCards_cost[];
+}
+
+export interface PurchaseCard_game_takeTurn_player_purchasedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn_player_purchasedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_player_purchasedCards_cost[];
+}
+
+export interface PurchaseCard_game_takeTurn_player {
+  __typename: "Player";
+  id: string;
+  score: number;
+  bank: PurchaseCard_game_takeTurn_player_bank[];
+  nobles: PurchaseCard_game_takeTurn_player_nobles[];
+  reservedCards: PurchaseCard_game_takeTurn_player_reservedCards[];
+  purchasedCards: PurchaseCard_game_takeTurn_player_purchasedCards[];
+}
+
+export interface PurchaseCard_game_takeTurn_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PurchaseCard_game_takeTurn {
+  __typename: "Game";
+  id: string;
+  cardStacks: PurchaseCard_game_takeTurn_cardStacks[];
+  nobles: PurchaseCard_game_takeTurn_nobles[];
+  player: PurchaseCard_game_takeTurn_player | null;
+  bank: PurchaseCard_game_takeTurn_bank[];
+}
+
+export interface PurchaseCard_game {
+  __typename: "GameMutation";
+  takeTurn: PurchaseCard_game_takeTurn | null;
+}
+
+export interface PurchaseCard {
+  game: PurchaseCard_game | null;
+}
+
+export interface PurchaseCardVariables {
+  gameId: string;
+  playerId: string;
+  cardId: string;
 }
 
 /* tslint:disable */
@@ -297,13 +555,6 @@ export enum GemColor {
   RED = "RED",
   WHITE = "WHITE",
   YELLOW = "YELLOW",
-}
-
-export enum TurnType {
-  PURCHASE_CARD = "PURCHASE_CARD",
-  RESERVE_CARD = "RESERVE_CARD",
-  TAKE_THREE_GEMS = "TAKE_THREE_GEMS",
-  TAKE_TWO_GEMS = "TAKE_TWO_GEMS",
 }
 
 //==============================================================

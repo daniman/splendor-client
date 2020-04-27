@@ -28,3 +28,13 @@ code {
 .width-full label {
   width: 100%;
 }
+
+.clickable {
+  outline: 1px solid transparent;
+  cursor: pointer;
+}
+
+.clickable:hover {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  transition: outline 150ms ease-out;
+}

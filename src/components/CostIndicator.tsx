@@ -1,15 +1,16 @@
 import React from 'react';
 
-export const CostIndicator: React.FC<{ value: number; color: string }> = ({
-  value,
-  color,
-}) => (
+export const CostIndicator: React.FC<{
+  value: number;
+  color: string;
+  style?: object;
+}> = ({ value, color, style = {} }) => (
   <div
     style={{
-      marginTop: 4,
-      fontSize: 12,
-      height: 20,
-      width: 20,
+      ...style,
+      fontSize: 10,
+      height: 16,
+      width: 16,
       borderRadius: 24,
       display: 'flex',
       justifyContent: 'center',
