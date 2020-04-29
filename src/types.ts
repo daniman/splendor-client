@@ -1,24 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GamePage
-// ====================================================
-
-export interface GamePage_game {
-  __typename: "Game";
-  id: string;
-  name: string;
-  state: GameState;
-}
-
-export interface GamePage {
-  game: GamePage_game | null;
-}
-
-/* tslint:disable */
-/* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -149,6 +131,7 @@ export interface GameBoardVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -197,6 +180,7 @@ export interface TakeCoinsVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -282,6 +266,7 @@ export interface ReserveCardVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -390,6 +375,7 @@ export interface PurchaseCard_game_takeTurn_bank {
 export interface PurchaseCard_game_takeTurn {
   __typename: "Game";
   id: string;
+  state: GameState;
   cardStacks: PurchaseCard_game_takeTurn_cardStacks[];
   nobles: PurchaseCard_game_takeTurn_nobles[];
   player: PurchaseCard_game_takeTurn_player | null;
@@ -413,6 +399,84 @@ export interface PurchaseCardVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GamePage
+// ====================================================
+
+export interface GamePage_game {
+  __typename: "Game";
+  id: string;
+  name: string;
+  state: GameState;
+}
+
+export interface GamePage {
+  game: GamePage_game | null;
+}
+
+export interface GamePageVariables {
+  gameId: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: AllGames
+// ====================================================
+
+export interface AllGames_allGames_players {
+  __typename: "Player";
+  id: string;
+}
+
+export interface AllGames_allGames {
+  __typename: "Game";
+  id: string;
+  name: string;
+  state: GameState;
+  /**
+   * The players in the game; returned in order of ranking.
+   * Ordering: 1st place, 2nd place, etc.
+   */
+  players: AllGames_allGames_players[];
+}
+
+export interface AllGames {
+  allGames: AllGames_allGames[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: CreateGame
+// ====================================================
+
+export interface CreateGame_newGame {
+  __typename: "Game";
+  id: string;
+  name: string;
+}
+
+export interface CreateGame {
+  newGame: CreateGame_newGame | null;
+}
+
+export interface CreateGameVariables {
+  name: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -427,6 +491,7 @@ export interface Lobby_game_players {
 export interface Lobby_game {
   __typename: "Game";
   id: string;
+  name: string;
   /**
    * The players in the game; returned in order of ranking.
    * Ordering: 1st place, 2nd place, etc.
@@ -444,6 +509,7 @@ export interface LobbyVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -481,6 +547,7 @@ export interface JoinGameVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -508,6 +575,7 @@ export interface StartGameVariables {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -530,6 +598,7 @@ export interface CardSelection {
 
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 //==============================================================

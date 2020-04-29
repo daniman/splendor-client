@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation, gql } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
+import { LoadingSpinner } from '@apollo/space-kit/Loaders';
+import { IconBack } from '@apollo/space-kit/icons/IconBack';
 import { Modal } from '@apollo/space-kit/Modal';
 import { TextField } from '@apollo/space-kit/TextField';
+
 import * as Types from '../types';
 
 const LOBBY_QUERY = gql`
   query Lobby($gameId: ID!) {
     game(id: $gameId) {
       id
+      name
       players {
         id
       }
@@ -41,8 +46,8 @@ const START_GAME_MUTATION = gql`
   }
 `;
 
-const Small: React.FC = ({ children }) => (
-  <i style={{ fontSize: 12, opacity: 0.8 }}>{children}</i>
+export const Small: React.FC = ({ children }) => (
+  <i style={{ fontSize: 12, opacity: 0.8, fontWeight: 400 }}>{children}</i>
 );
 
 export const Lobby: React.FC<{
@@ -60,7 +65,7 @@ export const Lobby: React.FC<{
   const [playerName, setPlayerName] = useState('');
   const [open, setOpen] = useState(false);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner theme="dark" size="small" />;
   if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
   if (!data || !data.game) return <div>No game found :(</div>;
 
@@ -70,9 +75,19 @@ export const Lobby: React.FC<{
   };
 
   return (
-    <div className="container">
+    <div className="row">
+      <div>
+        <Button
+          title="Back to home."
+          theme="dark"
+          color={colors.grey.darker}
+          style={{ color: 'white' }}
+          as={<Link to="/" />}
+          icon={<IconBack style={{ width: 12, height: 12 }} />}
+        />
+      </div>
       <h1>
-        Instance: <code>{gameId}</code>
+        {data.game.name} <code style={{ marginLeft: 10 }}>{data.game.id}</code>
       </h1>
       <h3>
         <span style={{ marginRight: 10 }}>Players:</span>
