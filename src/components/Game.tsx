@@ -10,14 +10,6 @@ import { Board } from './Board';
 
 import * as Types from '../types';
 
-/**
- * - Build a turn log.
- * - Find some better Card CSS.
- * - Build a home for games to be created.
- * - Maybe provide a list of all games and their state with links to them in Home?
- * - Use localStorage to keep track of player's identities.
- */
-
 const GAME_STATE_QUERY = gql`
   query GamePage($gameId: ID!) {
     game(id: $gameId) {
@@ -33,6 +25,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
 }) => {
   const { data, loading, error } = useQuery<Types.GamePage>(GAME_STATE_QUERY, {
     variables: { gameId: match.params.gameId },
+    pollInterval: 3000,
   });
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;

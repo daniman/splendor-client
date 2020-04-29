@@ -55,6 +55,7 @@ export const Lobby: React.FC<{
 }> = ({ gameId }) => {
   const { data, loading, error } = useQuery<Types.Lobby>(LOBBY_QUERY, {
     variables: { gameId },
+    pollInterval: 3000,
   });
   const [joinGame, { loading: joinLoading, error: joinError }] = useMutation<
     Types.JoinGame

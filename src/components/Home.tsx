@@ -33,7 +33,9 @@ const CREATE_GAME_MUTATION = gql`
 `;
 
 export const Home: React.FC = () => {
-  const { data, loading, error } = useQuery<Types.AllGames>(ALL_GAMES_QUERY);
+  const { data, loading, error } = useQuery<Types.AllGames>(ALL_GAMES_QUERY, {
+    pollInterval: 3000,
+  });
   const [
     createGame,
     { loading: createLoading, error: createError },

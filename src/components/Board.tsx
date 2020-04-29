@@ -154,6 +154,7 @@ const PURCHASE_CARD_MUTATION = gql`
 export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
     variables: { gameId },
+    pollInterval: 3000,
   });
   const [takeGems, { error: takeGemsError }] = useMutation<Types.TakeCoins>(
     TAKE_COINS_MUTATION
