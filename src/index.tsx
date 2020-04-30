@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
@@ -23,6 +24,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
+      <Helmet>
+        <title>Splendor</title>
+      </Helmet>
       <Router>
         <div className="container">
           <Route exact path="/:gameId" component={Game} />

@@ -8,7 +8,8 @@ export const CoinStack: React.FC<{
   quantity: number;
   color: Types.GemColor;
   style?: object;
-}> = ({ onSelect, color, radius = 30, quantity, style }) => (
+  inverted?: boolean;
+}> = ({ onSelect, color, radius = 30, quantity, style, inverted = false }) => (
   <div
     className={!!onSelect && quantity > 0 ? 'clickable' : ''}
     title={
@@ -25,15 +26,18 @@ export const CoinStack: React.FC<{
       if (quantity > 0 && !!onSelect) onSelect(color);
     }}
   >
-    <div style={{ textAlign: 'center' }}>
-      <code>{quantity}</code>
-    </div>
+    {!inverted && (
+      <div style={{ textAlign: 'center' }}>
+        <code>{quantity}</code>
+      </div>
+    )}
     {quantity > 0 ? (
       <div className="coins">
         {new Array(quantity).fill(0).map((_j, i) => (
           <div
             key={i}
             style={{
+              opacity: inverted ? 0.6 : 1,
               backgroundColor: colors[color],
               height: 4,
               marginBottom: 2,
@@ -50,6 +54,11 @@ export const CoinStack: React.FC<{
           marginBottom: 2,
         }}
       />
+    )}
+    {inverted && (
+      <div style={{ textAlign: 'center' }}>
+        <code>-{quantity}</code>
+      </div>
     )}
   </div>
 );

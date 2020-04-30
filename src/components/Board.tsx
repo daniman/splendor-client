@@ -1,195 +1,24 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { Helmet } from 'react-helmet';
+import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
-import { Button } from '@apollo/space-kit/Button';
-import { colors } from '@apollo/space-kit/colors';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
-import { Card, CARD_FRAGMENT } from './Card';
-import { CoinStack } from './CoinStack';
+import { Card } from './Card';
 import { CardRowAndStack } from './CardRowAndStack';
 import { NobleCard } from './NobleCard';
+import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
+import { Small } from './Lobby';
+import { Bank } from './Bank';
 
 import * as Types from '../types';
-import { Small } from './Lobby';
-
-const PLAYER_FRAGMENT = gql`
-  fragment PlayerSelection on Player {
-    id
-    score
-    bank {
-      gemColor
-      quantity
-    }
-    nobles {
-      ...CardSelection
-    }
-    reservedCards {
-      ...CardSelection
-    }
-    purchasedCards {
-      ...CardSelection
-    }
-  }
-`;
 
 const GAME_BOARD_QUERY = gql`
   query GameBoard($gameId: ID!) {
     game(id: $gameId) {
-      id
-      name
-      state
-      currentTurn {
-        ...PlayerSelection
-      }
-      turns {
-        playerId
-        type
-        when
-      }
-      players {
-        ...PlayerSelection
-      }
-      bank {
-        gemColor
-        quantity
-      }
-      nobles {
-        ...CardSelection
-      }
-      cardStacks {
-        type
-        remaining
-        cards {
-          ...CardSelection
-        }
-      }
+      ...GameSelection
     }
   }
-  ${PLAYER_FRAGMENT}
-  ${CARD_FRAGMENT}
-`;
-
-const TAKE_COINS_MUTATION = gql`
-  mutation TakeCoins($gameId: ID!, $playerId: ID!, $gemList: [GemColor!]) {
-    game(id: $gameId) {
-      takeTurn(
-        playerId: $playerId
-        takeGems: $gemList # takeTwoGems: GREEN # takeThreeGems: [WHITE, RED, ] # purchaseCardById: "-2-2--1-"
-      ) {
-        id
-        bank {
-          gemColor
-          quantity
-        }
-        currentTurn {
-          id
-        }
-        turns {
-          playerId
-          type
-          when
-        }
-        player(id: $playerId) {
-          id
-          bank {
-            gemColor
-            quantity
-          }
-        }
-      }
-    }
-  }
-`;
-
-const RESERVE_CARD_MUTATION = gql`
-  mutation ReserveCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
-    game(id: $gameId) {
-      takeTurn(playerId: $playerId, reserveCardById: $cardId) {
-        id
-        cardStacks {
-          type
-          remaining
-          cards {
-            ...CardSelection
-          }
-        }
-        currentTurn {
-          id
-        }
-        turns {
-          playerId
-          type
-          when
-        }
-        player(id: $playerId) {
-          id
-          bank {
-            gemColor
-            quantity
-          }
-          reservedCards {
-            ...CardSelection
-          }
-        }
-        bank {
-          gemColor
-          quantity
-        }
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
-`;
-
-const PURCHASE_CARD_MUTATION = gql`
-  mutation PurchaseCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
-    game(id: $gameId) {
-      takeTurn(playerId: $playerId, purchaseCardById: $cardId) {
-        id
-        state
-        currentTurn {
-          id
-        }
-        turns {
-          playerId
-          type
-          when
-        }
-        cardStacks {
-          type
-          remaining
-          cards {
-            ...CardSelection
-          }
-        }
-        nobles {
-          ...CardSelection
-        }
-        player(id: $playerId) {
-          id
-          score
-          bank {
-            gemColor
-            quantity
-          }
-          nobles {
-            ...CardSelection
-          }
-          reservedCards {
-            ...CardSelection
-          }
-          purchasedCards {
-            ...CardSelection
-          }
-        }
-        bank {
-          gemColor
-          quantity
-        }
-      }
-    }
-  }
-  ${CARD_FRAGMENT}
+  ${GAME_FRAGMENT}
 `;
 
 export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
@@ -197,18 +26,10 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
     variables: { gameId },
     pollInterval: 3000,
   });
-  const [takeGems, { error: takeGemsError }] = useMutation<Types.TakeCoins>(
-    TAKE_COINS_MUTATION
-  );
-  const [purchaseCard, { error: purchaseCardError }] = useMutation<
-    Types.ReserveCard
-  >(PURCHASE_CARD_MUTATION);
-  const [reserveCard, { error: reserveCardError }] = useMutation<
-    Types.PurchaseCard
-  >(RESERVE_CARD_MUTATION);
 
   const [showingPlayerId, setShowingPlayerId] = useState('');
   const [turnCoinState, setTurnCoinState] = useState<Types.GemColor[]>([]);
+  const [returnCoinState, setReturnCoinState] = useState<Types.GemColor[]>([]);
   const [
     turnCardState,
     setTurnCardState,
@@ -231,6 +52,11 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {data.game.name} {canAct ? `| 👋 it's your turn!` : ''}
+        </title>
+      </Helmet>
       <code
         style={{
           paddingTop: 2,
@@ -285,30 +111,17 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             </div>
           </div>
 
-          <div style={{ position: 'relative', marginBottom: 40 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                width: '100%',
-              }}
-            >
-              {data.game.bank.map(({ gemColor, quantity }, i) => (
-                <CoinStack
-                  key={gemColor}
-                  color={gemColor}
-                  quantity={
-                    quantity -
-                    turnCoinState.filter((c) => c === gemColor).length
-                  }
-                  onSelect={(color) => {
-                    setTurnCoinState([...turnCoinState, color]);
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          <Bank
+            bank={data.game.bank.map(({ gemColor, quantity }) => ({
+              gemColor,
+              quantity:
+                quantity - turnCoinState.filter((c) => c === gemColor).length,
+            }))}
+            style={{ marginBottom: 40 }}
+            onSelect={(color) => {
+              canAct && setTurnCoinState([...turnCoinState, color]);
+            }}
+          />
 
           <div style={{ position: 'relative', marginBottom: 40 }}>
             {data.game.cardStacks.map(({ type, remaining, cards }) => (
@@ -319,7 +132,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 remaining={remaining}
                 level={type === 'I' ? 1 : type === 'II' ? 2 : 3}
                 onSelect={(card: Types.CardSelection) => {
-                  setTurnCardState(card);
+                  canAct && setTurnCardState(card);
                 }}
               />
             ))}
@@ -328,148 +141,16 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
 
         <div className="col-lg-6">
           {canAct && (
-            <div style={{ marginBottom: 60 }}>
-              <h3 style={{ marginTop: 0 }}>
-                Build Your Turn:
-                <code style={{ marginLeft: 10 }}>{activePlayer.id}</code>
-              </h3>
-              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                {Array.from(new Set(turnCoinState))
-                  .map((gemColor) => ({
-                    gemColor,
-                    quantity: turnCoinState.filter((c) => c === gemColor)
-                      .length,
-                  }))
-                  .map(({ gemColor, quantity }) => (
-                    <CoinStack
-                      key={gemColor}
-                      color={gemColor}
-                      quantity={quantity}
-                      onSelect={(color) => {
-                        const i = turnCoinState.findIndex((c) => c === color);
-                        turnCoinState.splice(i, 1);
-                        setTurnCoinState([...turnCoinState]);
-                      }}
-                    />
-                  ))}
-              </div>
-              <div>
-                {turnCardState && (
-                  <Card
-                    card={turnCardState}
-                    style={{ marginLeft: 0, marginRight: 0, marginTop: 10 }}
-                    onSelect={() => {
-                      setTurnCardState(null);
-                    }}
-                  />
-                )}
-              </div>
-              <div style={{ marginTop: 20 }}>
-                <Button
-                  size="small"
-                  theme="dark"
-                  color={colors.pink.base}
-                  style={{ marginRight: 10 }}
-                  disabled={turnCoinState.length === 0}
-                  onClick={() => {
-                    takeGems({
-                      variables: {
-                        gameId,
-                        playerId: activePlayer.id,
-                        gemList: turnCoinState,
-                      },
-                    })
-                      .then(() => {
-                        setTurnCoinState([]);
-                      })
-                      .catch((e) => {
-                        console.error(e.message);
-                      });
-                  }}
-                >
-                  Take Gems
-                </Button>
-                <Button
-                  size="small"
-                  theme="dark"
-                  color={colors.pink.base}
-                  style={{ marginRight: 10 }}
-                  disabled={!turnCardState}
-                  onClick={() => {
-                    purchaseCard({
-                      variables: {
-                        gameId: data.game!.id,
-                        playerId: activePlayer.id,
-                        cardId: turnCardState?.id,
-                      },
-                    })
-                      .then(() => {
-                        setTurnCardState(null);
-                      })
-                      .catch((e) => {
-                        console.error(e.message);
-                      });
-                  }}
-                >
-                  Purchase
-                </Button>
-                <Button
-                  size="small"
-                  theme="dark"
-                  color={colors.pink.base}
-                  disabled={
-                    !turnCardState ||
-                    activePlayer.reservedCards
-                      .map((c) => c.id)
-                      .includes(turnCardState.id)
-                  }
-                  onClick={() => {
-                    reserveCard({
-                      variables: {
-                        gameId: data.game!.id,
-                        playerId: activePlayer.id,
-                        cardId: turnCardState?.id,
-                      },
-                    })
-                      .then(() => {
-                        setTurnCardState(null);
-                      })
-                      .catch((e) => {
-                        console.error(e.message);
-                      });
-                  }}
-                >
-                  Reserve
-                </Button>
-              </div>
-              {takeGemsError && (
-                <div style={{ marginTop: 20 }}>
-                  <code style={{ whiteSpace: 'nowrap' }}>
-                    {takeGemsError.graphQLErrors
-                      .map((e) => e.message)
-                      .join('; ')}
-                  </code>
-                </div>
-              )}
-              {purchaseCardError && (
-                <div style={{ marginTop: 20 }}>
-                  <code style={{ whiteSpace: 'nowrap' }}>
-                    {purchaseCardError.graphQLErrors
-                      .map((e) => e.message)
-                      .join('; ')}
-                  </code>
-                </div>
-              )}
-              {reserveCardError && (
-                <div style={{ marginTop: 20 }}>
-                  <code style={{ whiteSpace: 'nowrap' }}>
-                    {reserveCardError.graphQLErrors
-                      .map((e) => e.message)
-                      .join('; ')}
-                  </code>
-                </div>
-              )}
-            </div>
+            <TurnBuilder
+              gameId={gameId}
+              activePlayer={activePlayer}
+              turnCardState={turnCardState}
+              setTurnCardState={setTurnCardState}
+              turnCoinState={turnCoinState}
+              setTurnCoinState={setTurnCoinState}
+              returnCoinState={returnCoinState}
+              setReturnCoinState={setReturnCoinState}
+            />
           )}
 
           <div style={{ display: 'flex', marginTop: 20, marginBottom: 20 }}>
@@ -499,24 +180,16 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             ))}
           </div>
 
-          <div key={showingPlayer.id} style={{ display: 'flex' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                width: '100%',
-              }}
-            >
-              {showingPlayer.bank.map(({ gemColor, quantity }) => (
-                <CoinStack
-                  key={gemColor}
-                  color={gemColor}
-                  quantity={quantity}
-                />
-              ))}
-            </div>
-          </div>
+          <Bank
+            bank={showingPlayer.bank.map(({ gemColor, quantity }) => ({
+              gemColor,
+              quantity:
+                quantity - returnCoinState.filter((c) => c === gemColor).length,
+            }))}
+            onSelect={(color) => {
+              canAct && setReturnCoinState([...returnCoinState, color]);
+            }}
+          />
 
           {showingPlayer.nobles.length > 0 && (
             <>
@@ -560,7 +233,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                         key={c.id}
                         card={c}
                         onSelect={() => {
-                          setTurnCardState(c);
+                          canAct && setTurnCardState(c);
                         }}
                       />
                     )
@@ -575,11 +248,12 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             {showingPlayer.purchasedCards.length ? (
               <div style={{ display: 'flex' }}>
                 {data.game.bank.map(({ gemColor }) => (
-                  <div>
+                  <div key={gemColor}>
                     {showingPlayer.purchasedCards
                       .filter((c) => c.gemColor === gemColor)
                       .map((c, i) => (
                         <Card
+                          key={c.id}
                           card={c}
                           title="You own this card."
                           style={{
@@ -604,8 +278,8 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
           {data.game.turns
             .slice()
             .reverse()
-            .map((t) => (
-              <div key={t.when}>
+            .map((t, i) => (
+              <div key={i}>
                 <span
                   style={{ marginRight: 10, opacity: 0.8 }}
                   className="mono"
