@@ -235,7 +235,6 @@ export const TurnBuilder: React.FC<{
                 gameId,
                 playerId: activePlayer.id,
                 cardId: turnCardState?.id,
-                returnGemList: returnCoinState,
               },
             })
               .then(() => {
@@ -264,6 +263,7 @@ export const TurnBuilder: React.FC<{
                 gameId,
                 playerId: activePlayer.id,
                 cardId: turnCardState?.id,
+                returnGemList: returnCoinState,
               },
             })
               .then(() => {
