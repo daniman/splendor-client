@@ -75,24 +75,29 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       <div className="row">
         <div className="col-lg-6">
           <div className="row" style={{ marginBottom: 40 }}>
-            <h1 style={{ marginTop: 0 }} className="col-md-9">
-              {data.game.name}
-              {data.game.state === Types.GameState.COMPLETE && (
-                <code style={{ marginLeft: 10 }}>
-                  {
-                    data.game.players.filter(
-                      (p) =>
-                        p.score ===
-                        Math.max(...data.game!.players.map((q) => q.score))
-                    )[0].id
-                  }{' '}
-                  wins!
-                </code>
-              )}
-            </h1>
+            <div className="col-md-9">
+              <h1 style={{ marginTop: 0, marginBottom: 0 }}>
+                {data.game.name}
+                {data.game.state === Types.GameState.COMPLETE && (
+                  <code style={{ marginLeft: 10 }}>
+                    {
+                      data.game.players.filter(
+                        (p) =>
+                          p.score ===
+                          Math.max(...data.game!.players.map((q) => q.score))
+                      )[0].id
+                    }{' '}
+                    wins!
+                  </code>
+                )}
+              </h1>
+              <h3 style={{ marginTop: 0 }}>
+                It's <code>{activePlayer.id}</code>'s turn.
+              </h3>
+            </div>
 
             <div className="col-md-3" style={{ textAlign: 'right' }}>
-              <h3 style={{ marginTop: 0, marginBottom: 0 }}>Leaderboard:</h3>
+              <h3 style={{ marginTop: 0, marginBottom: 0 }}>Scoreboard:</h3>
               {data.game.players.map((p) => (
                 <div key={p.id}>
                   {p.score ===
