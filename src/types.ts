@@ -7,6 +7,71 @@
 // GraphQL query operation: GameBoard
 // ====================================================
 
+export interface GameBoard_game_currentTurn_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_currentTurn_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_currentTurn_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_currentTurn_nobles_cost[];
+}
+
+export interface GameBoard_game_currentTurn_reservedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_currentTurn_reservedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_currentTurn_reservedCards_cost[];
+}
+
+export interface GameBoard_game_currentTurn_purchasedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface GameBoard_game_currentTurn_purchasedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_currentTurn_purchasedCards_cost[];
+}
+
+export interface GameBoard_game_currentTurn {
+  __typename: "Player";
+  id: string;
+  score: number;
+  bank: GameBoard_game_currentTurn_bank[];
+  nobles: GameBoard_game_currentTurn_nobles[];
+  reservedCards: GameBoard_game_currentTurn_reservedCards[];
+  purchasedCards: GameBoard_game_currentTurn_purchasedCards[];
+}
+
+export interface GameBoard_game_turns {
+  __typename: "PurchaseCard" | "ReserveCard" | "TakeGems";
+  playerId: string;
+  type: TurnType;
+  when: string;
+}
+
 export interface GameBoard_game_players_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
@@ -111,6 +176,8 @@ export interface GameBoard_game {
   id: string;
   name: string;
   state: GameState;
+  currentTurn: GameBoard_game_currentTurn | null;
+  turns: GameBoard_game_turns[];
   /**
    * The players in the game; returned in order of ranking.
    * Ordering: 1st place, 2nd place, etc.
@@ -144,6 +211,13 @@ export interface TakeCoins_game_takeTurn_bank {
   quantity: number;
 }
 
+export interface TakeCoins_game_takeTurn_turns {
+  __typename: "PurchaseCard" | "ReserveCard" | "TakeGems";
+  playerId: string;
+  type: TurnType;
+  when: string;
+}
+
 export interface TakeCoins_game_takeTurn_player_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
@@ -160,6 +234,7 @@ export interface TakeCoins_game_takeTurn {
   __typename: "Game";
   id: string;
   bank: TakeCoins_game_takeTurn_bank[];
+  turns: TakeCoins_game_takeTurn_turns[];
   player: TakeCoins_game_takeTurn_player | null;
 }
 
@@ -208,6 +283,13 @@ export interface ReserveCard_game_takeTurn_cardStacks {
   cards: ReserveCard_game_takeTurn_cardStacks_cards[];
 }
 
+export interface ReserveCard_game_takeTurn_turns {
+  __typename: "PurchaseCard" | "ReserveCard" | "TakeGems";
+  playerId: string;
+  type: TurnType;
+  when: string;
+}
+
 export interface ReserveCard_game_takeTurn_player_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
@@ -245,6 +327,7 @@ export interface ReserveCard_game_takeTurn {
   __typename: "Game";
   id: string;
   cardStacks: ReserveCard_game_takeTurn_cardStacks[];
+  turns: ReserveCard_game_takeTurn_turns[];
   player: ReserveCard_game_takeTurn_player | null;
   bank: ReserveCard_game_takeTurn_bank[];
 }
@@ -272,6 +355,13 @@ export interface ReserveCardVariables {
 // ====================================================
 // GraphQL mutation operation: PurchaseCard
 // ====================================================
+
+export interface PurchaseCard_game_takeTurn_turns {
+  __typename: "PurchaseCard" | "ReserveCard" | "TakeGems";
+  playerId: string;
+  type: TurnType;
+  when: string;
+}
 
 export interface PurchaseCard_game_takeTurn_cardStacks_cards_cost {
   __typename: "CostUnit";
@@ -376,6 +466,7 @@ export interface PurchaseCard_game_takeTurn {
   __typename: "Game";
   id: string;
   state: GameState;
+  turns: PurchaseCard_game_takeTurn_turns[];
   cardStacks: PurchaseCard_game_takeTurn_cardStacks[];
   nobles: PurchaseCard_game_takeTurn_nobles[];
   player: PurchaseCard_game_takeTurn_player | null;
@@ -579,6 +670,73 @@ export interface StartGameVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL fragment: PlayerSelection
+// ====================================================
+
+export interface PlayerSelection_bank {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PlayerSelection_nobles_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PlayerSelection_nobles {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PlayerSelection_nobles_cost[];
+}
+
+export interface PlayerSelection_reservedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PlayerSelection_reservedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PlayerSelection_reservedCards_cost[];
+}
+
+export interface PlayerSelection_purchasedCards_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
+export interface PlayerSelection_purchasedCards {
+  __typename: "Card";
+  id: string;
+  gemColor: GemColor | null;
+  pointValue: number;
+  cost: PlayerSelection_purchasedCards_cost[];
+}
+
+export interface PlayerSelection {
+  __typename: "Player";
+  id: string;
+  score: number;
+  bank: PlayerSelection_bank[];
+  nobles: PlayerSelection_nobles[];
+  reservedCards: PlayerSelection_reservedCards[];
+  purchasedCards: PlayerSelection_purchasedCards[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL fragment: CardSelection
 // ====================================================
 
@@ -624,6 +782,12 @@ export enum GemColor {
   RED = "RED",
   WHITE = "WHITE",
   YELLOW = "YELLOW",
+}
+
+export enum TurnType {
+  PURCHASE_CARD = "PURCHASE_CARD",
+  RESERVE_CARD = "RESERVE_CARD",
+  TAKE_GEMS = "TAKE_GEMS",
 }
 
 //==============================================================

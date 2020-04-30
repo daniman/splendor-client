@@ -22,7 +22,7 @@ export const Card: React.FC<{
   card: Types.CardSelection;
   title?: string;
 }> = ({ style = {}, onSelect, card, title }) => {
-  const { id, gemColor, pointValue, cost } = card;
+  const { gemColor, pointValue, cost } = card;
 
   return (
     <div
@@ -31,7 +31,7 @@ export const Card: React.FC<{
       style={{
         position: 'relative',
         marginLeft: 10,
-        backgroundColor: `${gemColor ? colors[gemColor] : '#FFFFFF'}1A`,
+        backgroundColor: `${gemColor ? darkColors[gemColor] : '#FFFFFF'}`,
         flex: 'none',
         width: 100,
         height: 100,
@@ -49,7 +49,7 @@ export const Card: React.FC<{
         style={{
           flex: 0,
           display: 'flex',
-          backgroundColor: 'rgba(255,255,255,0.05)',
+          backgroundColor: 'rgba(255,255,255,0.1)',
           padding: 8,
         }}
       >

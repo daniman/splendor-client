@@ -58,7 +58,7 @@ export const Home: React.FC = () => {
     <div className="row">
       <h1>Games:</h1>
       {data.allGames.map(({ id, name, state, players }, i) => (
-        <Link to={`/${id}`}>
+        <Link to={`/${id}`} key={id}>
           <h3 style={{ color: 'white', marginTop: 0, marginBottom: 10 }}>
             <div style={{ display: 'inline-block' }} className="clickable">
               <code style={{ marginRight: 10 }}>{state}</code>

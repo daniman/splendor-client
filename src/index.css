@@ -10,11 +10,15 @@ body {
   color: rgb(255, 255, 255);
 }
 
-code {
+code,
+.mono {
   font-family: 'Inconsolata', monospace;
-  color: #e83e8c;
   word-break: break-word;
   font-weight: 500;
+}
+
+code {
+  color: #e83e8c;
 }
 
 * {

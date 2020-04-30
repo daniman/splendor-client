@@ -8,10 +8,10 @@ export const colors = {
 };
 
 export const darkColors = {
-  BLUE: '#00004C',
-  GREEN: '#003A00',
-  RED: '#5B0000',
-  WHITE: '#340784',
-  BLACK: '#213B47',
-  YELLOW: '#CCB808',
+  BLUE: '#17212E',
+  GREEN: '#19231F',
+  RED: '#271B1E ',
+  WHITE: '#1A1A29',
+  BLACK: '#191E23',
+  YELLOW: '#2A2B21',
 };

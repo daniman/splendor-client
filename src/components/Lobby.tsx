@@ -130,7 +130,10 @@ export const Lobby: React.FC<{
                   joinGame({
                     variables: { gameId, playerId: playerName },
                   })
-                    .then(onClose)
+                    .then(() => {
+                      localStorage.setItem(`splendor:${gameId}`, playerName);
+                      onClose();
+                    })
                     .catch((e) => {
                       console.error(e.message);
                     });

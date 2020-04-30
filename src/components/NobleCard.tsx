@@ -9,7 +9,7 @@ export const NobleCard: React.FC<{
 }> = ({ title, card: { pointValue, cost } }) => (
   <div
     style={{
-      backgroundColor: `${colors.YELLOW}1A`,
+      backgroundColor: `${darkColors.YELLOW}`,
       marginRight: 10,
       flex: 'none',
       width: 100,
@@ -29,7 +29,7 @@ export const NobleCard: React.FC<{
         fontSize: 32,
         fontWeight: 900,
         padding: 8,
-        backgroundColor: 'rgba(255,255,255,0.05)',
+        backgroundColor: 'rgba(255,255,255,0.1)',
       }}
     >
       <div style={{ flex: 1 }}>{pointValue}</div>👑
