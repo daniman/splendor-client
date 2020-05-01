@@ -10,6 +10,7 @@ import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Small } from './Lobby';
 import { Bank } from './Bank';
 
+import { colors } from '../config/colors';
 import * as Types from '../types';
 
 const GAME_BOARD_QUERY = gql`
@@ -173,17 +174,63 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                     p.id === showingPlayer.id
                       ? 'rgba(255,255,255,0.2)'
                       : 'rgba(255,255,255,0.05)',
-                  textAlign: 'center',
                   padding: 5,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
                 }}
               >
-                {p.id}
-                {p.id === activePlayer.id && (
-                  <span style={{ marginLeft: 10 }}>🤔</span>
-                )}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontWeight: 900,
+                  }}
+                >
+                  {p.id}
+                  {p.id === activePlayer.id && (
+                    <span style={{ marginLeft: 10 }}>🤔</span>
+                  )}
+                </div>
+                <div
+                  style={{
+                    marginTop: 5,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <code style={{ flex: 'none', marginRight: 5 }}>R:</code>
+                  {p.reservedCards.map(({ gemColor }) => (
+                    <div
+                      style={{
+                        marginRight: 5,
+                        height: 10,
+                        width: 10,
+                        backgroundColor: !!gemColor
+                          ? colors[gemColor]
+                          : '#FFFFFF',
+                      }}
+                    />
+                  ))}
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <code style={{ flex: 'none', marginRight: 5 }}>P:</code>
+                  {p.purchasedCards.map(({ gemColor }) => (
+                    <div
+                      style={{
+                        marginRight: 5,
+                        height: 10,
+                        width: 10,
+                        backgroundColor: !!gemColor
+                          ? colors[gemColor]
+                          : '#FFFFFF',
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             ))}
           </div>
