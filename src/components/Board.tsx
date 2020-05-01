@@ -75,7 +75,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       <div className="row">
         <div className="col-lg-6">
           <div className="row" style={{ marginBottom: 40 }}>
-            <div className="col-md-9">
+            <div className="col-md-6">
               <h1 style={{ marginTop: 0, marginBottom: 0 }}>
                 {data.game.name}
                 {data.game.state === Types.GameState.COMPLETE && (
@@ -96,7 +96,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
               </h3>
             </div>
 
-            <div className="col-md-3" style={{ textAlign: 'right' }}>
+            <div className="col-md-6" style={{ textAlign: 'right' }}>
               <h3 style={{ marginTop: 0, marginBottom: 0 }}>Scoreboard:</h3>
               {data.game.players.map((p) => (
                 <div key={p.id}>
@@ -167,7 +167,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                   setShowingPlayerId(p.id);
                 }}
                 style={{
-                  flex: 1,
+                  flex: '1',
                   cursor: 'pointer',
                   backgroundColor:
                     p.id === showingPlayer.id
@@ -175,12 +175,15 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                       : 'rgba(255,255,255,0.05)',
                   textAlign: 'center',
                   padding: 5,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 {p.id}
-                <span style={{ marginLeft: 10 }}>
-                  {p.id === activePlayer.id && '🤔'}
-                </span>
+                {p.id === activePlayer.id && (
+                  <span style={{ marginLeft: 10 }}>🤔</span>
+                )}
               </div>
             ))}
           </div>
