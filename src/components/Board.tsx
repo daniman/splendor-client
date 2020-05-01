@@ -51,6 +51,16 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
     !!localPlayerId &&
     (localPlayerId === data.game.currentTurn?.id || localPlayerId === 'sudo');
 
+  console.log(showingPlayer);
+  console.log(
+    Array.from(
+      new Set([
+        ...showingPlayer.bank.map((b) => b.gemColor),
+        ...showingPlayer.purchasedCards.map((c) => c.gemColor),
+      ])
+    )
+  );
+
   return (
     <>
       <Helmet>
@@ -77,7 +87,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
         <div className="col-lg-6">
           <div className="row" style={{ marginBottom: 40 }}>
             <div className="col-md-6">
-              <h1 style={{ marginTop: 0, marginBottom: 0 }}>
+              <h1 style={{ marginTop: 0, marginBottom: 20, lineHeight: 1 }}>
                 {data.game.name}
                 {data.game.state === Types.GameState.COMPLETE && (
                   <code style={{ marginLeft: 10 }}>
@@ -174,7 +184,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                     p.id === showingPlayer.id
                       ? 'rgba(255,255,255,0.2)'
                       : 'rgba(255,255,255,0.05)',
-                  padding: 5,
+                  padding: 10,
                 }}
               >
                 <div
@@ -183,54 +193,64 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     fontWeight: 900,
+                    marginBottom: 10,
+                    wordBreak: 'break-word',
                   }}
                 >
                   {p.id}
                   {p.id === activePlayer.id && (
-                    <span style={{ marginLeft: 10 }}>🤔</span>
+                    <span
+                      style={{ marginLeft: 10 }}
+                      role="img"
+                      aria-label="thinking"
+                    >
+                      🤔
+                    </span>
                   )}
                 </div>
-                <div
-                  style={{
-                    marginTop: 5,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <code style={{ flex: 'none', marginRight: 5 }}>R:</code>
-                  {p.reservedCards.map(({ gemColor }) => (
-                    <div
-                      style={{
-                        marginRight: 5,
-                        height: 10,
-                        width: 10,
-                        backgroundColor: !!gemColor
-                          ? colors[gemColor]
-                          : '#FFFFFF',
-                      }}
-                    />
-                  ))}
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <code style={{ flex: 'none', marginRight: 5 }}>P:</code>
-                  {p.purchasedCards.map(({ gemColor }) => (
-                    <div
-                      style={{
-                        marginRight: 5,
-                        height: 10,
-                        width: 10,
-                        backgroundColor: !!gemColor
-                          ? colors[gemColor]
-                          : '#FFFFFF',
-                      }}
-                    />
-                  ))}
-                </div>
+
+                {Array.from(
+                  new Set([
+                    ...p.bank.map((b) => b.gemColor),
+                    ...p.purchasedCards.map((c) => c.gemColor),
+                  ])
+                ).map((gemColor) => (
+                  <div style={{ lineHeight: 1 }}>
+                    {p.purchasedCards
+                      .filter((c) => c.gemColor === gemColor)
+                      .map(() => (
+                        <div
+                          style={{
+                            display: 'inline-block',
+                            marginRight: 2,
+                            height: 10,
+                            width: 10,
+                            backgroundColor: !!gemColor
+                              ? colors[gemColor]
+                              : '#FFFFFF',
+                          }}
+                        />
+                      ))}
+                    {p.bank
+                      .filter((b) => b.gemColor === gemColor)
+                      .map(({ quantity }) =>
+                        new Array(quantity).fill(0).map(() => (
+                          <div
+                            style={{
+                              display: 'inline-block',
+                              marginRight: 2,
+                              borderRadius: 5,
+                              height: 10,
+                              width: 10,
+                              backgroundColor: !!gemColor
+                                ? colors[gemColor]
+                                : '#FFFFFF',
+                            }}
+                          />
+                        ))
+                      )}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -249,8 +269,8 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
           {showingPlayer.nobles.length > 0 && (
             <>
               <h3>Nobles:</h3>
-              <div style={{ display: 'flex' }}>
-                {activePlayer.nobles.map((card) => (
+              <div style={{ display: 'flex', marginBottom: 40 }}>
+                {showingPlayer.nobles.map((card) => (
                   <NobleCard
                     key={card.id}
                     card={card}
@@ -261,10 +281,38 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             </>
           )}
 
+          <h3>Purchased:</h3>
+          <div style={{ marginBottom: 40 }}>
+            {showingPlayer.purchasedCards.length ? (
+              <div style={{ display: 'flex' }}>
+                {data.game.bank.map(({ gemColor }) => (
+                  <div key={gemColor}>
+                    {showingPlayer.purchasedCards
+                      .filter((c) => c.gemColor === gemColor)
+                      .map((c, i) => (
+                        <Card
+                          key={c.id}
+                          card={c}
+                          title="You own this card."
+                          style={{
+                            marginLeft: 0,
+                            marginRight: 10,
+                            marginTop: i === 0 ? 0 : -44,
+                          }}
+                        />
+                      ))}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <code>No purchased cards.</code>
+            )}
+          </div>
+
           {showingPlayer.reservedCards.length > 0 && (
             <>
               <h3>Reserved:</h3>
-              <div style={{ marginBottom: 40 }}>
+              <div>
                 <div style={{ display: 'flex', marginLeft: -10 }}>
                   {showingPlayer.reservedCards.map((c) =>
                     turnCardState && c.id === turnCardState.id ? (
@@ -297,34 +345,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
               </div>
             </>
           )}
-
-          <h3>Purchased:</h3>
-          <div style={{ marginBottom: 40 }}>
-            {showingPlayer.purchasedCards.length ? (
-              <div style={{ display: 'flex' }}>
-                {data.game.bank.map(({ gemColor }) => (
-                  <div key={gemColor}>
-                    {showingPlayer.purchasedCards
-                      .filter((c) => c.gemColor === gemColor)
-                      .map((c, i) => (
-                        <Card
-                          key={c.id}
-                          card={c}
-                          title="You own this card."
-                          style={{
-                            marginLeft: 0,
-                            marginRight: 10,
-                            marginTop: i === 0 ? 0 : -44,
-                          }}
-                        />
-                      ))}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <code>No purchased cards.</code>
-            )}
-          </div>
         </div>
       </div>
       <div className="row">
