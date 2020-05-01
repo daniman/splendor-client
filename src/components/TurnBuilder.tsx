@@ -177,7 +177,7 @@ export const TurnBuilder: React.FC<{
                   onSelect={(color) => {
                     const i = returnCoinState.findIndex((c) => c === color);
                     returnCoinState.splice(i, 1);
-                    setReturnCoinState([...turnCoinState]);
+                    setReturnCoinState([...returnCoinState]);
                   }}
                 />
               )}
