@@ -2,8 +2,9 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
-import { Card, CARD_FRAGMENT } from './Card';
+import { Card, PlaceholderCard, CARD_FRAGMENT } from './Card';
 import { CoinStack } from './CoinStack';
+import { TopOfDeck } from './Board';
 
 import * as Types from '../types';
 
@@ -39,8 +40,23 @@ export const GAME_FRAGMENT = gql`
       playerId
       type
       when
+      ... on TakeGems {
+        gems
+      }
+      ... on PurchaseCard {
+        card {
+          gemColor
+        }
+      }
+      ... on ReserveCard {
+        cardType
+        card {
+          pointValue
+          gemColor
+        }
+      }
     }
-    players {
+    players(currentPlayer: $playerId) {
       ...PlayerSelection
     }
     bank {
@@ -102,6 +118,26 @@ const RESERVE_CARD_MUTATION = gql`
   ${GAME_FRAGMENT}
 `;
 
+const RESERVE_CARD_FROM_STACK_MUTATION = gql`
+  mutation ReserveCardFromStack(
+    $gameId: ID!
+    $playerId: ID!
+    $stack: CardStackType
+    $returnGemList: [GemColor!]
+  ) {
+    game(id: $gameId) {
+      takeTurn(
+        playerId: $playerId
+        reserveCardFromStack: $stack
+        returnGems: $returnGemList
+      ) {
+        ...GameSelection
+      }
+    }
+  }
+  ${GAME_FRAGMENT}
+`;
+
 const PURCHASE_CARD_MUTATION = gql`
   mutation PurchaseCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
     game(id: $gameId) {
@@ -116,8 +152,10 @@ const PURCHASE_CARD_MUTATION = gql`
 export const TurnBuilder: React.FC<{
   gameId: string;
   activePlayer: Types.PlayerSelection;
-  turnCardState: Types.CardSelection | null;
-  setTurnCardState: Dispatch<SetStateAction<Types.CardSelection | null>>;
+  turnCardState: Types.CardSelection | TopOfDeck | null;
+  setTurnCardState: Dispatch<
+    SetStateAction<Types.CardSelection | TopOfDeck | null>
+  >;
   turnCoinState: Types.GemColor[];
   setTurnCoinState: Dispatch<SetStateAction<Types.GemColor[]>>;
   returnCoinState: Types.GemColor[];
@@ -136,11 +174,15 @@ export const TurnBuilder: React.FC<{
     TAKE_COINS_MUTATION
   );
   const [purchaseCard, { error: purchaseCardError }] = useMutation<
-    Types.ReserveCard
+    Types.PurchaseCard
   >(PURCHASE_CARD_MUTATION);
   const [reserveCard, { error: reserveCardError }] = useMutation<
-    Types.PurchaseCard
+    Types.ReserveCard
   >(RESERVE_CARD_MUTATION);
+  const [
+    reserveCardFromStack,
+    { error: reserveCardFromStackError },
+  ] = useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
 
   return (
     <div style={{ marginBottom: 60 }}>
@@ -186,15 +228,18 @@ export const TurnBuilder: React.FC<{
         )}
       </div>
       <div>
-        {turnCardState && (
-          <Card
-            card={turnCardState}
-            style={{ marginLeft: 0, marginRight: 0, marginTop: 10 }}
-            onSelect={() => {
-              setTurnCardState(null);
-            }}
-          />
-        )}
+        {turnCardState &&
+          (!!(turnCardState as Types.CardSelection).id ? (
+            <Card
+              card={turnCardState as Types.CardSelection}
+              style={{ marginLeft: 0, marginRight: 0 }}
+              onSelect={() => {
+                setTurnCardState(null);
+              }}
+            />
+          ) : (
+            <PlaceholderCard label={(turnCardState as TopOfDeck).type} />
+          ))}
       </div>
       <div style={{ marginTop: 20 }}>
         <Button
@@ -228,13 +273,18 @@ export const TurnBuilder: React.FC<{
           theme="dark"
           color={colors.pink.base}
           style={{ marginRight: 10 }}
-          disabled={!turnCardState}
+          disabled={!turnCardState || !!(turnCardState as TopOfDeck).type}
+          title={
+            turnCardState && !!(turnCardState as TopOfDeck).type
+              ? 'You cannot purchase a card from the top of a deck.'
+              : ''
+          }
           onClick={() => {
             purchaseCard({
               variables: {
                 gameId,
                 playerId: activePlayer.id,
-                cardId: turnCardState?.id,
+                cardId: (turnCardState as Types.CardSelection)?.id,
               },
             })
               .then(() => {
@@ -254,25 +304,45 @@ export const TurnBuilder: React.FC<{
           disabled={
             !turnCardState ||
             activePlayer.reservedCards
-              .map((c) => c.id)
-              .includes(turnCardState.id)
+              .filter((c) => !!c)
+              .map((c) => c!.id)
+              .includes((turnCardState as Types.CardSelection).id)
           }
           onClick={() => {
-            reserveCard({
-              variables: {
-                gameId,
-                playerId: activePlayer.id,
-                cardId: turnCardState?.id,
-                returnGemList: returnCoinState,
-              },
-            })
-              .then(() => {
-                setTurnCardState(null);
-                setReturnCoinState([]);
+            if (turnCardState && !!(turnCardState as Types.CardSelection).id) {
+              reserveCard({
+                variables: {
+                  gameId,
+                  playerId: activePlayer.id,
+                  cardId: (turnCardState as Types.CardSelection)?.id,
+                  returnGemList: returnCoinState,
+                },
               })
-              .catch((e) => {
-                console.error(e.message);
-              });
+                .then(() => {
+                  setTurnCardState(null);
+                  setReturnCoinState([]);
+                })
+                .catch((e) => {
+                  console.error(e.message);
+                });
+            } else {
+              // reserve from top of deck
+              reserveCardFromStack({
+                variables: {
+                  gameId,
+                  playerId: activePlayer.id,
+                  stack: (turnCardState as TopOfDeck)?.type,
+                  returnGemList: returnCoinState,
+                },
+              })
+                .then(() => {
+                  setTurnCardState(null);
+                  setReturnCoinState([]);
+                })
+                .catch((e) => {
+                  console.error(e.message);
+                });
+            }
           }}
         >
           Reserve
@@ -296,6 +366,15 @@ export const TurnBuilder: React.FC<{
         <div style={{ marginTop: 20 }}>
           <code>
             {reserveCardError.graphQLErrors.map((e) => e.message).join('; ')}
+          </code>
+        </div>
+      )}
+      {reserveCardFromStackError && (
+        <div style={{ marginTop: 20 }}>
+          <code>
+            {reserveCardFromStackError.graphQLErrors
+              .map((e) => e.message)
+              .join('; ')}
           </code>
         </div>
       )}

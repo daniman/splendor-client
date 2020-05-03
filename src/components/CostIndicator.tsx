@@ -16,7 +16,7 @@ export const CostIndicator: React.FC<{
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: color,
-      color: 'white',
+      color: color === '#FFFFFF' ? 'rgb(18, 21, 26)' : 'white',
       fontWeight: 900,
     }}
   >

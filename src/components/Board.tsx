@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
-import { Card } from './Card';
+import { Card, PlaceholderCard } from './Card';
 import { CardRowAndStack } from './CardRowAndStack';
 import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
@@ -13,8 +13,10 @@ import { Bank } from './Bank';
 import { colors } from '../config/colors';
 import * as Types from '../types';
 
+export type TopOfDeck = { type: Types.CardStackType };
+
 const GAME_BOARD_QUERY = gql`
-  query GameBoard($gameId: ID!) {
+  query GameBoard($gameId: ID!, $playerId: ID) {
     game(id: $gameId) {
       ...GameSelection
     }
@@ -24,17 +26,16 @@ const GAME_BOARD_QUERY = gql`
 
 export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
-    variables: { gameId },
+    variables: { gameId, playerId: localStorage.getItem(`splendor:${gameId}`) },
     pollInterval: 3000,
   });
 
   const [showingPlayerId, setShowingPlayerId] = useState('');
   const [turnCoinState, setTurnCoinState] = useState<Types.GemColor[]>([]);
   const [returnCoinState, setReturnCoinState] = useState<Types.GemColor[]>([]);
-  const [
-    turnCardState,
-    setTurnCardState,
-  ] = useState<Types.CardSelection | null>(null);
+  const [turnCardState, setTurnCardState] = useState<
+    Types.CardSelection | TopOfDeck | null
+  >(null);
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
   if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
@@ -50,16 +51,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   const canAct =
     !!localPlayerId &&
     (localPlayerId === data.game.currentTurn?.id || localPlayerId === 'sudo');
-
-  console.log(showingPlayer);
-  console.log(
-    Array.from(
-      new Set([
-        ...showingPlayer.bank.map((b) => b.gemColor),
-        ...showingPlayer.purchasedCards.map((c) => c.gemColor),
-      ])
-    )
-  );
 
   return (
     <>
@@ -106,17 +97,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 It's <code>{activePlayer.id}</code>'s turn.
               </h3>
             </div>
-
-            <div className="col-md-6" style={{ textAlign: 'right' }}>
-              <h3 style={{ marginTop: 0, marginBottom: 0 }}>Scoreboard:</h3>
-              {data.game.players.map((p) => (
-                <div key={p.id}>
-                  {p.score ===
-                    Math.max(...data.game!.players.map((p) => p.score)) && '👑'}
-                  {p.id}:<code style={{ marginLeft: 10 }}>{p.score}</code>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div style={{ position: 'relative', marginBottom: 30 }}>
@@ -146,8 +126,8 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 cards={cards}
                 turnCardState={turnCardState}
                 remaining={remaining}
-                level={type === 'I' ? 1 : type === 'II' ? 2 : 3}
-                onSelect={(card: Types.CardSelection) => {
+                level={type}
+                onSelect={(card: Types.CardSelection | TopOfDeck) => {
                   canAct && setTurnCardState(card);
                 }}
               />
@@ -187,26 +167,32 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                   padding: 10,
                 }}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    fontWeight: 900,
-                    marginBottom: 10,
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {p.id}
-                  {p.id === activePlayer.id && (
-                    <span
-                      style={{ marginLeft: 10 }}
-                      role="img"
-                      aria-label="thinking"
-                    >
-                      🤔
-                    </span>
-                  )}
+                <div style={{ display: 'flex' }}>
+                  <div
+                    style={{
+                      fontWeight: 900,
+                      wordBreak: 'break-word',
+                      flex: 1,
+                    }}
+                  >
+                    {p.id}
+                    {p.id === activePlayer.id && (
+                      <span
+                        style={{ marginLeft: 10 }}
+                        role="img"
+                        aria-label="thinking"
+                      >
+                        🤔
+                      </span>
+                    )}
+                  </div>
+                  <code style={{ flex: 'none', marginLeft: 5 }}>
+                    {Math.max(...data.game!.players.map((p) => p.score)) ===
+                      p.score &&
+                      p.score > 0 &&
+                      '👑'}
+                    {p.score}
+                  </code>
                 </div>
 
                 {Array.from(
@@ -215,11 +201,12 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                     ...p.purchasedCards.map((c) => c.gemColor),
                   ])
                 ).map((gemColor) => (
-                  <div style={{ lineHeight: 1 }}>
+                  <div key={gemColor || ''} style={{ lineHeight: 1 }}>
                     {p.purchasedCards
                       .filter((c) => c.gemColor === gemColor)
-                      .map(() => (
+                      .map((i) => (
                         <div
+                          key={`${gemColor}-${i}`}
                           style={{
                             display: 'inline-block',
                             marginRight: 2,
@@ -234,8 +221,9 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                     {p.bank
                       .filter((b) => b.gemColor === gemColor)
                       .map(({ quantity }) =>
-                        new Array(quantity).fill(0).map(() => (
+                        new Array(quantity).fill(0).map((_, i) => (
                           <div
+                            key={`${i}`}
                             style={{
                               display: 'inline-block',
                               marginRight: 2,
@@ -251,6 +239,21 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                       )}
                   </div>
                 ))}
+
+                <div style={{ lineHeight: 1 }}>
+                  {p.reservedCards.map((c, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        height: 10,
+                        display: 'inline-block',
+                        width: 10,
+                        marginRight: 2,
+                        backgroundColor: 'rgba(255,255,255,0.3)',
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -313,31 +316,27 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             <>
               <h3>Reserved:</h3>
               <div>
-                <div style={{ display: 'flex', marginLeft: -10 }}>
-                  {showingPlayer.reservedCards.map((c) =>
-                    turnCardState && c.id === turnCardState.id ? (
-                      <div
-                        key={c.id}
-                        style={{
-                          marginLeft: 10,
-                          width: 100,
-                          height: 100,
-                          backgroundColor: 'rgba(255,255,255,0.01)',
-                          display: 'flex',
-                          borderRadius: 8,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <code>x</code>
-                      </div>
+                <div style={{ display: 'flex' }}>
+                  {showingPlayer.reservedCards.map((c, i) =>
+                    !!c ? (
+                      turnCardState &&
+                      c.id === (turnCardState as Types.CardSelection).id ? (
+                        <PlaceholderCard label="x" />
+                      ) : (
+                        <Card
+                          key={c.id}
+                          card={c}
+                          onSelect={() => {
+                            canAct && setTurnCardState(c);
+                          }}
+                          style={{ marginLeft: 0, marginRight: 10 }}
+                        />
+                      )
                     ) : (
-                      <Card
-                        key={c.id}
-                        card={c}
-                        onSelect={() => {
-                          canAct && setTurnCardState(c);
-                        }}
+                      <PlaceholderCard
+                        key={i}
+                        label="SECRET"
+                        style={{ marginRight: 10 }}
                       />
                     )
                   )}
@@ -362,14 +361,34 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                   {moment(t.when).format('h:mm')}
                 </span>
                 <code>{t.playerId}</code>{' '}
-                <Small>
-                  {t.type === Types.TurnType.TAKE_GEMS
-                    ? 'took gems'
-                    : t.type === Types.TurnType.PURCHASE_CARD
-                    ? 'purchased a card'
-                    : 'reserved a card'}{' '}
-                  {moment(t.when).fromNow()}.
-                </Small>
+                {t.__typename === 'TakeGems' ? (
+                  <span>
+                    <Small>took</Small> <code>{t.gems.join(',')}</code>{' '}
+                    <Small>gems</Small>
+                  </span>
+                ) : t.__typename === 'PurchaseCard' ? (
+                  <span>
+                    <Small>purchased a</Small>{' '}
+                    <code>{t.card ? t.card.gemColor : 'mysterious'}</code>{' '}
+                    <Small>card</Small>
+                  </span>
+                ) : (
+                  <span>
+                    <Small>reserved a</Small>{' '}
+                    {t.card ? (
+                      <span>
+                        <code>{t.card.pointValue}</code> <Small>point</Small>{' '}
+                        <code>{t.card.gemColor}</code>
+                      </span>
+                    ) : t.cardType ? (
+                      <code>TYPE {t.cardType}</code>
+                    ) : (
+                      <code>MYSTERY</code>
+                    )}{' '}
+                    <Small>card</Small>
+                  </span>
+                )}{' '}
+                <Small>{moment(t.when).fromNow()}</Small>.
               </div>
             ))}
         </div>

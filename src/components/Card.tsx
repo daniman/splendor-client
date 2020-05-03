@@ -16,6 +16,26 @@ export const CARD_FRAGMENT = gql`
   }
 `;
 
+export const PlaceholderCard: React.FC<{ label?: any; style?: object }> = ({
+  label,
+  style,
+}) => (
+  <div
+    style={{
+      width: 100,
+      height: 100,
+      backgroundColor: 'rgba(255,255,255,0.2)',
+      display: 'flex',
+      borderRadius: 8,
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...style,
+    }}
+  >
+    {label && <code>{label}</code>}
+  </div>
+);
+
 export const Card: React.FC<{
   style?: any;
   onSelect?: (c: Types.CardSelection) => void;

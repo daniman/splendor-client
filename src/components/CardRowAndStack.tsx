@@ -1,24 +1,20 @@
 import React from 'react';
-// import { useMutation, gql } from '@apollo/client';
-import { Card } from './Card';
+import { Card, PlaceholderCard } from './Card';
+import { TopOfDeck } from './Board';
 import * as Types from '../types';
-
-// reserveCard({ variables: { cardId: card.id, playerId, gameId } });
-// const [reserveCard] = useMutation<Types.ReserveCard>(RESERVE_CARD_MUTATION, {
-//   refetchQueries: ['GameBoard'],
-// });
 
 export const CardRowAndStack: React.FC<{
   cards: Types.CardSelection[];
-  turnCardState: Types.CardSelection | null;
-  level: 1 | 2 | 3;
+  turnCardState: Types.CardSelection | TopOfDeck | null;
+  level: Types.CardStackType;
   remaining: number;
-  onSelect?: (c: Types.CardSelection) => void;
+  onSelect?: (c: Types.CardSelection | TopOfDeck) => void;
 }> = ({ cards, turnCardState, level, remaining, onSelect }) => (
   <div style={{ display: 'flex', marginBottom: 10 }}>
     <div
+      className="clickable"
       style={{
-        backgroundColor: 'rgba(255,255,255,0.05)',
+        backgroundColor: 'rgba(255,255,255,0.1)',
         flex: 'none',
         width: 100,
         height: 100,
@@ -27,6 +23,9 @@ export const CardRowAndStack: React.FC<{
         color: 'white',
         display: 'flex',
         flexDirection: 'column',
+      }}
+      onClick={() => {
+        if (onSelect) onSelect({ type: level });
       }}
     >
       <div
@@ -39,7 +38,7 @@ export const CardRowAndStack: React.FC<{
         <code style={{ marginLeft: 10 }}>{remaining}</code>
       </div>
       <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
-        {new Array(level).fill(0).map((_j, i) => (
+        {new Array(level.length).fill(0).map((_j, i) => (
           <div
             key={i}
             style={{
@@ -56,22 +55,8 @@ export const CardRowAndStack: React.FC<{
       </div>
     </div>
     {cards.map((card, i) =>
-      turnCardState && turnCardState.id === card.id ? (
-        <div
-          key={card.id}
-          style={{
-            marginLeft: 10,
-            width: 100,
-            height: 100,
-            display: 'flex',
-            backgroundColor: 'rgba(255,255,255,0.01)',
-            borderRadius: 8,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <code>x</code>
-        </div>
+      turnCardState && (turnCardState as Types.CardSelection).id === card.id ? (
+        <PlaceholderCard label="x" style={{ marginLeft: 10 }} />
       ) : (
         <Card
           key={card.id}

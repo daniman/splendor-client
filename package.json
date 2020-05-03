@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "codegen": "npx apollo client:codegen --endpoint=https://splendoor.herokuapp.com --outputFlat --target=typescript src/types.ts"
+    "codegen:prod": "npx apollo client:codegen --endpoint=https://splendoor.herokuapp.com --outputFlat --target=typescript src/types.ts",
+    "codegen:local": "npx apollo client:codegen --endpoint=http://localhost:4000 --outputFlat --target=typescript src/types.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
