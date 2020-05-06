@@ -250,8 +250,21 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                         width: 10,
                         marginRight: 2,
                         backgroundColor: 'rgba(255,255,255,0.3)',
+                        position: 'relative',
+                        overflow: 'hidden',
                       }}
-                    />
+                    >
+                      <div
+                        style={{
+                          height: 1,
+                          width: 14,
+                          position: 'absolute',
+                          transform: 'rotate(45deg)',
+                          transformOrigin: 'left',
+                          backgroundColor: '#e83e8c',
+                        }}
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
