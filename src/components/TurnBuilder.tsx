@@ -151,6 +151,7 @@ const PURCHASE_CARD_MUTATION = gql`
 
 export const TurnBuilder: React.FC<{
   gameId: string;
+  goldAvailableInBank: boolean;
   activePlayer: Types.PlayerSelection;
   turnCardState: Types.CardSelection | TopOfDeck | null;
   setTurnCardState: Dispatch<
@@ -162,6 +163,7 @@ export const TurnBuilder: React.FC<{
   setReturnCoinState: Dispatch<SetStateAction<Types.GemColor[]>>;
 }> = ({
   gameId,
+  goldAvailableInBank,
   activePlayer,
   turnCardState,
   setTurnCardState,
@@ -309,39 +311,53 @@ export const TurnBuilder: React.FC<{
               .includes((turnCardState as Types.CardSelection).id)
           }
           onClick={() => {
-            if (turnCardState && !!(turnCardState as Types.CardSelection).id) {
-              reserveCard({
-                variables: {
-                  gameId,
-                  playerId: activePlayer.id,
-                  cardId: (turnCardState as Types.CardSelection)?.id,
-                  returnGemList: returnCoinState,
-                },
-              })
-                .then(() => {
-                  setTurnCardState(null);
-                  setReturnCoinState([]);
+            console.log('reserving', goldAvailableInBank);
+
+            let confirmed = true;
+            if (!goldAvailableInBank) {
+              confirmed = window.confirm(
+                'Are you sure you want to reserve with no YELLOW gems available?'
+              );
+            }
+
+            if (confirmed) {
+              if (
+                turnCardState &&
+                !!(turnCardState as Types.CardSelection).id
+              ) {
+                reserveCard({
+                  variables: {
+                    gameId,
+                    playerId: activePlayer.id,
+                    cardId: (turnCardState as Types.CardSelection)?.id,
+                    returnGemList: returnCoinState,
+                  },
                 })
-                .catch((e) => {
-                  console.error(e.message);
-                });
-            } else {
-              // reserve from top of deck
-              reserveCardFromStack({
-                variables: {
-                  gameId,
-                  playerId: activePlayer.id,
-                  stack: (turnCardState as TopOfDeck)?.type,
-                  returnGemList: returnCoinState,
-                },
-              })
-                .then(() => {
-                  setTurnCardState(null);
-                  setReturnCoinState([]);
+                  .then(() => {
+                    setTurnCardState(null);
+                    setReturnCoinState([]);
+                  })
+                  .catch((e) => {
+                    console.error(e.message);
+                  });
+              } else {
+                // reserve from top of deck
+                reserveCardFromStack({
+                  variables: {
+                    gameId,
+                    playerId: activePlayer.id,
+                    stack: (turnCardState as TopOfDeck)?.type,
+                    returnGemList: returnCoinState,
+                  },
                 })
-                .catch((e) => {
-                  console.error(e.message);
-                });
+                  .then(() => {
+                    setTurnCardState(null);
+                    setReturnCoinState([]);
+                  })
+                  .catch((e) => {
+                    console.error(e.message);
+                  });
+              }
             }
           }}
         >
