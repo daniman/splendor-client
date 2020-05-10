@@ -81,14 +81,11 @@ export const Home: React.FC = () => {
       {open && (
         <Modal
           className="text-black"
-          title="Name of the game?"
-          size="small"
-          onClose={onClose}
-          primaryAction={
-            <Button
-              loading={createLoading}
-              color={colors.blue.base}
-              onClick={() => {
+          as={
+            <form
+              onSubmit={(e) => {
+                console.log('subimtting');
+                e.preventDefault();
                 createGame({
                   variables: { name: gameName },
                 })
@@ -97,11 +94,26 @@ export const Home: React.FC = () => {
                     console.error(e.message);
                   });
               }}
+              noValidate={true}
+            />
+          }
+          title="Name of the game?"
+          size="small"
+          onClose={onClose}
+          primaryAction={
+            <Button
+              type="submit"
+              loading={createLoading}
+              color={colors.blue.base}
             >
               Create
             </Button>
           }
-          secondaryAction={<Button onClick={onClose}>Cancel</Button>}
+          secondaryAction={
+            <Button type="button" onClick={onClose}>
+              Cancel
+            </Button>
+          }
         >
           <TextField
             autoFocus={true}

@@ -119,14 +119,10 @@ export const Lobby: React.FC<{
         {open && (
           <Modal
             className="text-black"
-            title="Who would you like to join the game as?"
-            size="small"
-            onClose={onClose}
-            primaryAction={
-              <Button
-                loading={joinLoading}
-                color={colors.blue.base}
-                onClick={() => {
+            as={
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
                   joinGame({
                     variables: { gameId, playerId: playerName },
                   })
@@ -138,11 +134,26 @@ export const Lobby: React.FC<{
                       console.error(e.message);
                     });
                 }}
+                noValidate={true}
+              />
+            }
+            title="Who would you like to join the game as?"
+            size="small"
+            onClose={onClose}
+            primaryAction={
+              <Button
+                type="submit"
+                loading={joinLoading}
+                color={colors.blue.base}
               >
                 Join
               </Button>
             }
-            secondaryAction={<Button onClick={onClose}>Cancel</Button>}
+            secondaryAction={
+              <Button type="button" onClick={onClose}>
+                Cancel
+              </Button>
+            }
           >
             <TextField
               autoFocus={true}
