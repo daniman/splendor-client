@@ -15,6 +15,7 @@ const LOBBY_QUERY = gql`
     game(id: $gameId) {
       id
       name
+      state
       players {
         id
       }
@@ -123,6 +124,9 @@ export const Lobby: React.FC<{
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  var s = new Audio('./smb3_enter_level.wav');
+                  s.play();
+
                   joinGame({
                     variables: { gameId, playerId: playerName },
                   })

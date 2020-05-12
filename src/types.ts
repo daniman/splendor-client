@@ -209,10 +209,6 @@ export interface GameBoard_game {
   state: GameState;
   currentTurn: GameBoard_game_currentTurn | null;
   turns: GameBoard_game_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: GameBoard_game_players[];
   bank: GameBoard_game_bank[];
   nobles: GameBoard_game_nobles[];
@@ -237,11 +233,23 @@ export interface GameBoardVariables {
 // GraphQL query operation: GamePage
 // ====================================================
 
+export interface GamePage_game_currentTurn {
+  __typename: "Player";
+  id: string;
+}
+
+export interface GamePage_game_turns {
+  __typename: "PurchaseCard" | "ReserveCard" | "TakeGems";
+  when: string;
+}
+
 export interface GamePage_game {
   __typename: "Game";
   id: string;
   name: string;
   state: GameState;
+  currentTurn: GamePage_game_currentTurn | null;
+  turns: GamePage_game_turns[];
 }
 
 export interface GamePage {
@@ -271,10 +279,6 @@ export interface AllGames_allGames {
   id: string;
   name: string;
   state: GameState;
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: AllGames_allGames_players[];
 }
 
@@ -323,10 +327,7 @@ export interface Lobby_game {
   __typename: "Game";
   id: string;
   name: string;
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
+  state: GameState;
   players: Lobby_game_players[];
 }
 
@@ -355,10 +356,6 @@ export interface JoinGame_game_join_players {
 export interface JoinGame_game_join {
   __typename: "Game";
   id: string;
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: JoinGame_game_join_players[];
 }
 
@@ -615,10 +612,6 @@ export interface TakeCoins_game_takeTurn {
   state: GameState;
   currentTurn: TakeCoins_game_takeTurn_currentTurn | null;
   turns: TakeCoins_game_takeTurn_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: TakeCoins_game_takeTurn_players[];
   bank: TakeCoins_game_takeTurn_bank[];
   nobles: TakeCoins_game_takeTurn_nobles[];
@@ -852,10 +845,6 @@ export interface ReserveCard_game_takeTurn {
   state: GameState;
   currentTurn: ReserveCard_game_takeTurn_currentTurn | null;
   turns: ReserveCard_game_takeTurn_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: ReserveCard_game_takeTurn_players[];
   bank: ReserveCard_game_takeTurn_bank[];
   nobles: ReserveCard_game_takeTurn_nobles[];
@@ -1089,10 +1078,6 @@ export interface ReserveCardFromStack_game_takeTurn {
   state: GameState;
   currentTurn: ReserveCardFromStack_game_takeTurn_currentTurn | null;
   turns: ReserveCardFromStack_game_takeTurn_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: ReserveCardFromStack_game_takeTurn_players[];
   bank: ReserveCardFromStack_game_takeTurn_bank[];
   nobles: ReserveCardFromStack_game_takeTurn_nobles[];
@@ -1326,10 +1311,6 @@ export interface PurchaseCard_game_takeTurn {
   state: GameState;
   currentTurn: PurchaseCard_game_takeTurn_currentTurn | null;
   turns: PurchaseCard_game_takeTurn_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: PurchaseCard_game_takeTurn_players[];
   bank: PurchaseCard_game_takeTurn_bank[];
   nobles: PurchaseCard_game_takeTurn_nobles[];
@@ -1652,10 +1633,6 @@ export interface GameSelection {
   state: GameState;
   currentTurn: GameSelection_currentTurn | null;
   turns: GameSelection_turns[];
-  /**
-   * The players in the game; returned in order of ranking.
-   * Ordering: 1st place, 2nd place, etc.
-   */
   players: GameSelection_players[];
   bank: GameSelection_bank[];
   nobles: GameSelection_nobles[];

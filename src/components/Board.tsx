@@ -59,21 +59,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
           {data.game.name} {canAct ? `| 👋 it's your turn!` : ''}
         </title>
       </Helmet>
-      <code
-        style={{
-          paddingTop: 2,
-          paddingBottom: 2,
-          paddingLeft: 8,
-          paddingRight: 8,
-          position: 'absolute',
-          backgroundColor: '#e83e8c',
-          top: 0,
-          right: 0,
-          color: 'white',
-        }}
-      >
-        {!!localPlayerId ? `playing as: ${localPlayerId}` : 'you are observing'}
-      </code>
       <div className="row">
         <div className="col-lg-6">
           <div className="row" style={{ marginBottom: 40 }}>
