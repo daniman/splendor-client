@@ -4,7 +4,7 @@ export const canSelectFromBank = (color,turnCoinState,playerBank,bank,returnCoin
   const bankCoinsOfColor = bank.reduce((accumulator,el) => el.color === color ? accumulator + el.quantity : 0,0);
   
   // disallow picking yellow
-  if (color === 'YELLOW') msg = "Can't pick yellow cards directly, need to reserve a card!";
+  if (color === 'YELLOW') msg = "Can't pick yellow coins directly, need to reserve a card!";
   
   // if user has already picked two coins of the same color don't allow a 3rd pick
   if (turnCoinState.length === 2 && turnCoinState[0] === turnCoinState[1]) msg = "Can't pick a 3rd coin when you've already picked 2 coins of the same color!";
