@@ -9,6 +9,7 @@ import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Small } from './Lobby';
 import { Bank } from './Bank';
+import { canSelectFromBank } from './coinRules';
 
 import { colors } from '../config/colors';
 import * as Types from '../types';
@@ -115,7 +116,13 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             }))}
             style={{ marginBottom: 40 }}
             onSelect={(color) => {
-              canAct && setTurnCoinState([...turnCoinState, color]);
+              if (canAct){
+                const bank = data?.game?.bank;
+                const playerBank = data?.game?.currentTurn?.bank;
+                const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
+                if (!csfb.err) setTurnCoinState([...turnCoinState, color]);
+                // csfb.msg contains the error message, this needs to be displayed somewhere
+              }
             }}
           />
 
