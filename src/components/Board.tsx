@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery, gql } from '@apollo/client';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
-import { Card, PlaceholderCard } from './Card';
 import { CardRowAndStack } from './CardRowAndStack';
 import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
@@ -12,6 +11,8 @@ import { MoveLog } from './MoveLog';
 
 import { colors } from '../config/colors';
 import * as Types from '../types';
+import { PurchasedCards } from './PurchasedCards';
+import { ReservedCards } from './ReservedCards';
 
 export type TopOfDeck = { type: Types.CardStackType };
 
@@ -309,66 +310,16 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             </>
           )}
 
-          <h3>Purchased:</h3>
-          <div style={{ marginBottom: 40 }}>
-            {showingPlayer.purchasedCards.length ? (
-              <div style={{ display: 'flex' }}>
-                {data.game.bank.map(({ gemColor }) => (
-                  <div key={gemColor}>
-                    {showingPlayer.purchasedCards
-                      .filter((c) => c.gemColor === gemColor)
-                      .map((c, i) => (
-                        <Card
-                          key={c.id}
-                          card={c}
-                          title="You own this card."
-                          style={{
-                            marginLeft: 0,
-                            marginRight: 10,
-                            marginTop: i === 0 ? 0 : -44,
-                          }}
-                        />
-                      ))}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <code>No purchased cards.</code>
-            )}
-          </div>
-
-          {showingPlayer.reservedCards.length > 0 && (
-            <>
-              <h3>Reserved:</h3>
-              <div>
-                <div style={{ display: 'flex' }}>
-                  {showingPlayer.reservedCards.map((c, i) =>
-                    !!c ? (
-                      turnCardState &&
-                      c.id === (turnCardState as Types.CardSelection).id ? (
-                        <PlaceholderCard label="x" />
-                      ) : (
-                        <Card
-                          key={c.id}
-                          card={c}
-                          onSelect={() => {
-                            canAct && setTurnCardState(c);
-                          }}
-                          style={{ marginLeft: 0, marginRight: 10 }}
-                        />
-                      )
-                    ) : (
-                      <PlaceholderCard
-                        key={i}
-                        label="SECRET"
-                        style={{ marginRight: 10 }}
-                      />
-                    )
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+          <PurchasedCards 
+            cards={showingPlayer.purchasedCards} 
+            bank={data.game.bank} 
+          />
+          <ReservedCards 
+            cards={showingPlayer.reservedCards} 
+            canAct={canAct}
+            turnCardState={turnCardState}
+            setTurnCardState={setTurnCardState}
+          />
         </div>
       </div>
       <div className="row">
