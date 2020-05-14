@@ -11,6 +11,7 @@ import { MoveLog } from './MoveLog';
 
 import { colors } from '../config/colors';
 import * as Types from '../types';
+import { NobleCards } from './NobleCards';
 import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
 
@@ -295,20 +296,9 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             }}
           />
 
-          {showingPlayer.nobles.length > 0 && (
-            <>
-              <h3>Nobles:</h3>
-              <div style={{ display: 'flex', marginBottom: 40 }}>
-                {showingPlayer.nobles.map((card) => (
-                  <NobleCard
-                    key={card.id}
-                    card={card}
-                    title="You have attracted this noble with your great wealth."
-                  />
-                ))}
-              </div>
-            </>
-          )}
+          <NobleCards
+            cards={showingPlayer.nobles}
+          />
 
           <PurchasedCards 
             cards={showingPlayer.purchasedCards} 
