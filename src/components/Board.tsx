@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery, gql } from '@apollo/client';
-import moment from 'moment';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { Card, PlaceholderCard } from './Card';
 import { CardRowAndStack } from './CardRowAndStack';
 import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
-import { Small } from './Lobby';
 import { Bank } from './Bank';
 import { canSelectFromBank } from './coinRules';
+import { MoveLog } from './MoveLog';
 
 import { colors } from '../config/colors';
 import * as Types from '../types';
@@ -374,49 +373,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       </div>
       <div className="row">
         <div className="col-lg-6">
-          <h3 style={{ marginTop: 0 }}>Turn Log:</h3>
-          {data.game.turns
-            .slice()
-            .reverse()
-            .map((t, i) => (
-              <div key={i}>
-                <span
-                  style={{ marginRight: 10, opacity: 0.8 }}
-                  className="mono"
-                >
-                  {moment(t.when).format('h:mm')}
-                </span>
-                <code>{t.playerId}</code>{' '}
-                {t.__typename === 'TakeGems' ? (
-                  <span>
-                    <Small>took</Small> <code>{t.gems.join(',')}</code>{' '}
-                    <Small>gems</Small>
-                  </span>
-                ) : t.__typename === 'PurchaseCard' ? (
-                  <span>
-                    <Small>purchased a</Small>{' '}
-                    <code>{t.card ? t.card.gemColor : 'mysterious'}</code>{' '}
-                    <Small>card</Small>
-                  </span>
-                ) : (
-                  <span>
-                    <Small>reserved a</Small>{' '}
-                    {t.card ? (
-                      <span>
-                        <code>{t.card.pointValue}</code> <Small>point</Small>{' '}
-                        <code>{t.card.gemColor}</code>
-                      </span>
-                    ) : t.cardType ? (
-                      <code>TYPE {t.cardType}</code>
-                    ) : (
-                      <code>MYSTERY</code>
-                    )}{' '}
-                    <Small>card</Small>
-                  </span>
-                )}{' '}
-                <Small>{moment(t.when).fromNow()}</Small>.
-              </div>
-            ))}
+          <MoveLog turns={data.game.turns}/>
         </div>
       </div>
     </>
