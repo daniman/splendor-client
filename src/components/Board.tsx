@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as Types from '../types';
 import { Helmet } from 'react-helmet';
 import { useQuery, gql } from '@apollo/client';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
@@ -8,12 +9,11 @@ import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Bank } from './Bank';
 import { canSelectFromBank } from './coinRules';
 import { MoveLog } from './MoveLog';
-
-import { colors } from '../config/colors';
-import * as Types from '../types';
+import { Miniboard } from './Miniboard';
 import { NobleCards } from './NobleCards';
 import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
+import { TurnIndicator } from './TurnIndicator';
 
 export type TopOfDeck = { type: Types.CardStackType };
 
@@ -78,28 +78,10 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       </code>
       <div className="row">
         <div className="col-lg-6">
-          <div className="row" style={{ marginBottom: 40 }}>
-            <div className="col-md-6">
-              <h1 style={{ marginTop: 0, marginBottom: 20, lineHeight: 1 }}>
-                {data.game.name}
-                {data.game.state === Types.GameState.COMPLETE && (
-                  <code style={{ marginLeft: 10 }}>
-                    {
-                      data.game.players.filter(
-                        (p) =>
-                          p.score ===
-                          Math.max(...data.game!.players.map((q) => q.score))
-                      )[0].id
-                    }{' '}
-                    wins!
-                  </code>
-                )}
-              </h1>
-              <h3 style={{ marginTop: 0 }}>
-                It's <code>{activePlayer.id}</code>'s turn.
-              </h3>
-            </div>
-          </div>
+          <TurnIndicator 
+            game={data.game} 
+            activePlayer={activePlayer} 
+          />
 
           <div style={{ position: 'relative', marginBottom: 30 }}>
             <div style={{ display: 'flex' }}>
@@ -122,7 +104,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 const playerBank = data?.game?.currentTurn?.bank;
                 const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
                 if (!csfb.err) setTurnCoinState([...turnCoinState, color]);
-                // csfb.msg contains the error message, this needs to be displayed somewhere
+                // TBD: csfb.msg contains the error message, this needs to be displayed somewhere
               }
             }}
           />
@@ -163,127 +145,11 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             />
           )}
 
-          <div style={{ display: 'flex', marginTop: 20, marginBottom: 20 }}>
-            {data.game.players.map((p) => (
-              <div
-                key={p.id}
-                className="clickable"
-                onClick={() => {
-                  setShowingPlayerId(p.id);
-                }}
-                style={{
-                  flex: '1',
-                  cursor: 'pointer',
-                  backgroundColor:
-                    p.id === showingPlayer.id
-                      ? 'rgba(255,255,255,0.2)'
-                      : 'rgba(255,255,255,0.05)',
-                  padding: 10,
-                }}
-              >
-                <div style={{ display: 'flex' }}>
-                  <div
-                    style={{
-                      fontWeight: 900,
-                      wordBreak: 'break-word',
-                      flex: 1,
-                    }}
-                  >
-                    {p.id}
-                    {p.id === activePlayer.id && (
-                      <span
-                        style={{ marginLeft: 10 }}
-                        role="img"
-                        aria-label="thinking"
-                      >
-                        🤔
-                      </span>
-                    )}
-                  </div>
-                  <code style={{ flex: 'none', marginLeft: 5 }}>
-                    {Math.max(...data.game!.players.map((p) => p.score)) ===
-                      p.score &&
-                      p.score > 0 &&
-                      '👑'}
-                    {p.score}
-                  </code>
-                </div>
-
-                {Array.from(
-                  new Set([
-                    ...p.bank.map((b) => b.gemColor),
-                    ...p.purchasedCards.map((c) => c.gemColor),
-                  ])
-                ).map((gemColor) => (
-                  <div key={gemColor || ''} style={{ lineHeight: 1 }}>
-                    {p.purchasedCards
-                      .filter((c) => c.gemColor === gemColor)
-                      .map((i) => (
-                        <div
-                          key={`${gemColor}-${i}`}
-                          style={{
-                            display: 'inline-block',
-                            marginRight: 2,
-                            height: 10,
-                            width: 10,
-                            backgroundColor: !!gemColor
-                              ? colors[gemColor]
-                              : '#FFFFFF',
-                          }}
-                        />
-                      ))}
-                    {p.bank
-                      .filter((b) => b.gemColor === gemColor)
-                      .map(({ quantity }) =>
-                        new Array(quantity).fill(0).map((_, i) => (
-                          <div
-                            key={`${i}`}
-                            style={{
-                              display: 'inline-block',
-                              marginRight: 2,
-                              borderRadius: 5,
-                              height: 10,
-                              width: 10,
-                              backgroundColor: !!gemColor
-                                ? colors[gemColor]
-                                : '#FFFFFF',
-                            }}
-                          />
-                        ))
-                      )}
-                  </div>
-                ))}
-
-                <div style={{ lineHeight: 1 }}>
-                  {p.reservedCards.map((c, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        height: 10,
-                        display: 'inline-block',
-                        width: 10,
-                        marginRight: 2,
-                        backgroundColor: 'rgba(255,255,255,0.3)',
-                        position: 'relative',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: 1,
-                          width: 14,
-                          position: 'absolute',
-                          transform: 'rotate(45deg)',
-                          transformOrigin: 'left',
-                          backgroundColor: '#e83e8c',
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <Miniboard 
+            players={data.game.players} 
+            setShowingPlayerId={setShowingPlayerId} 
+            showingPlayer={showingPlayer}
+            activePlayer={activePlayer} />
 
           <Bank
             bank={showingPlayer.bank.map(({ gemColor, quantity }) => ({
