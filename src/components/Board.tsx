@@ -149,7 +149,10 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 quantity - returnCoinState.filter((c) => c === gemColor).length,
             }))}
             onSelect={(color) => {
-              canAct && setReturnCoinState([...returnCoinState, color]);
+              if (canAct) {
+                playWav('smb3_coin');
+                setReturnCoinState([...returnCoinState, color]);
+              }
             }}
           />
 

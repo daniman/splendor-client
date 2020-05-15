@@ -1,7 +1,14 @@
-export const canSelectFromBank = (color,turnCoinState,playerBank,bank,returnCoinState) => {
+import * as Types from '../types';
+
+export const canSelectFromBank = (
+  color: Types.GemColor,
+  turnCoinState: Types.GemColor[],
+  playerBank: Types.GameBoard_game_currentTurn_bank[] | undefined,
+  bank: Types.GameBoard_game_bank[] | undefined,
+  returnCoinState: Types.GemColor[] ) => {
   let msg;
-  const playerTotalCoins = playerBank.reduce((accumulator, el) => accumulator + el.quantity,0);
-  const bankCoinsOfColor = bank.reduce((accumulator,el) => el.color === color ? accumulator + el.quantity : 0,0);
+  const playerTotalCoins = playerBank ? playerBank.reduce((accumulator, el) => accumulator + el.quantity,0) : 0;
+  const bankCoinsOfColor = bank ? bank.reduce((accumulator,el) => el.gemColor === color ? accumulator + el.quantity : 0,0) : 0;
   
   // disallow picking yellow
   if (color === 'YELLOW') msg = "Can't pick yellow coins directly, need to reserve a card!";
@@ -16,7 +23,7 @@ export const canSelectFromBank = (color,turnCoinState,playerBank,bank,returnCoin
   if (turnCoinState.length === 3) msg = "Can only pick 3 total coins!";
 
   // disallow picking coins that would take the total over 10
-  if (playerTotalCoins + turnCoinState.length - returnCoinState >= 10) msg = "Can't bring your total coins to more than 10. Try returning some coins!"
+  if (playerTotalCoins + turnCoinState.length - returnCoinState.length > 10) msg = "Can't bring your total coins to more than 10. Try returning some coins!"
 
   // if user already has picked one coin then don't allow a second coin of the same color if there are 3 or less left in the bank
   if (turnCoinState.length === 1 && turnCoinState.includes(color) && bankCoinsOfColor <=3 ) msg = "Can't take two coins of the same color if 3 or less remain!";
