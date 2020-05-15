@@ -205,7 +205,6 @@ export const TurnBuilder: React.FC<{
                   onSelect={(color) => { // coin being returned from the turn builder
                     const i = turnCoinState.findIndex((c) => c === color);
                     turnCoinState.splice(i, 1);
-                    playWav('smb3_coin');
                     setTurnCoinState([...turnCoinState]);
                   }}
                 />

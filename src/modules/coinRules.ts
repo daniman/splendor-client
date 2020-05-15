@@ -25,8 +25,6 @@ export const canSelectFromBank = (
   // disallow picking coins that would take the total over 10
   if (playerTotalCoins + turnCoinState.length - returnCoinState.length > 10) msg = "Can't bring your total coins to more than 10. Try returning some coins!"
 
-  // if user already has picked one coin then don't allow a second coin of the same color if there are 3 or less left in the bank
-  if (turnCoinState.length === 1 && turnCoinState.includes(color) && bankCoinsOfColor <=3 ) msg = "Can't take two coins of the same color if 3 or less remain!";
   const err = !!msg;
 
   //if (err) alert(msg)

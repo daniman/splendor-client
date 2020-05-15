@@ -90,7 +90,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 const playerBank = data?.game?.currentTurn?.bank;
                 const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
                 if (!csfb.err) {
-                  playWav('smb3_coin');
                   setTurnCoinState([...turnCoinState, color]);
                 } else {
                   playWav('smb3_bump');
@@ -150,7 +149,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             }))}
             onSelect={(color) => {
               if (canAct) {
-                playWav('smb3_coin');
                 setReturnCoinState([...returnCoinState, color]);
               }
             }}
