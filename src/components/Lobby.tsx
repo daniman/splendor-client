@@ -7,6 +7,7 @@ import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { IconBack } from '@apollo/space-kit/icons/IconBack';
 import { Modal } from '@apollo/space-kit/Modal';
 import { TextField } from '@apollo/space-kit/TextField';
+import { playWav } from '../modules/playWav';
 
 import * as Types from '../types';
 
@@ -124,8 +125,7 @@ export const Lobby: React.FC<{
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  var s = new Audio('./smb3_enter_level.wav');
-                  s.play();
+                  playWav('smb3_enter_level');
 
                   joinGame({
                     variables: { gameId, playerId: playerName },
