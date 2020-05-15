@@ -8,6 +8,7 @@ import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { RouteComponentProps } from 'react-router-dom';
 import { Lobby } from './Lobby';
 import { Board } from './Board';
+import { playWav } from '../modules/playWav';
 
 import * as Types from '../types';
 
@@ -53,8 +54,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
       prevState === Types.GameState.LOBBY &&
       state === Types.GameState.ACTIVE
     ) {
-      const snd = new Audio('./smb3_pipe.wav');
-      snd.play();
+      playWav('smb3_pipe');
     }
   }, [prevState, state]);
 
@@ -67,8 +67,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
       localPlayerId === 'sudo' ||
       (prevTurn !== localPlayerId && turn === localPlayerId)
     ) {
-      const snd = new Audio('./smb3_jump.wav');
-      snd.play();
+      playWav('smb3_jump');
 
       if (lastTurn) {
         interval = setInterval(() => {
@@ -79,8 +78,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
           //   moment.duration(10, 'seconds').asSeconds()
           // ) {
           //   console.log('apply sound');
-          //   // const snd = new Audio('./smb3_jump.wav');
-          //   // snd.play();
+          //   playWav('smb3_jump');
           // }
         }, 1000);
       }

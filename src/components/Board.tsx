@@ -7,13 +7,14 @@ import { CardRowAndStack } from './CardRowAndStack';
 import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Bank } from './Bank';
-import { canSelectFromBank } from './coinRules';
+import { canSelectFromBank } from '../modules/coinRules';
 import { MoveLog } from './MoveLog';
 import { Miniboard } from './Miniboard';
 import { NobleCards } from './NobleCards';
 import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
 import { TurnIndicator } from './TurnIndicator';
+import { playWav } from '../modules/playWav';
 
 export type TopOfDeck = { type: Types.CardStackType };
 
@@ -88,7 +89,12 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
                 const bank = data?.game?.bank;
                 const playerBank = data?.game?.currentTurn?.bank;
                 const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
-                if (!csfb.err) setTurnCoinState([...turnCoinState, color]);
+                if (!csfb.err) {
+                  playWav('smb3_coin');
+                  setTurnCoinState([...turnCoinState, color]);
+                } else {
+                  playWav('smb3_bump');
+                }
                 // TBD: csfb.msg contains the error message, this needs to be displayed somewhere
               }
             }}

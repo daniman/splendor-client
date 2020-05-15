@@ -5,8 +5,8 @@ import { colors } from '@apollo/space-kit/colors';
 import { Card, PlaceholderCard, CARD_FRAGMENT } from './Card';
 import { CoinStack } from './CoinStack';
 import { TopOfDeck } from './Board';
-
 import * as Types from '../types';
+import { playWav } from '../modules/playWav';
 
 const PLAYER_FRAGMENT = gql`
   fragment PlayerSelection on Player {
@@ -202,9 +202,10 @@ export const TurnBuilder: React.FC<{
                   style={{ gridRow: 1, gridColumn: i + 1, alignSelf: 'end' }}
                   color={gemColor}
                   quantity={turnCoinState.filter((c) => c === gemColor).length}
-                  onSelect={(color) => {
+                  onSelect={(color) => { // coin being returned from the turn builder
                     const i = turnCoinState.findIndex((c) => c === color);
                     turnCoinState.splice(i, 1);
+                    playWav('smb3_coin');
                     setTurnCoinState([...turnCoinState]);
                   }}
                 />
