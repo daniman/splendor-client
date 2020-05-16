@@ -12,17 +12,11 @@ export const CardRowAndStack: React.FC<{
 }> = ({ cards, turnCardState, level, remaining, onSelect }) => (
   <div style={{ display: 'flex', marginBottom: 10 }}>
     <div
-      className="clickable"
+      className="clickable secret card"
       style={{
         backgroundColor: 'rgba(255,255,255,0.1)',
         flex: 'none',
-        width: 100,
-        height: 100,
         padding: 8,
-        borderRadius: 8,
-        color: 'white',
-        display: 'flex',
-        flexDirection: 'column',
       }}
       onClick={() => {
         if (onSelect) onSelect({ type: level });
@@ -35,22 +29,11 @@ export const CardRowAndStack: React.FC<{
           textAlign: 'center',
         }}
       >
-        <code style={{ marginLeft: 10 }}>{remaining}</code>
+        <code>{remaining}</code>
       </div>
       <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
         {new Array(level.length).fill(0).map((_j, i) => (
-          <div
-            key={i}
-            style={{
-              height: 6,
-              width: 6,
-              borderRadius: 6,
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              opacity: 0.8,
-              marginRight: 2,
-              marginLeft: 2,
-            }}
-          />
+          <div className='dots' key={i} />
         ))}
       </div>
     </div>

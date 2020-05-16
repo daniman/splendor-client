@@ -186,6 +186,9 @@ export const TurnBuilder: React.FC<{
     { error: reserveCardFromStackError },
   ] = useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
 
+  // coalesce all the gql errors
+  const gqlError = takeGemsError || purchaseCardError || reserveCardError || reserveCardFromStackError;
+  
   return (
     <div style={{ marginBottom: 60 }}>
       <h3 style={{ marginTop: 0 }}>
@@ -222,6 +225,7 @@ export const TurnBuilder: React.FC<{
                   onSelect={(color) => {
                     const i = returnCoinState.findIndex((c) => c === color);
                     returnCoinState.splice(i, 1);
+                    playWav('smb3_coin');
                     setReturnCoinState([...returnCoinState]);
                   }}
                 />
@@ -365,33 +369,10 @@ export const TurnBuilder: React.FC<{
           Reserve
         </Button>
       </div>
-      {takeGemsError && (
+      {gqlError && (
         <div style={{ marginTop: 20 }}>
           <code>
-            {takeGemsError.graphQLErrors.map((e) => e.message).join('; ')}
-          </code>
-        </div>
-      )}
-      {purchaseCardError && (
-        <div style={{ marginTop: 20 }}>
-          <code>
-            {purchaseCardError.graphQLErrors.map((e) => e.message).join('; ')}
-          </code>
-        </div>
-      )}
-      {reserveCardError && (
-        <div style={{ marginTop: 20 }}>
-          <code>
-            {reserveCardError.graphQLErrors.map((e) => e.message).join('; ')}
-          </code>
-        </div>
-      )}
-      {reserveCardFromStackError && (
-        <div style={{ marginTop: 20 }}>
-          <code>
-            {reserveCardFromStackError.graphQLErrors
-              .map((e) => e.message)
-              .join('; ')}
+            {gqlError.graphQLErrors.map((e) => e.message).join('; ')}
           </code>
         </div>
       )}
