@@ -39,7 +39,7 @@ export const CardRowAndStack: React.FC<{
     </div>
     {cards.map((card, i) =>
       turnCardState && (turnCardState as Types.CardSelection).id === card.id ? (
-        <PlaceholderCard label="x" style={{ marginLeft: 10 }} />
+        <PlaceholderCard label="x" key={card.id} style={{ marginLeft: 10 }} />
       ) : (
         <Card
           key={card.id}

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
@@ -185,9 +185,23 @@ export const TurnBuilder: React.FC<{
     reserveCardFromStack,
     { error: reserveCardFromStackError },
   ] = useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
+  
+  // state to show gql errors
+  const [showGQLError, setShowGQLError] = useState(true);
+
+  const handleGQLError = (e: String) => {
+    console.log(e)
+    playWav('smb3_bump');
+    setShowGQLError(true);
+  }
 
   // coalesce all the gql errors
   const gqlError = takeGemsError || purchaseCardError || reserveCardError || reserveCardFromStackError;
+
+  // clear gql errors after 3000ms
+  if (showGQLError && gqlError) {
+    setTimeout(() => setShowGQLError(false),3000);
+  }
   
   return (
     <div style={{ marginBottom: 60 }}>
@@ -268,9 +282,7 @@ export const TurnBuilder: React.FC<{
                 setTurnCoinState([]);
                 setReturnCoinState([]);
               })
-              .catch((e) => {
-                console.error(e.message);
-              });
+              .catch((e) => handleGQLError(e));
           }}
         >
           Take Gems
@@ -297,9 +309,7 @@ export const TurnBuilder: React.FC<{
               .then(() => {
                 setTurnCardState(null);
               })
-              .catch((e) => {
-                console.error(e.message);
-              });
+              .catch((e) => handleGQLError(e));
           }}
         >
           Purchase
@@ -342,9 +352,7 @@ export const TurnBuilder: React.FC<{
                     setTurnCardState(null);
                     setReturnCoinState([]);
                   })
-                  .catch((e) => {
-                    console.error(e.message);
-                  });
+                  .catch((e) => handleGQLError(e));
               } else {
                 // reserve from top of deck
                 reserveCardFromStack({
@@ -359,9 +367,7 @@ export const TurnBuilder: React.FC<{
                     setTurnCardState(null);
                     setReturnCoinState([]);
                   })
-                  .catch((e) => {
-                    console.error(e.message);
-                  });
+                  .catch((e) => handleGQLError(e));
               }
             }
           }}
@@ -369,7 +375,7 @@ export const TurnBuilder: React.FC<{
           Reserve
         </Button>
       </div>
-      {gqlError && (
+      {showGQLError && gqlError && (
         <div style={{ marginTop: 20 }}>
           <code>
             {gqlError.graphQLErrors.map((e) => e.message).join('; ')}
