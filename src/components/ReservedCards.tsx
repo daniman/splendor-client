@@ -12,8 +12,8 @@ export const ReservedCards: React.FC<{
   <>
     {cards && cards.length > 0 && (
       <>
+      <div style={{ marginBottom: 40 }}>
         <h3>Reserved:</h3>
-        <div>
           <div style={{ display: 'flex' }}>
             {cards.map((c, i: string | number | undefined) =>
               !!c ? (

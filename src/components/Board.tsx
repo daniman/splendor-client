@@ -3,8 +3,6 @@ import * as Types from '../types';
 import { Helmet } from 'react-helmet';
 import { useQuery, gql } from '@apollo/client';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
-import { CardRowAndStack } from './CardRowAndStack';
-import { NobleCard } from './NobleCard';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Bank } from './Bank';
 import { canSelectFromBank } from '../modules/coinRules';
@@ -15,6 +13,9 @@ import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
 import { TurnIndicator } from './TurnIndicator';
 import { playWav } from '../modules/playWav';
+import { playerResources } from '../modules/playerResources';
+import { NobleStack } from './NobleStack';
+import { GameCardStacks } from './GameCardStacks';
 
 export type TopOfDeck = { type: Types.CardStackType };
 
@@ -51,6 +52,11 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       data.game.players.find((p) => p.id === showingPlayerId)) ||
     data.game.players[0];
 
+  /* compute points available to purchase cards and attract nobles for the SHOWING PLAYER
+   * this can be used for client-side validation of purchases and/or 
+   * indicating what % of a card the user has resources for */
+  const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
+  
   const canAct =
     !!localPlayerId &&
     (localPlayerId === data.game.currentTurn?.id || localPlayerId === 'sudo');
@@ -69,13 +75,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             activePlayer={activePlayer} 
           />
 
-          <div style={{ position: 'relative', marginBottom: 30 }}>
-            <div style={{ display: 'flex' }}>
-              {data.game.nobles.map((card) => (
-                <NobleCard key={card.id} card={card} />
-              ))}
-            </div>
-          </div>
+          <NobleStack nobles={data.game.nobles} />
 
           <Bank
             bank={data.game.bank.map(({ gemColor, quantity }) => ({
@@ -99,20 +99,13 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             }}
           />
 
-          <div style={{ position: 'relative', marginBottom: 40 }}>
-            {data.game.cardStacks.map(({ type, remaining, cards }) => (
-              <CardRowAndStack
-                key={type}
-                cards={cards}
-                turnCardState={turnCardState}
-                remaining={remaining}
-                level={type}
-                onSelect={(card: Types.CardSelection | TopOfDeck) => {
-                  canAct && setTurnCardState(card);
-                }}
-              />
-            ))}
-          </div>
+          <GameCardStacks 
+            cardStacks={data.game.cardStacks} 
+            canAct={canAct} 
+            turnCardState={turnCardState}
+            setTurnCardState={setTurnCardState}
+          />
+
         </div>
 
         <div className="col-lg-6">
@@ -162,12 +155,14 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             cards={showingPlayer.purchasedCards} 
             bank={data.game.bank} 
           />
+
           <ReservedCards 
             cards={showingPlayer.reservedCards} 
             canAct={canAct}
             turnCardState={turnCardState}
             setTurnCardState={setTurnCardState}
           />
+          
         </div>
       </div>
       <div className="row">

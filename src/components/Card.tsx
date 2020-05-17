@@ -20,13 +20,9 @@ export const PlaceholderCard: React.FC<{ label?: any; style?: object }> = ({
   label,
   style,
 }) => (
-  <div
+  <div className='card placeholder'
     style={{
-      width: 100,
-      height: 100,
       backgroundColor: 'rgba(255,255,255,0.2)',
-      display: 'flex',
-      borderRadius: 8,
       justifyContent: 'center',
       alignItems: 'center',
       ...style,
@@ -47,53 +43,26 @@ export const Card: React.FC<{
   return (
     <div
       title={title || ''}
-      className={!!onSelect ? 'clickable' : ''}
+      className={!!onSelect ? 'clickable card' : 'card'}
       style={{
-        position: 'relative',
-        marginLeft: 10,
         backgroundColor: `${gemColor ? darkColors[gemColor] : '#FFFFFF'}`,
-        flex: 'none',
-        width: 100,
-        height: 100,
-        borderRadius: 8,
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
         ...style,
       }}
       onClick={() => {
         if (onSelect) onSelect(card);
       }}
     >
-      <div
-        style={{
-          flex: 0,
-          display: 'flex',
-          backgroundColor: 'rgba(255,255,255,0.1)',
-          padding: 8,
-        }}
-      >
-        <div style={{ flex: 1, lineHeight: 1, fontSize: 32, fontWeight: 900 }}>
+      <div className='top'>
+        <div className='pointValue'>
           {pointValue || ''}
         </div>
-        <div
+        <div className='bubble'
           style={{
-            flex: 'none',
             backgroundColor: gemColor ? colors[gemColor] : '#FFFFFF',
-            height: 32,
-            width: 32,
-            borderRadius: 32,
           }}
         />
       </div>
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'flex-end',
-          padding: 8,
-        }}
-      >
+      <div className='bottom'>
         {cost
           .filter((c) => c.quantity > 0)
           .map(({ gemColor, quantity }, i) => (

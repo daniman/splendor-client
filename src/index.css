@@ -42,3 +42,73 @@ code {
   outline: 2px solid rgba(255, 255, 255, 0.8);
   transition: outline 150ms ease-out;
 }
+
+.card {
+  position: relative;
+  margin-right: 10px;
+  margin-left: 0px;
+  flex: 0 0 auto;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+}
+
+.card > .top {
+  flex: 0;
+  display: flex;
+  background-color: rgba(255,255,255,0.1);
+  padding: 8px;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.card > .top > .pointValue {
+  flex: 1 1 0%;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.card > .top > .bubble {
+  flex: 0 0 auto;
+  background-color: rgb(30, 136, 229);
+  height: 32px;
+  width: 32px;
+  border-radius: 32px;
+}
+
+.card > .bottom {
+  flex: 1 1 0%;
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+}
+
+.card > .bottom > .costIndicator {
+  margin-right: 4px;
+  font-size: 10px;
+  height: 16px;
+  width: 16px;
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+}
+
+.card.noble > .top {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dots {
+  height: 6px;
+  width: 6px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  opacity: 0.8;
+  margin-right: 2px;
+  margin-left: 2px;
+}
