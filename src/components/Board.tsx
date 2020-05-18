@@ -60,6 +60,7 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   
   const canAct =
     !!localPlayerId &&
+    data.game.state !== Types.GameState.COMPLETE && 
     (localPlayerId === data.game.currentTurn?.id || localPlayerId === 'sudo');
 
   return (

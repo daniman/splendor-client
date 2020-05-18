@@ -3,7 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
 import { Card, PlaceholderCard, CARD_FRAGMENT } from './Card';
-import { CoinStack } from './CoinStack';
+import { TurnCoins } from './TurnCoins';
 import { TopOfDeck } from './Board';
 import * as Types from '../types';
 import { playWav } from '../modules/playWav';
@@ -189,6 +189,7 @@ export const TurnBuilder: React.FC<{
   // state to show gql errors
   const [showGQLError, setShowGQLError] = useState(true);
 
+  // error handler for gql errors
   const handleGQLError = (e: String) => {
     console.log(e)
     playWav('smb3_bump');
@@ -213,36 +214,21 @@ export const TurnBuilder: React.FC<{
         {Array.from(new Set([...turnCoinState, ...returnCoinState])).map(
           (gemColor, i) => (
             <>
-              {turnCoinState.filter((c) => c === gemColor).length > 0 && (
-                <CoinStack
-                  key={gemColor}
-                  style={{ gridRow: 1, gridColumn: i + 1, alignSelf: 'end' }}
-                  color={gemColor}
-                  quantity={turnCoinState.filter((c) => c === gemColor).length}
-                  onSelect={(color) => { // coin being returned from the turn builder
-                    const i = turnCoinState.findIndex((c) => c === color);
-                    turnCoinState.splice(i, 1);
-                    setTurnCoinState([...turnCoinState]);
-                  }}
-                />
-              )}
-              {returnCoinState.filter((c) => c === gemColor).length > 0 && (
-                <CoinStack
-                  key={`inverted-${gemColor}`}
-                  style={{ gridRow: 2, gridColumn: i + 1, alignSelf: 'start' }}
-                  inverted={true}
-                  color={gemColor}
-                  quantity={
-                    returnCoinState.filter((c) => c === gemColor).length
-                  }
-                  onSelect={(color) => {
-                    const i = returnCoinState.findIndex((c) => c === color);
-                    returnCoinState.splice(i, 1);
-                    playWav('smb3_coin');
-                    setReturnCoinState([...returnCoinState]);
-                  }}
-                />
-              )}
+              <TurnCoins 
+                coinState={turnCoinState} 
+                setCoinState={setTurnCoinState} 
+                gemColor={gemColor} 
+                column={i}
+                key={gemColor}
+              />
+              <TurnCoins 
+                coinState={returnCoinState} 
+                setCoinState={setReturnCoinState} 
+                gemColor={gemColor} 
+                column={i}
+                key={`-${gemColor}`}
+                inverted={true}
+              />
             </>
           )
         )}
@@ -325,12 +311,10 @@ export const TurnBuilder: React.FC<{
               .includes((turnCardState as Types.CardSelection).id)
           }
           onClick={() => {
-            console.log('reserving', goldAvailableInBank);
-
-            let confirmed = true;
+            let confirmed;
             if (!goldAvailableInBank) {
               confirmed = window.confirm(
-                'Are you sure you want to reserve with no YELLOW gems available?'
+                'Are you sure you want to reserve when no YELLOW gems are available?'
               );
             }
 

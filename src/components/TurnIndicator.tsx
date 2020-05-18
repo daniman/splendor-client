@@ -22,9 +22,11 @@ export const TurnIndicator: React.FC<{
           </code>
         )}
       </h1>
-      <h3 style={{ marginTop: 0 }}>
-        It's <code>{activePlayer.id}</code>'s turn.
-      </h3>
+      {game.state !== Types.GameState.COMPLETE && (
+        <h3 style={{ marginTop: 0 }}>
+          It's <code>{activePlayer.id}</code>'s turn.
+        </h3>
+      )}
     </div>
   </div>
 )
