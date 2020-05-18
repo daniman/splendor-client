@@ -8,7 +8,7 @@ export const canSelectFromBank = (
   returnCoinState: Types.GemColor[] ) => {
   let msg;
   const playerTotalCoins = playerBank ? playerBank.reduce((accumulator, el) => accumulator + el.quantity,0) : 0;
-  const bankCoinsOfColor = bank ? bank.reduce((accumulator,el) => el.gemColor === color ? accumulator + el.quantity : 0,0) : 0;
+  //const bankCoinsOfColor = bank ? bank.reduce((accumulator,el) => el.gemColor === color ? accumulator + el.quantity : 0,0) : 0;
   
   // disallow picking yellow
   if (color === 'YELLOW') msg = "Can't pick yellow coins directly, need to reserve a card!";

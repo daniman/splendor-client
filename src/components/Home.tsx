@@ -84,7 +84,7 @@ export const Home: React.FC = () => {
           as={
             <form
               onSubmit={(e) => {
-                console.log('subimtting');
+                console.log('submitting');
                 e.preventDefault();
                 createGame({
                   variables: { name: gameName },

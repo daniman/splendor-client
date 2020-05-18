@@ -63,9 +63,9 @@ export const Miniboard: React.FC<{
           <div key={gemColor || ''} style={{ lineHeight: 1 }}>
             {p.purchasedCards
               .filter((c) => c.gemColor === gemColor)
-              .map((i) => (
+              .map((c) => (
                 <div
-                  key={`${gemColor}-${i}`}
+                  key={c.id}
                   style={{
                     display: 'inline-block',
                     marginRight: 2,
