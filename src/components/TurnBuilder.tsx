@@ -210,7 +210,7 @@ export const TurnBuilder: React.FC<{
         Build Your Turn:
         <code style={{ marginLeft: 10 }}>{activePlayer.id}</code>
       </h3>
-      <div style={{ display: 'grid', width: 'fit-content' }}>
+      <div style={{ display: 'grid', width: 'fit-content', marginBottom: 20}}>
         {Array.from(new Set([...turnCoinState, ...returnCoinState])).map(
           (gemColor, i) => (
             <>
@@ -244,7 +244,10 @@ export const TurnBuilder: React.FC<{
               }}
             />
           ) : (
-            <PlaceholderCard label={(turnCardState as TopOfDeck).type} />
+            <PlaceholderCard 
+              label={(turnCardState as TopOfDeck).type} 
+              style={{ marginLeft: 0, marginRight: 0 }}
+            />
           ))}
       </div>
       <div style={{ marginTop: 20 }}>
@@ -311,7 +314,7 @@ export const TurnBuilder: React.FC<{
               .includes((turnCardState as Types.CardSelection).id)
           }
           onClick={() => {
-            let confirmed;
+            let confirmed = true;
             if (!goldAvailableInBank) {
               confirmed = window.confirm(
                 'Are you sure you want to reserve when no YELLOW gems are available?'
