@@ -13,7 +13,7 @@ import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
 import { TurnIndicator } from './TurnIndicator';
 import { playWav } from '../modules/playWav';
-import { playerResources } from '../modules/playerResources';
+//import { playerResources } from '../modules/playerResources';
 import { NobleStack } from './NobleStack';
 import { GameCardStacks } from './GameCardStacks';
 
@@ -55,7 +55,8 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   /* compute points available to purchase cards and attract nobles for the SHOWING PLAYER
    * this can be used for client-side validation of purchases and/or 
    * indicating what % of a card the user has resources for */
-  const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
+  // TBD: uncomment the line below when implementing such features
+  // const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
   
   const canAct =
     !!localPlayerId &&

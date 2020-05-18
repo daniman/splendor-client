@@ -16,8 +16,9 @@ import './index.css';
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    //uri: 'http://localhost:4000',
-    uri: 'https://splendoor.herokuapp.com/graphql',
+    uri: document.location.host.indexOf('localhost') === -1 ?
+    'https://splendoor.herokuapp.com/graphql' : 
+    'http://localhost:4000',
   }),
 });
 
