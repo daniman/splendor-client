@@ -7,7 +7,8 @@ export const Miniboard: React.FC<{
   setShowingPlayerId: React.Dispatch<React.SetStateAction<string>>;
   showingPlayer: Types.GameBoard_game_players;
   activePlayer: Types.GameBoard_game_players;
-}> = ({ players, setShowingPlayerId, showingPlayer, activePlayer}) => (
+  localPlayerId: String | null;
+}> = ({ players, setShowingPlayerId, showingPlayer, activePlayer, localPlayerId}) => (
   <div style={{ display: 'flex', marginTop: 20, marginBottom: 20 }}>
     {players.map((p) => (
       <div
@@ -29,27 +30,29 @@ export const Miniboard: React.FC<{
         <div style={{ display: 'flex' }}>
           <div
             style={{
-              fontWeight: 900,
               wordBreak: 'break-word',
               flex: 1,
             }}
           >
-            {p.id}
+            <span 
+              style={{
+                color: p.id === localPlayerId ? '#FFFFFF' : 'lightgrey',
+                fontWeight: p.id === localPlayerId ? 1000 : 500
+              }}
+            >
+              {p.id}
+            </span> 
             {p.id === activePlayer.id && (
-              <span
-                style={{ marginLeft: 10 }}
-                role="img"
-                aria-label="thinking"
-              >
-                🤔
-              </span>
+              <span style={{
+                marginLeft: 10,
+                fontWeight: p.id === localPlayerId ? 1000 : 500
+              }} role="img" aria-label="thinking">🤔</span>
             )}
           </div>
           <code style={{ flex: 'none', marginLeft: 5 }}>
-            {Math.max(...players.map((p) => p.score)) ===
-              p.score &&
-              p.score > 0 &&
-              '👑'}
+            {Math.max(...players.map((p) => p.score)) === p.score && p.score > 0 &&
+              <span role="img" aria-label="leading">👑</span>
+            }
             {p.score}
           </code>
         </div>
