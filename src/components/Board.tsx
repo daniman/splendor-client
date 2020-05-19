@@ -28,7 +28,10 @@ const GAME_BOARD_QUERY = gql`
   ${GAME_FRAGMENT}
 `;
 
-export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
+export const Board: React.FC<{
+  gameId: string;
+  localPlayerId: string | null;
+}> = ({ gameId, localPlayerId }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
     variables: { gameId, playerId: localStorage.getItem(`splendor:${gameId}`) },
     pollInterval: 3000,
@@ -45,7 +48,6 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
   if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
   if (!data || !data.game) return <div>No game found :(</div>;
 
-  const localPlayerId = localStorage.getItem(`splendor:${data.game.id}`);
   const activePlayer = data.game.currentTurn || data.game.players[0];
   const showingPlayer =
     (showingPlayerId &&
@@ -73,8 +75,11 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
       <div className="row">
         <div className="col-lg-6">
           <TurnIndicator 
-            game={data.game} 
+            name={data.game.name}
+            state={data.game.state} 
+            players={data.game.players}
             activePlayer={activePlayer} 
+            localPlayerId={localPlayerId}
           />
 
           <NobleStack nobles={data.game.nobles} />
@@ -134,7 +139,9 @@ export const Board: React.FC<{ gameId: string }> = ({ gameId }) => {
             players={data.game.players} 
             setShowingPlayerId={setShowingPlayerId} 
             showingPlayer={showingPlayer}
-            activePlayer={activePlayer} />
+            activePlayer={activePlayer}
+            localPlayerId={localPlayerId}
+          />
 
           <Bank
             bank={showingPlayer.bank.map(({ gemColor, quantity }) => ({

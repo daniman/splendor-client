@@ -43,9 +43,8 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     variables: { gameId: match.params.gameId },
     pollInterval: 3000,
   });
-  const [ticker, setTicker] = useState('');
-
   const localPlayerId = localStorage.getItem(`splendor:${match.params.gameId}`);
+  const [ticker, setTicker] = useState('');
 
   const state = data?.game?.state;
   const prevState = usePrevious(state);
@@ -116,31 +115,33 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
 
   return (
     <>
+    {!localPlayerId ? (
       <code
         style={{
           paddingTop: 2,
           paddingBottom: 2,
           paddingLeft: 8,
           paddingRight: 8,
-          position: 'absolute',
+          position: 'fixed',
           backgroundColor: '#e83e8c',
           top: 0,
           right: 0,
           color: 'white',
         }}
       >
-        {!!localPlayerId ? `playing as: ${localPlayerId}` : 'you are observing'}
+        You are observing
       </code>
+    ) : ''}
       {data?.game?.currentTurn?.id === localPlayerId && (
         <code
           style={{
-            position: 'absolute',
+            position: 'fixed',
             right: 0,
             paddingTop: 2,
             paddingBottom: 2,
             paddingLeft: 8,
             paddingRight: 8,
-            top: 24,
+            top: 0,
             color: 'white',
             backgroundColor: '#3F20BA',
           }}
@@ -148,7 +149,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
           It's your turn! <b>{ticker}</b>
         </code>
       )}
-      <Board gameId={data.game.id} />
+      <Board gameId={data.game.id} localPlayerId={localPlayerId}/>
     </>
   );
 };
