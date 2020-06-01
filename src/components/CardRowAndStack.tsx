@@ -11,6 +11,19 @@ export const CardRowAndStack: React.FC<{
   onSelect?: (c: Types.CardSelection | TopOfDeck) => void;
 }> = ({ cards, turnCardState, level, remaining, onSelect }) => (
   <div style={{ display: 'flex', marginBottom: 10 }}>
+    {cards.map((card, i) =>
+      turnCardState && (turnCardState as Types.CardSelection).id === card.id ? (
+        <PlaceholderCard label="x" key={card.id} />
+      ) : (
+        <Card
+          key={card.id}
+          card={card}
+          onSelect={(card: Types.CardSelection) => {
+            if (onSelect) onSelect(card);
+          }}
+        />
+      )
+    )}
     <div
       className="clickable secret card"
       style={{
@@ -37,18 +50,5 @@ export const CardRowAndStack: React.FC<{
         ))}
       </div>
     </div>
-    {cards.map((card, i) =>
-      turnCardState && (turnCardState as Types.CardSelection).id === card.id ? (
-        <PlaceholderCard label="x" key={card.id} style={{ marginLeft: 10 }} />
-      ) : (
-        <Card
-          key={card.id}
-          card={card}
-          onSelect={(card: Types.CardSelection) => {
-            if (onSelect) onSelect(card);
-          }}
-        />
-      )
-    )}
   </div>
 );

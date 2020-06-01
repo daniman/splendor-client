@@ -7,28 +7,38 @@ export const TurnIndicator: React.FC<{
   players: Types.GameBoard_game_players[];
   activePlayer: Types.GameBoard_game_currentTurn;
   localPlayerId: string | null;
-}> = ({ name, state, players, activePlayer, localPlayerId }) => {
+  ticker: string
+}> = ({ name, state, players, activePlayer, localPlayerId, ticker }) => {
   const winningPlayer = players.filter(p => p.score === Math.max(...players.map((q) => q.score)))[0].id;
 
   return (
-    <div className="row" style={{ marginBottom: 40 }}>
-      <div className="col-md-6">
-        <h1 style={{ marginTop: 0, marginBottom: 20, lineHeight: 1 }}>{name}</h1>
+    <>
+      <div className="col-md-2">
+        <span style={{fontWeight: 900}}>
         {state === Types.GameState.COMPLETE ? (
-          <code style={{ marginLeft: 10 }}>
-            {winningPlayer}{' '}
-            wins!
-          </code>
+          <span>
+            {winningPlayer}&nbsp;has won!
+          </span>
         ) : activePlayer.id === localPlayerId ? (
-          <h3 style={{ marginTop: 0 }}>
-            It's your turn!
-          </h3>
+          <span>It's your turn!&nbsp;<code>{ticker}</code></span>
         ) : (
-          <h3 style={{ marginTop: 0 }}>
-            It's <code>{activePlayer.id}</code>'s turn!
-          </h3>
+          <span>It's <code>{activePlayer.id}</code>'s turn!</span>
         )}
+        </span>
       </div>
+      <div className="col-md-4">
+        <span>
+          You are {!localPlayerId ? <span>observing</span> : <span>playing in</span>} the game: <code>{name}</code>
+        </span>
+      </div>
+    <div className="col-md-3">
+      <span>
+        Welcome to Splendoor!
+      </span>
     </div>
+      <div className="col-md-3">
+        <span style={{float: 'right'}}><a href="/">Return to Lobby</a></span>
+      </div>
+    </>
   )
 }
