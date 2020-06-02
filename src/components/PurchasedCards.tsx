@@ -6,7 +6,7 @@ export const PurchasedCards: React.FC<{
   cards: Types.PlayerSelection_purchasedCards[];
   bank: Types.GameBoard_game_bank[];
 }> = ( { cards, bank } ) => (
-  <div style={{ marginBottom: 40 }}>
+  <div style={{ marginBottom: 20 }}>
     <h3>Purchased:</h3>
       {cards?.length ? (
         <div style={{ display: 'flex' }}>
