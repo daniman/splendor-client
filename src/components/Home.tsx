@@ -55,79 +55,91 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="row">
-      <h1>Games:</h1>
-      {data.allGames.map(({ id, name, state, players }, i) => (
-        <Link to={`/${id}`} key={id}>
-          <h3 style={{ color: 'white', marginTop: 0, marginBottom: 10 }}>
-            <div style={{ display: 'inline-block' }} className="clickable">
-              <code style={{ marginRight: 10 }}>{state}</code>
-              <span style={{ marginRight: 10 }}>{name}</span>
-              <Small>{players.length} players</Small>
-            </div>
-          </h3>
-        </Link>
-      ))}
-      <Button
-        theme="dark"
-        style={{ marginRight: 10, marginTop: 20 }}
-        color={colors.pink.dark}
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Create Game
-      </Button>
-      {open && (
-        <Modal
-          className="text-black"
-          as={
-            <form
-              onSubmit={(e) => {
-                console.log('submitting');
-                e.preventDefault();
-                createGame({
-                  variables: { name: gameName },
-                })
-                  .then(onClose)
-                  .catch((e) => {
-                    console.error(e.message);
-                  });
-              }}
-              noValidate={true}
-            />
-          }
-          title="Name of the game?"
-          size="small"
-          onClose={onClose}
-          primaryAction={
-            <Button
-              type="submit"
-              loading={createLoading}
-              color={colors.blue.base}
-            >
-              Create
-            </Button>
-          }
-          secondaryAction={
-            <Button type="button" onClick={onClose}>
-              Cancel
-            </Button>
-          }
+    <>
+      <div className="row">
+        <div className="col-lg-12">
+          <h1>Games:</h1>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-lg-12">
+          {data.allGames.map(({ id, name, state, players }, i) => (
+            <h3 style={{ color: 'white', marginTop: 0, marginBottom: 10 }}>
+              <Link to={`/${id}`} key={id}>
+                <div style={{ display: 'inline-block' }} className="clickable">
+                  <code style={{ marginRight: 10 }}>{state}</code>
+                  <span style={{ marginRight: 10 }}>{name}</span>
+                  <Small>{players.length} players</Small>
+                </div>
+              </Link>
+            </h3>
+          ))}
+        </div>
+      </div>
+      <div>
+        <Button
+          theme="dark"
+          style={{ marginRight: 10, marginTop: 20 }}
+          color={colors.pink.dark}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
-          <TextField
-            autoFocus={true}
-            error={createError?.graphQLErrors.map((e) => e.message).join('; ')}
-            className="width-full"
-            label="Game Name"
-            size="standard"
-            value={gameName}
-            onChange={(e) => {
-              setGameName(e.target.value);
-            }}
-          />
-        </Modal>
-      )}
-    </div>
+          Create Game
+        </Button>
+        {open && (
+          <Modal
+            className="text-black"
+            as={
+              <form
+                onSubmit={(e) => {
+                  console.log('submitting');
+                  e.preventDefault();
+                  createGame({
+                    variables: { name: gameName },
+                  })
+                    .then(onClose)
+                    .catch((e) => {
+                      console.error(e.message);
+                    });
+                }}
+                noValidate={true}
+              />
+            }
+            title="Name of the game?"
+            size="small"
+            onClose={onClose}
+            primaryAction={
+              <Button
+                type="submit"
+                loading={createLoading}
+                color={colors.blue.base}
+              >
+                Create
+              </Button>
+            }
+            secondaryAction={
+              <Button type="button" onClick={onClose}>
+                Cancel
+              </Button>
+            }
+          >
+            <TextField
+              autoFocus={true}
+              error={createError?.graphQLErrors
+                .map((e) => e.message)
+                .join('; ')}
+              className="width-full"
+              label="Game Name"
+              size="standard"
+              value={gameName}
+              onChange={(e) => {
+                setGameName(e.target.value);
+              }}
+            />
+          </Modal>
+        )}
+      </div>
+    </>
   );
 };
