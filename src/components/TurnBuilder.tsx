@@ -207,8 +207,7 @@ export const TurnBuilder: React.FC<{
   return (
     <div style={{ marginBottom: 60 }}>
       <h3 style={{ marginTop: 0 }}>
-        Build Your Turn:
-        <code style={{ marginLeft: 10 }}>{activePlayer.id}</code>
+        Take or exchange gems, reserve a card, or purchase a card
       </h3>
       <div style={{ display: 'grid', width: 'fit-content', marginBottom: 20}}>
         {Array.from(new Set([...turnCoinState, ...returnCoinState])).map(

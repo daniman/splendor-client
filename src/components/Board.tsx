@@ -13,7 +13,6 @@ import { PurchasedCards } from './PurchasedCards';
 import { ReservedCards } from './ReservedCards';
 import { TurnIndicator } from './TurnIndicator';
 import { playWav } from '../modules/playWav';
-//import { playerResources } from '../modules/playerResources';
 import { NobleStack } from './NobleStack';
 import { GameCardStacks } from './GameCardStacks';
 
@@ -31,7 +30,8 @@ const GAME_BOARD_QUERY = gql`
 export const Board: React.FC<{
   gameId: string;
   localPlayerId: string | null;
-}> = ({ gameId, localPlayerId }) => {
+  ticker: string;
+}> = ({ gameId, localPlayerId, ticker }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
     variables: { gameId, playerId: localStorage.getItem(`splendor:${gameId}`) },
     pollInterval: 3000,
@@ -72,50 +72,26 @@ export const Board: React.FC<{
           {data.game.name} {canAct ? `| 👋 it's your turn!` : ''}
         </title>
       </Helmet>
+      <div className="row" style={{marginBottom: 5, marginTop: -10}}>
+        <TurnIndicator 
+          name={data.game.name}
+          state={data.game.state} 
+          players={data.game.players}
+          activePlayer={activePlayer} 
+          localPlayerId={localPlayerId}
+          ticker={ticker}
+        />
+      </div>
       <div className="row">
-        <div className="col-lg-6">
-          <TurnIndicator 
-            name={data.game.name}
-            state={data.game.state} 
-            players={data.game.players}
-            activePlayer={activePlayer} 
+        <div className="col-lg-6" style={canAct ? {border: '2px dotted yellow'} : {border: '1px dotted grey'}}>
+          <Miniboard 
+            players={data.game.players} 
+            setShowingPlayerId={setShowingPlayerId} 
+            showingPlayer={showingPlayer}
+            activePlayer={activePlayer}
             localPlayerId={localPlayerId}
           />
 
-          <NobleStack nobles={data.game.nobles} />
-
-          <Bank
-            bank={data.game.bank.map(({ gemColor, quantity }) => ({
-              gemColor,
-              quantity:
-                quantity - turnCoinState.filter((c) => c === gemColor).length,
-            }))}
-            style={{ marginBottom: 40 }}
-            onSelect={(color) => {
-              if (canAct){
-                const bank = data?.game?.bank;
-                const playerBank = data?.game?.currentTurn?.bank;
-                const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
-                if (!csfb.err) {
-                  setTurnCoinState([...turnCoinState, color]);
-                } else {
-                  playWav('smb3_bump');
-                }
-                // TBD: csfb.msg contains the error message, this needs to be displayed somewhere
-              }
-            }}
-          />
-
-          <GameCardStacks 
-            cardStacks={data.game.cardStacks} 
-            canAct={canAct} 
-            turnCardState={turnCardState}
-            setTurnCardState={setTurnCardState}
-          />
-
-        </div>
-
-        <div className="col-lg-6">
           {canAct && (
             <TurnBuilder
               gameId={gameId}
@@ -134,14 +110,6 @@ export const Board: React.FC<{
               setReturnCoinState={setReturnCoinState}
             />
           )}
-
-          <Miniboard 
-            players={data.game.players} 
-            setShowingPlayerId={setShowingPlayerId} 
-            showingPlayer={showingPlayer}
-            activePlayer={activePlayer}
-            localPlayerId={localPlayerId}
-          />
 
           <Bank
             bank={showingPlayer.bank.map(({ gemColor, quantity }) => ({
@@ -171,7 +139,40 @@ export const Board: React.FC<{
             turnCardState={turnCardState}
             setTurnCardState={setTurnCardState}
           />
-          
+        </div>
+
+        <div className="col-lg-6" style={{border: '1px dotted grey'}}>
+          <Bank
+            bank={data.game.bank.map(({ gemColor, quantity }) => ({
+              gemColor,
+              quantity:
+                quantity - turnCoinState.filter((c) => c === gemColor).length,
+            }))}
+            style={{ marginBottom: 20, marginTop: 20 }}
+            onSelect={(color) => {
+              if (canAct){
+                const bank = data?.game?.bank;
+                const playerBank = data?.game?.currentTurn?.bank;
+                const csfb = canSelectFromBank(color,turnCoinState,playerBank,bank,returnCoinState);
+                if (!csfb.err) {
+                  setTurnCoinState([...turnCoinState, color]);
+                } else {
+                  playWav('smb3_bump');
+                }
+                // TBD: csfb.msg contains the error message, this needs to be displayed somewhere
+              }
+            }}
+          />
+
+          <NobleStack nobles={data.game.nobles} />
+
+          <GameCardStacks 
+            cardStacks={data.game.cardStacks} 
+            canAct={canAct} 
+            turnCardState={turnCardState}
+            setTurnCardState={setTurnCardState}
+          />
+
         </div>
       </div>
       <div className="row">

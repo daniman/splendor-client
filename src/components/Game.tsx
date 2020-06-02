@@ -72,19 +72,11 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
         interval = setInterval(() => {
           const diff = moment().diff(lastTurn.when);
           setTicker(moment(diff).format('mm:ss'));
-          // if (
-          //   moment.duration(diff).asSeconds() ===
-          //   moment.duration(10, 'seconds').asSeconds()
-          // ) {
-          //   console.log('apply sound');
-          //   playWav('smb3_jump');
-          // }
         }, 1000);
       }
     } else if (turn !== localPlayerId) {
       clearInterval(interval);
     }
-    // return () => clearInterval(interval);
   }, [localPlayerId, prevTurn, turn, lastTurn]);
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
@@ -93,9 +85,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     return (
       <div>
         <div>
-          <code>
-            No game matching identifier {match.params.gameId} was found.
-          </code>
+          No game matching identifier <code>{match.params.gameId}</code> was found.
         </div>
         <Button
           color={colors.pink.base}
@@ -114,42 +104,6 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
   }
 
   return (
-    <>
-    {!localPlayerId ? (
-      <code
-        style={{
-          paddingTop: 2,
-          paddingBottom: 2,
-          paddingLeft: 8,
-          paddingRight: 8,
-          position: 'fixed',
-          backgroundColor: '#e83e8c',
-          top: 0,
-          right: 0,
-          color: 'white',
-        }}
-      >
-        You are observing
-      </code>
-    ) : ''}
-      {data?.game?.currentTurn?.id === localPlayerId && (
-        <code
-          style={{
-            position: 'fixed',
-            right: 0,
-            paddingTop: 2,
-            paddingBottom: 2,
-            paddingLeft: 8,
-            paddingRight: 8,
-            top: 0,
-            color: 'white',
-            backgroundColor: '#3F20BA',
-          }}
-        >
-          It's your turn! <b>{ticker}</b>
-        </code>
-      )}
-      <Board gameId={data.game.id} localPlayerId={localPlayerId}/>
-    </>
+    <Board gameId={data.game.id} localPlayerId={localPlayerId} ticker={ticker}/>
   );
 };

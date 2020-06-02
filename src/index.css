@@ -2,12 +2,25 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  padding: 40px;
+  padding: 20px 40px 20px 40px;
   font-family: 'Lato', sans-serif;
   font-weight: 400;
 
   background-color: rgb(18, 21, 26);
   color: rgb(255, 255, 255);
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
 }
 
 code,
