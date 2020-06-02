@@ -72,7 +72,7 @@ export const Board: React.FC<{
           {data.game.name} {canAct ? `| 👋 it's your turn!` : ''}
         </title>
       </Helmet>
-      <div className="row">
+      <div className="row" style={{marginBottom: 5, marginTop: -10}}>
         <TurnIndicator 
           name={data.game.name}
           state={data.game.state} 

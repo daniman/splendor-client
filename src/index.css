@@ -10,6 +10,19 @@ body {
   color: rgb(255, 255, 255);
 }
 
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
 code,
 .mono {
   font-family: 'Inconsolata', monospace;
