@@ -103,12 +103,13 @@ export const Lobby: React.FC<{
       </div>
       <div className="row">
         {data.game.players.length > 0 ? (
-          data.game.players.map((p, i) => (
-            <div key={p.id}>
-              <Small>#{i + 1}:</Small>
-              <code style={{ marginLeft: 10 }}>{p.id}</code>
-            </div>
-          ))
+          <ol>
+            {data.game.players.map((p, i) => (
+              <li key={p.id}>
+                <code style={{ marginLeft: 10 }}>{p.id}</code>
+              </li>
+            ))}
+          </ol>
         ) : (
           <code>No players have joined yet.</code>
         )}
