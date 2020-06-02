@@ -83,7 +83,7 @@ export const Board: React.FC<{
         />
       </div>
       <div className="row">
-        <div className="col-lg-6" style={canAct ? {border: '2px dotted yellow'} : {border: '1px dotted grey'}}>
+        <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12" style={canAct ? {border: '2px dotted yellow'} : {border: '1px dotted grey'}}>
           <Miniboard 
             players={data.game.players} 
             setShowingPlayerId={setShowingPlayerId} 
@@ -141,7 +141,7 @@ export const Board: React.FC<{
           />
         </div>
 
-        <div className="col-lg-6" style={{border: '1px dotted grey'}}>
+        <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12" style={{border: '1px dotted grey'}}>
           <Bank
             bank={data.game.bank.map(({ gemColor, quantity }) => ({
               gemColor,

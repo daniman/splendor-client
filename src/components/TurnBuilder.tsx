@@ -205,7 +205,7 @@ export const TurnBuilder: React.FC<{
   }
   
   return (
-    <div style={{ marginBottom: 60 }}>
+    <div style={{ marginBottom: 20 }}>
       <h3 style={{ marginTop: 0 }}>
         Take or exchange gems, reserve a card, or purchase a card
       </h3>

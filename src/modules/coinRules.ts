@@ -8,7 +8,7 @@ export const canSelectFromBank = (
   returnCoinState: Types.GemColor[] ) => {
   let msg;
   const playerTotalCoins = playerBank ? playerBank.reduce((accumulator, el) => accumulator + el.quantity,0) : 0;
-  //const bankCoinsOfColor = bank ? bank.reduce((accumulator,el) => el.gemColor === color ? accumulator + el.quantity : 0,0) : 0;
+  const bankCoinsOfColor = bank ? bank.reduce((accumulator,el) => el.gemColor === color ? accumulator + el.quantity : 0,0) : 0;
   
   // disallow picking yellow
   if (color === 'YELLOW') msg = "Can't pick yellow coins directly, need to reserve a card!";
@@ -16,6 +16,9 @@ export const canSelectFromBank = (
   // if user has already picked two coins of the same color don't allow a 3rd pick
   if (turnCoinState.length === 2 && turnCoinState[0] === turnCoinState[1]) msg = "Can't pick a 3rd coin when you've already picked 2 coins of the same color!";
 
+  // if user already has picked one coin then don't allow a second coin of the same color if <3 remain	
+  if (turnCoinState.length === 1 && turnCoinState.includes(color) && bankCoinsOfColor < 3 ) msg = "Can't take two coins of the same color if 3 or less remain!";
+  
   // disallow picking a 3rd coin if it's the same color as an existing coin
   if (turnCoinState.length === 2 && turnCoinState.includes(color)) msg = "If you pick 2 coins of the same color you can't pick a 3rd!";
   

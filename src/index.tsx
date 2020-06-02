@@ -29,7 +29,7 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
       <Helmet>
-        <title>Splendor</title>
+        <title>Splendoor</title>
       </Helmet>
       <Router>
         <div className="container">
