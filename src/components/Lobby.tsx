@@ -78,121 +78,130 @@ export const Lobby: React.FC<{
   };
 
   return (
-    <div className="row">
-      <div>
-        <Button
-          title="Back to home."
-          theme="dark"
-          color={colors.grey.darker}
-          style={{ color: 'white' }}
-          as={<Link to="/" />}
-          icon={<IconBack style={{ width: 12, height: 12 }} />}
-        />
+    <>
+      <div className="row">
+        <h1>
+          <Button
+            title="Back to home."
+            theme="dark"
+            color={colors.grey.darker}
+            style={{ color: 'white' }}
+            as={<Link to="/" />}
+            icon={<IconBack style={{ width: 12, height: 12 }} />}
+          />
+          <span style={{ marginLeft: 20 }}>
+            {data.game.name}{' '}
+            <code style={{ marginLeft: 10 }}>{data.game.id}</code>
+          </span>
+        </h1>
       </div>
-      <h1>
-        {data.game.name} <code style={{ marginLeft: 10 }}>{data.game.id}</code>
-      </h1>
-      <h3>
-        <span style={{ marginRight: 10 }}>Players:</span>
-        <Small>(up to 4)</Small>
-      </h3>
-      {data.game.players.length > 0 ? (
-        data.game.players.map((p, i) => (
-          <div key={p.id}>
-            <Small>#{i + 1}:</Small>
-            <code style={{ marginLeft: 10 }}>{p.id}</code>
-          </div>
-        ))
-      ) : (
-        <code>No players have joined yet.</code>
-      )}
-      <div style={{ marginTop: 60 }}>
-        <Button
-          theme="dark"
-          style={{ marginRight: 10 }}
-          color={colors.pink.dark}
-          disabled={data.game.players.length === 4}
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          Join Game
-        </Button>
-        {open && (
-          <Modal
-            className="text-black"
-            as={
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  playWav('smb3_enter_level');
-
-                  joinGame({
-                    variables: { gameId, playerId: playerName },
-                  })
-                    .then(() => {
-                      localStorage.setItem(`splendor:${gameId}`, playerName);
-                      onClose();
-                    })
-                    .catch((e) => {
-                      console.error(e.message);
-                    });
-                }}
-                noValidate={true}
-              />
-            }
-            title="Who would you like to join the game as?"
-            size="small"
-            onClose={onClose}
-            primaryAction={
-              <Button
-                type="submit"
-                loading={joinLoading}
-                color={colors.blue.base}
-              >
-                Join
-              </Button>
-            }
-            secondaryAction={
-              <Button type="button" onClick={onClose}>
-                Cancel
-              </Button>
-            }
-          >
-            <TextField
-              autoFocus={true}
-              error={joinError?.graphQLErrors.map((e) => e.message).join('; ')}
-              className="width-full"
-              label="Player Name"
-              size="standard"
-              value={playerName}
-              onChange={(e) => {
-                setPlayerName(e.target.value);
-              }}
-            />
-          </Modal>
+      <div className="row">
+        <h3>
+          <span style={{ marginRight: 10 }}>Players:</span>
+          <Small>(up to 4)</Small>
+        </h3>
+      </div>
+      <div className="row">
+        {data.game.players.length > 0 ? (
+          data.game.players.map((p, i) => (
+            <div key={p.id}>
+              <Small>#{i + 1}:</Small>
+              <code style={{ marginLeft: 10 }}>{p.id}</code>
+            </div>
+          ))
+        ) : (
+          <code>No players have joined yet.</code>
         )}
-        <Button
-          theme="dark"
-          color={colors.blue.base}
-          disabled={data.game.players.length < 2}
-          loading={startLoading}
-          onClick={() => {
-            startGame().catch((e) => {
-              console.error(e.message);
-            });
-          }}
-        >
-          Start Game
-        </Button>
-      </div>
-      {startError && (
-        <div style={{ marginTop: 20 }}>
-          <code>
-            {startError.graphQLErrors.map((e) => e.message).join('; ')}
-          </code>
+        <div style={{ marginTop: 60 }}>
+          <Button
+            theme="dark"
+            style={{ marginRight: 10 }}
+            color={colors.pink.dark}
+            disabled={data.game.players.length === 4}
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            Join Game
+          </Button>
+          {open && (
+            <Modal
+              className="text-black"
+              as={
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    playWav('smb3_enter_level');
+
+                    joinGame({
+                      variables: { gameId, playerId: playerName },
+                    })
+                      .then(() => {
+                        localStorage.setItem(`splendor:${gameId}`, playerName);
+                        onClose();
+                      })
+                      .catch((e) => {
+                        console.error(e.message);
+                      });
+                  }}
+                  noValidate={true}
+                />
+              }
+              title="Who would you like to join the game as?"
+              size="small"
+              onClose={onClose}
+              primaryAction={
+                <Button
+                  type="submit"
+                  loading={joinLoading}
+                  color={colors.blue.base}
+                >
+                  Join
+                </Button>
+              }
+              secondaryAction={
+                <Button type="button" onClick={onClose}>
+                  Cancel
+                </Button>
+              }
+            >
+              <TextField
+                autoFocus={true}
+                error={joinError?.graphQLErrors
+                  .map((e) => e.message)
+                  .join('; ')}
+                className="width-full"
+                label="Player Name"
+                size="standard"
+                value={playerName}
+                onChange={(e) => {
+                  setPlayerName(e.target.value);
+                }}
+              />
+            </Modal>
+          )}
+          <Button
+            theme="dark"
+            color={colors.blue.base}
+            disabled={data.game.players.length < 2}
+            loading={startLoading}
+            onClick={() => {
+              startGame().catch((e) => {
+                console.error(e.message);
+              });
+            }}
+          >
+            Start Game
+          </Button>
         </div>
-      )}
-    </div>
+        {startError && (
+          <div style={{ marginTop: 20 }}>
+            <code>
+              {startError.graphQLErrors.map((e) => e.message).join('; ')}
+            </code>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
