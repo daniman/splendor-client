@@ -85,9 +85,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     return (
       <div>
         <div>
-          <code>
-            No game matching identifier {match.params.gameId} was found.
-          </code>
+          No game matching identifier <code>{match.params.gameId}</code> was found.
         </div>
         <Button
           color={colors.pink.base}
