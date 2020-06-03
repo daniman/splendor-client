@@ -6,6 +6,7 @@ import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
 import { Bank } from './Bank';
 import { canSelectFromBank } from '../modules/coinRules';
+import { cookie } from '../modules/cookie';
 import { MoveLog } from './MoveLog';
 import { Miniboard } from './Miniboard';
 import { NobleCards } from './NobleCards';
@@ -33,7 +34,7 @@ export const Board: React.FC<{
   ticker: string;
 }> = ({ gameId, localPlayerId, ticker }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
-    variables: { gameId, playerId: localStorage.getItem(`splendor:${gameId}`) },
+    variables: { gameId, playerId: cookie.get(`splendor:${gameId}`) },
     pollInterval: 3000,
   });
 
