@@ -87,6 +87,7 @@ export const Home: React.FC = () => {
         >
           Create Game
         </Button>
+        <p><a href="https://cdn.1j1ju.com/medias/7f/91/ba-splendor-rulebook.pdf" target="_new">The Rules of Splendor</a></p>
         {open && (
           <Modal
             className="text-black"
