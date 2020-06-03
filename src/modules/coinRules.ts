@@ -17,7 +17,7 @@ export const canSelectFromBank = (
   if (turnCoinState.length === 2 && turnCoinState[0] === turnCoinState[1]) msg = "Can't pick a 3rd coin when you've already picked 2 coins of the same color!";
 
   // if user already has picked one coin then don't allow a second coin of the same color if <3 remain	
-  if (turnCoinState.length === 1 && turnCoinState.includes(color) && bankCoinsOfColor < 3 ) msg = "Can't take two coins of the same color if 3 or less remain!";
+  if (turnCoinState.length === 1 && turnCoinState.includes(color) && bankCoinsOfColor < 3 ) msg = "Can't take two coins of the same color if <3 remain!";
   
   // disallow picking a 3rd coin if it's the same color as an existing coin
   if (turnCoinState.length === 2 && turnCoinState.includes(color)) msg = "If you pick 2 coins of the same color you can't pick a 3rd!";
