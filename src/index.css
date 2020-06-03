@@ -23,6 +23,10 @@ body {
   flex-direction: column;
 }
 
+.row:before, .row:after {
+  display: inline-block;
+}
+
 code,
 .mono {
   font-family: 'Inconsolata', monospace;

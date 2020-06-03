@@ -9,6 +9,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Lobby } from './Lobby';
 import { Board } from './Board';
 import { playWav } from '../modules/playWav';
+import { cookie } from '../modules/cookie';
 
 import * as Types from '../types';
 
@@ -43,7 +44,7 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     variables: { gameId: match.params.gameId },
     pollInterval: 3000,
   });
-  const localPlayerId = localStorage.getItem(`splendor:${match.params.gameId}`);
+  const localPlayerId = cookie.get(`splendor:${match.params.gameId}`);
   const [ticker, setTicker] = useState('');
 
   const state = data?.game?.state;

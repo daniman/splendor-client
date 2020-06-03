@@ -8,6 +8,7 @@ import { IconBack } from '@apollo/space-kit/icons/IconBack';
 import { Modal } from '@apollo/space-kit/Modal';
 import { TextField } from '@apollo/space-kit/TextField';
 import { playWav } from '../modules/playWav';
+import { cookie } from '../modules/cookie';
 
 import * as Types from '../types';
 
@@ -138,7 +139,7 @@ export const Lobby: React.FC<{
                       variables: { gameId, playerId: playerName },
                     })
                       .then(() => {
-                        localStorage.setItem(`splendor:${gameId}`, playerName);
+                        cookie.set(`splendor:${gameId}`, playerName, 4);
                         onClose();
                       })
                       .catch((e) => {
