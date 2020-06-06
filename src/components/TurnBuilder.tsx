@@ -185,45 +185,54 @@ export const TurnBuilder: React.FC<{
     reserveCardFromStack,
     { error: reserveCardFromStackError },
   ] = useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
-  
+
   // state to show gql errors
   const [showGQLError, setShowGQLError] = useState(true);
 
   // error handler for gql errors
   const handleGQLError = (e: String) => {
-    console.log(e)
     playWav('smb3_bump');
     setShowGQLError(true);
-  }
+  };
 
   // coalesce all the gql errors
-  const gqlError = takeGemsError || purchaseCardError || reserveCardError || reserveCardFromStackError;
+  const gqlError =
+    takeGemsError ||
+    purchaseCardError ||
+    reserveCardError ||
+    reserveCardFromStackError;
 
   // clear gql errors after 3000ms
   if (showGQLError && gqlError) {
-    setTimeout(() => setShowGQLError(false),3000);
+    setTimeout(() => setShowGQLError(false), 3000);
   }
-  
+
   return (
-    <div style={{ marginBottom: 20 }}>
-      <h3 style={{ marginTop: 0 }}>
-        Take or exchange gems, reserve a card, or purchase a card
+    <div style={{ border: '3px dotted yellow', padding: 10 }}>
+      <h3 style={{ marginTop: 0, marginBottom: 20 }}>
+        <span role="img" aria-label="waving">
+          👋
+        </span>{' '}
+        It's your turn!
       </h3>
-      <div style={{ display: 'grid', width: 'fit-content', marginBottom: 20}}>
+      {!turnCardState && !turnCoinState.length && (
+        <code>Take some gems, purchase a card, or reserve a card.</code>
+      )}
+      <div style={{ display: 'grid', width: 'fit-content' }}>
         {Array.from(new Set([...turnCoinState, ...returnCoinState])).map(
           (gemColor, i) => (
             <>
-              <TurnCoins 
-                coinState={turnCoinState} 
-                setCoinState={setTurnCoinState} 
-                gemColor={gemColor} 
+              <TurnCoins
+                coinState={turnCoinState}
+                setCoinState={setTurnCoinState}
+                gemColor={gemColor}
                 column={i}
                 key={gemColor}
               />
-              <TurnCoins 
-                coinState={returnCoinState} 
-                setCoinState={setReturnCoinState} 
-                gemColor={gemColor} 
+              <TurnCoins
+                coinState={returnCoinState}
+                setCoinState={setReturnCoinState}
+                gemColor={gemColor}
                 column={i}
                 key={`-${gemColor}`}
                 inverted={true}
@@ -243,9 +252,12 @@ export const TurnBuilder: React.FC<{
               }}
             />
           ) : (
-            <PlaceholderCard 
-              label={(turnCardState as TopOfDeck).type} 
+            <PlaceholderCard
+              label={(turnCardState as TopOfDeck).type}
               style={{ marginLeft: 0, marginRight: 0 }}
+              onClick={() => {
+                setTurnCardState(null);
+              }}
             />
           ))}
       </div>
@@ -316,7 +328,7 @@ export const TurnBuilder: React.FC<{
             let confirmed = true;
             if (!goldAvailableInBank) {
               confirmed = window.confirm(
-                'Are you sure you want to reserve when no YELLOW gems are available?'
+                'Are you sure you want to reserve when no gold gems are available?'
               );
             }
 
@@ -362,9 +374,7 @@ export const TurnBuilder: React.FC<{
       </div>
       {showGQLError && gqlError && (
         <div style={{ marginTop: 20 }}>
-          <code>
-            {gqlError.graphQLErrors.map((e) => e.message).join('; ')}
-          </code>
+          <code>{gqlError.graphQLErrors.map((e) => e.message).join('; ')}</code>
         </div>
       )}
     </div>

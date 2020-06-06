@@ -28,6 +28,11 @@ body {
   display: inline-block;
 }
 
+a:hover,
+a:focus {
+  color: white;
+}
+
 code,
 .mono {
   font-family: 'Inconsolata', monospace;

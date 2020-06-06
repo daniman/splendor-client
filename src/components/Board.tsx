@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Types from '../types';
 import { Helmet } from 'react-helmet';
+import moment from 'moment';
 import { useQuery, gql } from '@apollo/client';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { TurnBuilder, GAME_FRAGMENT } from './TurnBuilder';
@@ -23,6 +24,9 @@ const GAME_BOARD_QUERY = gql`
   query GameBoard($gameId: ID!, $playerId: ID) {
     game(id: $gameId) {
       ...GameSelection
+      turns {
+        when
+      }
     }
   }
   ${GAME_FRAGMENT}
@@ -31,8 +35,7 @@ const GAME_BOARD_QUERY = gql`
 export const Board: React.FC<{
   gameId: string;
   localPlayerId: string | null;
-  ticker: string;
-}> = ({ gameId, localPlayerId, ticker }) => {
+}> = ({ gameId, localPlayerId }) => {
   const { data, loading, error } = useQuery<Types.GameBoard>(GAME_BOARD_QUERY, {
     variables: { gameId, playerId: cookie.get(`splendor:${gameId}`) },
     pollInterval: 3000,
@@ -44,6 +47,19 @@ export const Board: React.FC<{
   const [turnCardState, setTurnCardState] = useState<
     Types.CardSelection | TopOfDeck | null
   >(null);
+
+  const lastTurn = data?.game?.turns.slice(-1)[0];
+  const [ticker, setTicker] = useState('');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = moment().diff(lastTurn ? lastTurn.when : new Date());
+      setTicker(moment(diff).format('mm:ss'));
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [localPlayerId, lastTurn]);
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
   if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
@@ -61,7 +77,6 @@ export const Board: React.FC<{
   // TBD: uncomment the line below when implementing such features
   // const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
 
-  // const canAct = true;
   const canAct =
     !!localPlayerId &&
     data.game.state !== Types.GameState.COMPLETE &&
@@ -79,9 +94,7 @@ export const Board: React.FC<{
         name={data.game.name}
         state={data.game.state}
         players={data.game.players}
-        activePlayer={activePlayer}
         localPlayerId={localPlayerId}
-        ticker={ticker}
       />
 
       <div className="row">
@@ -125,20 +138,12 @@ export const Board: React.FC<{
         </div>
         <div
           className="col-lg-6 col-md-12 col-sm-12 col-xs-12"
-          style={
-            canAct
-              ? { border: '2px dotted yellow' }
-              : { border: '1px dotted grey' }
-          }
+          // style={
+          //   canAct
+          //     ? { border: '2px dotted yellow' }
+          //     : { border: '1px dotted grey' }
+          // }
         >
-          <Miniboard
-            players={data.game.players}
-            setShowingPlayerId={setShowingPlayerId}
-            showingPlayer={showingPlayer}
-            activePlayer={activePlayer}
-            localPlayerId={localPlayerId}
-          />
-
           {canAct && (
             <TurnBuilder
               gameId={gameId}
@@ -157,6 +162,15 @@ export const Board: React.FC<{
               setReturnCoinState={setReturnCoinState}
             />
           )}
+
+          <Miniboard
+            ticker={ticker}
+            players={data.game.players}
+            setShowingPlayerId={setShowingPlayerId}
+            showingPlayer={showingPlayer}
+            activePlayer={activePlayer}
+            localPlayerId={localPlayerId}
+          />
 
           <Bank
             bank={showingPlayer.bank.map(({ gemColor, quantity }) => ({

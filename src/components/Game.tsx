@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { useQuery, gql } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
@@ -45,10 +44,14 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     pollInterval: 3000,
   });
   const localPlayerId = cookie.get(`splendor:${match.params.gameId}`);
-  const [ticker, setTicker] = useState('');
 
   const state = data?.game?.state;
   const prevState = usePrevious(state);
+
+  const turn = data?.game?.currentTurn?.id;
+  const lastTurn = data?.game?.turns.slice(-1)[0];
+  const prevTurn = usePrevious(turn);
+
   useEffect(() => {
     if (
       prevState === Types.GameState.LOBBY &&
@@ -58,25 +61,12 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     }
   }, [prevState, state]);
 
-  const turn = data?.game?.currentTurn?.id;
-  const lastTurn = data?.game?.turns.slice(-1)[0];
-  const prevTurn = usePrevious(turn);
   useEffect(() => {
-    let interval: any = null;
     if (
       localPlayerId === 'sudo' ||
       (prevTurn !== localPlayerId && turn === localPlayerId)
     ) {
       playWav('smb3_jump');
-
-      if (lastTurn) {
-        interval = setInterval(() => {
-          const diff = moment().diff(lastTurn.when);
-          setTicker(moment(diff).format('mm:ss'));
-        }, 1000);
-      }
-    } else if (turn !== localPlayerId) {
-      clearInterval(interval);
     }
   }, [localPlayerId, prevTurn, turn, lastTurn]);
 
@@ -86,7 +76,8 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     return (
       <div>
         <div>
-          No game matching identifier <code>{match.params.gameId}</code> was found.
+          No game matching identifier <code>{match.params.gameId}</code> was
+          found.
         </div>
         <Button
           color={colors.pink.base}
@@ -104,7 +95,5 @@ export const Game: React.FC<RouteComponentProps<{ gameId: string }>> = ({
     return <Lobby gameId={data.game.id} />;
   }
 
-  return (
-    <Board gameId={data.game.id} localPlayerId={localPlayerId} ticker={ticker}/>
-  );
+  return <Board gameId={data.game.id} localPlayerId={localPlayerId} />;
 };

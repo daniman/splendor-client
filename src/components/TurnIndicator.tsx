@@ -8,10 +8,8 @@ export const TurnIndicator: React.FC<{
   name: String;
   state: Types.GameState;
   players: Types.GameBoard_game_players[];
-  activePlayer: Types.GameBoard_game_currentTurn;
   localPlayerId: string | null;
-  ticker: string;
-}> = ({ name, state, players, activePlayer, localPlayerId, ticker }) => {
+}> = ({ name, state, players, localPlayerId }) => {
   const winningPlayer = players.filter(
     (p) => p.score === Math.max(...players.map((q) => q.score))
   )[0].id;
@@ -37,35 +35,23 @@ export const TurnIndicator: React.FC<{
         </h1>
         {state === Types.GameState.COMPLETE ? (
           <span>
-            ✨ 🥇 🏆 <code>{winningPlayer}</code> has won 🏆 🥇 ✨
+            <span role="img" aria-label="trophy">
+              🏆
+            </span>{' '}
+            <code>{winningPlayer}</code> has won{' '}
+            <span role="img" aria-label="trophy">
+              🏆
+            </span>
           </span>
         ) : !!localPlayerId ? (
           <span>
-            👋 you are playing as <code>{localPlayerId}</code>
+            you are playing as <code>{localPlayerId}</code>
           </span>
         ) : (
           <span>
             <i>you are observing</i>
           </span>
         )}
-        {/* <span style={{ fontWeight: 900 }}>
-        {state === Types.GameState.COMPLETE ? (
-          <span>{winningPlayer}&nbsp;has won!</span>
-        ) : activePlayer.id === localPlayerId ? (
-          <span>
-            👋 It's your turn!&nbsp;<code>{ticker}</code>
-          </span>
-        ) : (
-          <span>
-            It's <code>{activePlayer.id}</code>'s turn!
-          </span>
-        )}
-      </span>
-      <span>
-        You are{' '}
-        {!localPlayerId ? <span>observing</span> : <span>playing in</span>} the
-        game: <code>{name}</code>
-      </span> */}
         <Button
           style={{ position: 'absolute', right: 15 }}
           size="small"

@@ -8,9 +8,81 @@ export const Miniboard: React.FC<{
   showingPlayer: Types.GameBoard_game_players;
   activePlayer: Types.GameBoard_game_players;
   localPlayerId: String | null;
-}> = ({ players, setShowingPlayerId, showingPlayer, activePlayer, localPlayerId}) => (
-  <div style={{ display: 'flex', marginTop: 20, marginBottom: 20 }}>
-    {players.map((p) => (
+  ticker: string;
+}> = ({
+  players,
+  setShowingPlayerId,
+  showingPlayer,
+  activePlayer,
+  localPlayerId,
+  ticker,
+}) => (
+  <div
+    style={{
+      display: 'grid',
+      gridAutoColumns: '1fr',
+      marginTop: 20,
+      marginBottom: 20,
+    }}
+  >
+    <div
+      style={{
+        gridRow: 1,
+        gridColumn: players.findIndex((p) => p.id === activePlayer.id) + 1,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        marginBottom: 10,
+      }}
+    >
+      <code style={{ fontSize: 12 }}>{ticker}</code>
+      <span
+        role="img"
+        aria-label="thinking"
+        style={{ marginLeft: 3, fontSize: 20 }}
+      >
+        🤔
+      </span>
+      <div
+        style={{
+          width: 10,
+          border: '0px solid transparent',
+          borderLeftWidth: 5,
+          borderRightWidth: 5,
+          borderTopWidth: 8,
+          borderBottomWidth: 0,
+          borderTopColor: '#e83e8c',
+        }}
+      />
+    </div>
+    {activePlayer.id !== localPlayerId && (
+      <div
+        style={{
+          gridRow: 1,
+          gridColumn: players.findIndex((p) => p.id === localPlayerId) + 1,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          marginBottom: 10,
+          alignSelf: 'end',
+          opacity: 0.5,
+        }}
+      >
+        <span style={{ marginBottom: 4, fontSize: 12 }}>you</span>
+        <div
+          style={{
+            width: 10,
+            border: '0px solid transparent',
+            borderLeftWidth: 5,
+            borderRightWidth: 5,
+            borderTopWidth: 8,
+            borderBottomWidth: 0,
+            borderTopColor: 'white',
+          }}
+        />
+      </div>
+    )}
+    {players.map((p, i) => (
       <div
         key={p.id}
         className="clickable"
@@ -18,41 +90,42 @@ export const Miniboard: React.FC<{
           setShowingPlayerId(p.id);
         }}
         style={{
-          flex: '1',
+          gridRow: 2,
           cursor: 'pointer',
+          padding: 10,
           backgroundColor:
             p.id === showingPlayer.id
               ? 'rgba(255,255,255,0.2)'
               : 'rgba(255,255,255,0.05)',
-          padding: 10,
         }}
       >
-        <div style={{ display: 'flex' }}>
+        <div
+          style={{
+            display: 'flex',
+          }}
+        >
           <div
             style={{
               wordBreak: 'break-word',
               flex: 1,
             }}
           >
-            <span 
+            <span
               style={{
                 color: p.id === localPlayerId ? '#FFFFFF' : 'lightgrey',
-                fontWeight: p.id === localPlayerId ? 1000 : 500
+                fontWeight: p.id === localPlayerId ? 1000 : 500,
               }}
             >
               {p.id}
-            </span> 
-            {p.id === activePlayer.id && (
-              <span style={{
-                marginLeft: 10,
-                fontWeight: p.id === localPlayerId ? 1000 : 500
-              }} role="img" aria-label="thinking">🤔</span>
-            )}
+            </span>
           </div>
           <code style={{ flex: 'none', marginLeft: 5 }}>
-            {Math.max(...players.map((p) => p.score)) === p.score && p.score > 0 &&
-              <span role="img" aria-label="leading">👑</span>
-            }
+            {Math.max(...players.map((p) => p.score)) === p.score &&
+              p.score > 0 && (
+                <span role="img" aria-label="leading">
+                  👑
+                </span>
+              )}
             {p.score}
           </code>
         </div>
@@ -74,9 +147,7 @@ export const Miniboard: React.FC<{
                     marginRight: 2,
                     height: 10,
                     width: 10,
-                    backgroundColor: !!gemColor
-                      ? colors[gemColor]
-                      : '#FFFFFF',
+                    backgroundColor: !!gemColor ? colors[gemColor] : '#FFFFFF',
                   }}
                 />
               ))}
@@ -132,4 +203,4 @@ export const Miniboard: React.FC<{
       </div>
     ))}
   </div>
-)
+);

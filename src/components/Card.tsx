@@ -16,16 +16,21 @@ export const CARD_FRAGMENT = gql`
   }
 `;
 
-export const PlaceholderCard: React.FC<{ label?: any; style?: object }> = ({
-  label,
-  style,
-}) => (
-  <div className='card placeholder'
+export const PlaceholderCard: React.FC<{
+  label?: any;
+  style?: object;
+  onClick?: () => void;
+}> = ({ label, style, onClick }) => (
+  <div
+    className={!!onClick ? 'clickable card placeholder' : 'card placeholder'}
     style={{
       backgroundColor: 'rgba(255,255,255,0.2)',
       justifyContent: 'center',
       alignItems: 'center',
       ...style,
+    }}
+    onClick={() => {
+      if (onClick) onClick();
     }}
   >
     {label && <code>{label}</code>}
@@ -52,17 +57,16 @@ export const Card: React.FC<{
         if (onSelect) onSelect(card);
       }}
     >
-      <div className='top'>
-        <div className='pointValue'>
-          {pointValue || ''}
-        </div>
-        <div className='bubble'
+      <div className="top">
+        <div className="pointValue">{pointValue || ''}</div>
+        <div
+          className="bubble"
           style={{
             backgroundColor: gemColor ? colors[gemColor] : '#FFFFFF',
           }}
         />
       </div>
-      <div className='bottom'>
+      <div className="bottom">
         {cost
           .filter((c) => c.quantity > 0)
           .map(({ gemColor, quantity }, i) => (
