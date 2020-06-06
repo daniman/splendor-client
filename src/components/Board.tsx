@@ -164,6 +164,7 @@ export const Board: React.FC<{
           )}
 
           <Miniboard
+            gameState={data.game.state}
             ticker={ticker}
             players={data.game.players}
             setShowingPlayerId={setShowingPlayerId}
