@@ -61,10 +61,11 @@ export const Board: React.FC<{
   // TBD: uncomment the line below when implementing such features
   // const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
 
+  // const canAct = true;
   const canAct =
     !!localPlayerId &&
     data.game.state !== Types.GameState.COMPLETE &&
-    (localPlayerId === data.game.currentTurn?.id || localPlayerId === 'sudo');
+    localPlayerId === data.game.currentTurn?.id;
 
   return (
     <>
@@ -73,28 +74,25 @@ export const Board: React.FC<{
           {data.game.name} {canAct ? `| 👋 it's your turn!` : ''}
         </title>
       </Helmet>
-      <div className="row" style={{ marginBottom: 5, marginTop: -10 }}>
-        <TurnIndicator
-          name={data.game.name}
-          state={data.game.state}
-          players={data.game.players}
-          activePlayer={activePlayer}
-          localPlayerId={localPlayerId}
-          ticker={ticker}
-        />
-      </div>
+
+      <TurnIndicator
+        name={data.game.name}
+        state={data.game.state}
+        players={data.game.players}
+        activePlayer={activePlayer}
+        localPlayerId={localPlayerId}
+        ticker={ticker}
+      />
+
       <div className="row">
-        <div
-          className="col-lg-6 col-md-12 col-sm-12 col-xs-12"
-          style={{ border: '1px dotted grey' }}
-        >
+        <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12">
           <Bank
             bank={data.game.bank.map(({ gemColor, quantity }) => ({
               gemColor,
               quantity:
                 quantity - turnCoinState.filter((c) => c === gemColor).length,
             }))}
-            style={{ marginBottom: 20, marginTop: 20 }}
+            style={{ marginTop: 20 }}
             onSelect={(color) => {
               if (canAct) {
                 const bank = data?.game?.bank;

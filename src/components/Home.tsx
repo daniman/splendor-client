@@ -64,7 +64,10 @@ export const Home: React.FC = () => {
       <div className="row">
         <div className="col-lg-12">
           {data.allGames.map(({ id, name, state, players }, i) => (
-            <h3 style={{ color: 'white', marginTop: 0, marginBottom: 10 }}>
+            <h3
+              key={id}
+              style={{ color: 'white', marginTop: 0, marginBottom: 10 }}
+            >
               <Link to={`/${id}`} key={id}>
                 <div style={{ display: 'inline-block' }} className="clickable">
                   <code style={{ marginRight: 10 }}>{state}</code>
@@ -87,7 +90,14 @@ export const Home: React.FC = () => {
         >
           Create Game
         </Button>
-        <p><a href="https://cdn.1j1ju.com/medias/7f/91/ba-splendor-rulebook.pdf" target="_new">The Rules of Splendor</a></p>
+        <p>
+          <a
+            href="https://cdn.1j1ju.com/medias/7f/91/ba-splendor-rulebook.pdf"
+            target="_new"
+          >
+            The Rules of Splendor
+          </a>
+        </p>
         {open && (
           <Modal
             className="text-black"

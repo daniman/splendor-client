@@ -13,7 +13,7 @@ export const Bank: React.FC<{
       style={{
         display: 'flex',
         alignItems: 'flex-end',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         width: '100%',
       }}
     >
