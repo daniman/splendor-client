@@ -19,7 +19,7 @@ const hostname = document.location.hostname;
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: 'http://splendoor.herokuapp.com/graphql',
+    uri: 'https://splendoor.herokuapp.com/graphql',
     // uri: hostname.indexOf('splendoor.netlify.app') === -1 ?
     // `//${hostname}:4000` :
     // 'https://splendoor.herokuapp.com/graphql',
