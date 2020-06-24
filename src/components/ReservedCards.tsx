@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, PlaceholderCard } from './Card';
 import * as Types from '../types';
-import { TopOfDeck } from './Board';
+import { TopOfDeck } from './CardRowAndStack';
 
 export const ReservedCards: React.FC<{
   cards: (Types.GameBoard_game_players_reservedCards | null)[];

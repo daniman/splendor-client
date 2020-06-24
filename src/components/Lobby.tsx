@@ -1,53 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { IconBack } from '@apollo/space-kit/icons/IconBack';
 import { Modal } from '@apollo/space-kit/Modal';
 import { TextField } from '@apollo/space-kit/TextField';
+import { LOBBY_QUERY } from '../gql/queries';
+import { JOIN_GAME_MUTATION, START_GAME_MUTATION } from '../gql/mutations';
 import { playWav } from '../modules/playWav';
 import { cookie } from '../modules/cookie';
 
 import * as Types from '../types';
-
-const LOBBY_QUERY = gql`
-  query Lobby($gameId: ID!) {
-    game(id: $gameId) {
-      id
-      name
-      state
-      players {
-        id
-      }
-    }
-  }
-`;
-
-const JOIN_GAME_MUTATION = gql`
-  mutation JoinGame($gameId: ID!, $playerId: ID!) {
-    game(id: $gameId) {
-      join(playerId: $playerId) {
-        id
-        players {
-          id
-        }
-      }
-    }
-  }
-`;
-
-const START_GAME_MUTATION = gql`
-  mutation StartGame($gameId: ID!) {
-    game(id: $gameId) {
-      start {
-        id
-        state
-      }
-    }
-  }
-`;
 
 export const Small: React.FC = ({ children }) => (
   <i style={{ fontSize: 12, opacity: 0.8, fontWeight: 400 }}>{children}</i>
@@ -114,7 +79,9 @@ export const Lobby: React.FC<{
         ) : (
           <code>No players have joined yet.</code>
         )}
-        <div style={{ marginTop: 60 }}>
+      </div>
+      <div className="row">
+        <div style={{ marginTop: 20 }}>
           <Button
             theme="dark"
             style={{ marginRight: 10 }}

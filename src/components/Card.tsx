@@ -1,20 +1,7 @@
 import React from 'react';
-import { gql } from '@apollo/client';
 import { CostIndicator } from './CostIndicator';
 import { colors, darkColors } from '../config/colors';
 import * as Types from '../types';
-
-export const CARD_FRAGMENT = gql`
-  fragment CardSelection on Card {
-    id
-    gemColor
-    pointValue
-    cost {
-      gemColor
-      quantity
-    }
-  }
-`;
 
 export const PlaceholderCard: React.FC<{
   label?: any;

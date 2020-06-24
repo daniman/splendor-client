@@ -283,6 +283,7 @@ export interface AllGames_allGames {
 }
 
 export interface AllGames {
+  [x: string]: any;
   allGames: AllGames_allGames[];
 }
 
