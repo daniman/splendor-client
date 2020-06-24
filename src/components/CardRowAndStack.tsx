@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, PlaceholderCard } from './Card';
-import { TopOfDeck } from './Board';
 import * as Types from '../types';
+
+export type TopOfDeck = { type: Types.CardStackType };
 
 export const CardRowAndStack: React.FC<{
   cards: Types.CardSelection[];

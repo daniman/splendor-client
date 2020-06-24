@@ -1,153 +1,14 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
-import { Card, PlaceholderCard, CARD_FRAGMENT } from './Card';
+import { PURCHASE_CARD_MUTATION, RESERVE_CARD_FROM_STACK_MUTATION, 
+  RESERVE_CARD_MUTATION, TAKE_COINS_MUTATION } from '../gql/mutations';
+import { Card, PlaceholderCard } from './Card';
 import { TurnCoins } from './TurnCoins';
-import { TopOfDeck } from './Board';
+import { TopOfDeck } from './CardRowAndStack';
 import * as Types from '../types';
 import { playWav } from '../modules/playWav';
-
-const PLAYER_FRAGMENT = gql`
-  fragment PlayerSelection on Player {
-    id
-    score
-    bank {
-      gemColor
-      quantity
-    }
-    nobles {
-      ...CardSelection
-    }
-    reservedCards {
-      ...CardSelection
-    }
-    purchasedCards {
-      ...CardSelection
-    }
-  }
-`;
-
-export const GAME_FRAGMENT = gql`
-  fragment GameSelection on Game {
-    id
-    name
-    state
-    currentTurn {
-      ...PlayerSelection
-    }
-    turns {
-      playerId
-      type
-      when
-      ... on TakeGems {
-        gems
-      }
-      ... on PurchaseCard {
-        card {
-          gemColor
-        }
-      }
-      ... on ReserveCard {
-        cardType
-        card {
-          pointValue
-          gemColor
-        }
-      }
-    }
-    players(currentPlayer: $playerId) {
-      ...PlayerSelection
-    }
-    bank {
-      gemColor
-      quantity
-    }
-    nobles {
-      ...CardSelection
-    }
-    cardStacks {
-      type
-      remaining
-      cards {
-        ...CardSelection
-      }
-    }
-  }
-  ${PLAYER_FRAGMENT}
-  ${CARD_FRAGMENT}
-`;
-
-const TAKE_COINS_MUTATION = gql`
-  mutation TakeCoins(
-    $gameId: ID!
-    $playerId: ID!
-    $gemList: [GemColor!]
-    $returnGemList: [GemColor!]
-  ) {
-    game(id: $gameId) {
-      takeTurn(
-        playerId: $playerId
-        takeGems: $gemList
-        returnGems: $returnGemList
-      ) {
-        ...GameSelection
-      }
-    }
-  }
-  ${GAME_FRAGMENT}
-`;
-
-const RESERVE_CARD_MUTATION = gql`
-  mutation ReserveCard(
-    $gameId: ID!
-    $playerId: ID!
-    $cardId: ID!
-    $returnGemList: [GemColor!]
-  ) {
-    game(id: $gameId) {
-      takeTurn(
-        playerId: $playerId
-        reserveCardById: $cardId
-        returnGems: $returnGemList
-      ) {
-        ...GameSelection
-      }
-    }
-  }
-  ${GAME_FRAGMENT}
-`;
-
-const RESERVE_CARD_FROM_STACK_MUTATION = gql`
-  mutation ReserveCardFromStack(
-    $gameId: ID!
-    $playerId: ID!
-    $stack: CardStackType
-    $returnGemList: [GemColor!]
-  ) {
-    game(id: $gameId) {
-      takeTurn(
-        playerId: $playerId
-        reserveCardFromStack: $stack
-        returnGems: $returnGemList
-      ) {
-        ...GameSelection
-      }
-    }
-  }
-  ${GAME_FRAGMENT}
-`;
-
-const PURCHASE_CARD_MUTATION = gql`
-  mutation PurchaseCard($gameId: ID!, $playerId: ID!, $cardId: ID!) {
-    game(id: $gameId) {
-      takeTurn(playerId: $playerId, purchaseCardById: $cardId) {
-        ...GameSelection
-      }
-    }
-  }
-  ${GAME_FRAGMENT}
-`;
 
 export const TurnBuilder: React.FC<{
   gameId: string;
@@ -172,38 +33,29 @@ export const TurnBuilder: React.FC<{
   returnCoinState,
   setReturnCoinState,
 }) => {
-  const [takeGems, { error: takeGemsError }] = useMutation<Types.TakeCoins>(
-    TAKE_COINS_MUTATION
-  );
-  const [purchaseCard, { error: purchaseCardError }] = useMutation<
-    Types.PurchaseCard
-  >(PURCHASE_CARD_MUTATION);
-  const [reserveCard, { error: reserveCardError }] = useMutation<
-    Types.ReserveCard
-  >(RESERVE_CARD_MUTATION);
-  const [
-    reserveCardFromStack,
-    { error: reserveCardFromStackError },
-  ] = useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
+  const [takeGems, { error: takeGemsError }] = 
+    useMutation<Types.TakeCoins>(TAKE_COINS_MUTATION);
+  const [purchaseCard, { error: purchaseCardError }] = 
+    useMutation<Types.PurchaseCard>(PURCHASE_CARD_MUTATION);
+  const [reserveCard, { error: reserveCardError }] = 
+    useMutation<Types.ReserveCard>(RESERVE_CARD_MUTATION);
+  const [reserveCardFromStack, { error: reserveCardFromStackError }] = 
+    useMutation<Types.ReserveCardFromStack>(RESERVE_CARD_FROM_STACK_MUTATION);
 
-  // state to show gql errors
-  const [showGQLError, setShowGQLError] = useState(true);
-
-  // error handler for gql errors
-  const handleGQLError = (e: String) => {
+  const [showGQLError, setShowGQLError] = useState(true); // state to show gql errors
+  
+  const handleGQLError = (e: String) => { // error handler for gql errors
     playWav('smb3_bump');
     setShowGQLError(true);
   };
 
-  // coalesce all the gql errors
-  const gqlError =
+  const gqlError = // coalesce all the gql errors
     takeGemsError ||
     purchaseCardError ||
     reserveCardError ||
     reserveCardFromStackError;
-
-  // clear gql errors after 3000ms
-  if (showGQLError && gqlError) {
+  
+  if (showGQLError && gqlError) { // clear gql errors after 3000ms
     setTimeout(() => setShowGQLError(false), 3000);
   }
 
@@ -257,6 +109,7 @@ export const TurnBuilder: React.FC<{
               style={{ marginLeft: 0, marginRight: 0 }}
               onClick={() => {
                 setTurnCardState(null);
+                setReturnCoinState([]);
               }}
             />
           ))}
@@ -307,6 +160,7 @@ export const TurnBuilder: React.FC<{
             })
               .then(() => {
                 setTurnCardState(null);
+                setReturnCoinState([]);
               })
               .catch((e) => handleGQLError(e));
           }}
@@ -351,8 +205,7 @@ export const TurnBuilder: React.FC<{
                   })
                   .catch((e) => handleGQLError(e));
               } else {
-                // reserve from top of deck
-                reserveCardFromStack({
+                reserveCardFromStack({ // reserve from top of deck
                   variables: {
                     gameId,
                     playerId: activePlayer.id,

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Types from '../types';
 import { CardRowAndStack } from './CardRowAndStack';
-import { TopOfDeck } from './Board';
+import { TopOfDeck } from './CardRowAndStack';
 
 export const GameCardStacks: React.FC<{
   cardStacks: Types.GameBoard_game_cardStacks[];
