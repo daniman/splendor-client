@@ -17,8 +17,10 @@ const hostname = document.location.hostname;
 
 // pick gql host based on client hostname, support multiplayer on dev
 const client = new ApolloClient({
+  name: 'Web UI',
   cache: new InMemoryCache(),
   link: new HttpLink({
+    // uri: 'https://splendoor.herokuapp.com/graphql',
     uri:
       hostname.indexOf('splendoor.netlify.app') === -1
         ? `//${hostname}:4000`
