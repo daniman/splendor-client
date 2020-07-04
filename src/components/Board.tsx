@@ -147,12 +147,7 @@ export const Board: React.FC<{
           {canAct && (
             <TurnBuilder
               gameId={gameId}
-              goldAvailableInBank={
-                !!data.game.bank.find((b) => b.gemColor === 'YELLOW')
-                  ? data.game.bank.find((b) => b.gemColor === 'YELLOW')!
-                      .quantity > 0
-                  : false
-              }
+              globalBank={data.game.bank}
               activePlayer={activePlayer}
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}

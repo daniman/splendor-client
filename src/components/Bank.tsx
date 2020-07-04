@@ -25,6 +25,7 @@ export const Bank: React.FC<{
           onSelect={onSelect}
         />
       ))}
+      <code>Total: {bank.reduce((acc, cur) => acc + cur.quantity, 0)}</code>
     </div>
   </div>
 );

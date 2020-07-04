@@ -151,7 +151,7 @@ const PURCHASE_CARD_MUTATION = gql`
 
 export const TurnBuilder: React.FC<{
   gameId: string;
-  goldAvailableInBank: boolean;
+  globalBank: { gemColor: Types.GemColor; quantity: number }[];
   activePlayer: Types.PlayerSelection;
   turnCardState: Types.CardSelection | TopOfDeck | null;
   setTurnCardState: Dispatch<
@@ -163,7 +163,7 @@ export const TurnBuilder: React.FC<{
   setReturnCoinState: Dispatch<SetStateAction<Types.GemColor[]>>;
 }> = ({
   gameId,
-  goldAvailableInBank,
+  globalBank,
   activePlayer,
   turnCardState,
   setTurnCardState,
@@ -269,20 +269,39 @@ export const TurnBuilder: React.FC<{
           style={{ marginRight: 10 }}
           disabled={turnCoinState.length === 0}
           onClick={() => {
-            takeGems({
-              variables: {
-                gameId,
-                playerId: activePlayer.id,
-                gemList: turnCoinState,
-                returnGemList: returnCoinState,
-              },
-            })
-              .then(() => {
-                setTurnCoinState([]);
-                setReturnCoinState([]);
+            let confirmed = true;
+            let otherColorsAvailable = false;
+            for (const chipCount of globalBank) {
+              if (!turnCoinState.includes(chipCount.gemColor) && chipCount.quantity > 0 && chipCount.gemColor !== 'YELLOW') {
+                otherColorsAvailable = true;
+                break;
+              }
+            }
+            const playerBankSize = activePlayer.bank.reduce((acc, cur) => acc + cur.quantity, 0);
+            if (turnCoinState.length < 3 &&
+              turnCoinState.length + playerBankSize < 10 &&
+              new Set(turnCoinState).size === turnCoinState.length &&
+              otherColorsAvailable) {
+              confirmed = window.confirm(
+                'You can take more chips than this. Are you sure?'
+              );
+            }
+            if (confirmed) {
+              takeGems({
+                variables: {
+                  gameId,
+                  playerId: activePlayer.id,
+                  gemList: turnCoinState,
+                  returnGemList: returnCoinState,
+                },
               })
-              .catch((e) => handleGQLError(e));
-          }}
+                .then(() => {
+                  setTurnCoinState([]);
+                  setReturnCoinState([]);
+                })
+                .catch((e) => handleGQLError(e));
+            }}
+          }
         >
           Take Gems
         </Button>
@@ -326,7 +345,7 @@ export const TurnBuilder: React.FC<{
           }
           onClick={() => {
             let confirmed = true;
-            if (!goldAvailableInBank) {
+            if (globalBank.find((b) => b.gemColor === 'YELLOW')?.quantity === 0) {
               confirmed = window.confirm(
                 'Are you sure you want to reserve when no gold gems are available?'
               );
