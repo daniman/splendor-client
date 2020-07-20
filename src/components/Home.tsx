@@ -9,8 +9,10 @@ import { Link } from 'react-router-dom';
 import { CREATE_GAME_MUTATION } from '../gql/mutations';
 import { Small } from './Lobby';
 
-export const Home = ({ subscribeToNewGames, data, loading, error }) => {
+import * as Types from '../types';
 
+export const Home: React.FC<{subscribeToNewGames: any, data: Types.AllGames | undefined, loading: boolean, error:any}> =
+ ({ subscribeToNewGames, data, loading, error }) => {
   useEffect(() => subscribeToNewGames());
 
   const [ createGame, { loading: createLoading, error: createError }] = 
@@ -36,7 +38,7 @@ export const Home = ({ subscribeToNewGames, data, loading, error }) => {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          {data.allGames.map(({ id, name, state, players }, i) => (
+          {data.allGames.map(({ id, name, state, players }) => (
             <h3
               key={id}
               style={{ color: 'white', marginTop: 0, marginBottom: 10 }}

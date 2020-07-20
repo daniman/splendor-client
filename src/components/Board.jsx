@@ -189,5 +189,5 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
         </div>
       </>
     );
-  }
+  } else return (<></>)
 }

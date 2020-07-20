@@ -7,19 +7,23 @@
 import React from 'react';
 import { useParams } from "react-router-dom";
 import { useQuery } from '@apollo/client';
-import { Game } from '../components/Game.jsx';
+import { Game } from '../components/Game';
 import { LOBBY_QUERY } from '../gql/queries';
 import { LOBBY_SUBSCRIPTION } from '../gql/subscriptions';
 
-export const GameContainer = () => {
+import * as Types from '../types';
+
+export const GameContainer: React.FC= () => {
   const { gameId } = useParams();
-  const { subscribeToMore, ...result } = useQuery(LOBBY_QUERY, {
+  const { subscribeToMore, data, loading, error } = useQuery<Types.Lobby, Types.LobbyVariables>(LOBBY_QUERY, {
     variables: { gameId },
   });
 
   return (
     <Game 
-      {...result}
+      data={data}
+      loading={loading}
+      error={error}
       gameId={gameId}
       subscribeToGame = {() => {
         subscribeToMore({

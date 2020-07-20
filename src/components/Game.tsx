@@ -4,10 +4,11 @@
 
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ApolloError } from '@apollo/client';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
-import { Lobby } from './Lobby.jsx';
+import { Lobby } from './Lobby';
 import { BoardContainer } from '../containers/BoardContainer';
 import { cookie } from '../modules/cookie';
 import { playWav } from '../modules/playWav';
@@ -15,11 +16,11 @@ import { usePrevious } from '../modules/usePrevious';
 
 import * as Types from '../types';
 
-export const Game = ({ subscribeToGame, gameId, data, loading, error }) => {
-
+export const Game: React.FC <{ subscribeToGame: any; gameId: String; data: Types.Lobby | undefined; loading: boolean;  error: ApolloError | undefined}> =
+  ({ subscribeToGame, gameId, data, loading, error }) => {
   useEffect(() => subscribeToGame());
-  const playerId = cookie.get(`splendor:${gameId}`);
 
+  const playerId = cookie.get(`splendor:${gameId}`);
   const state = data?.game?.state;
   const prevState = usePrevious(state);
 

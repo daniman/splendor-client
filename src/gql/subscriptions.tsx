@@ -27,7 +27,7 @@ const GAME_BOARD_SUBSCRIPTION = gql`
 `;
 
 const LOBBY_SUBSCRIPTION = gql`
-  subscription gameMutation($gameId: ID!) {
+  subscription gamePlayers($gameId: ID!) {
     gameMutation(id: $gameId) {
       id
       name
