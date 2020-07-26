@@ -27,7 +27,7 @@ const GAME_BOARD_QUERY = gql`
 `;
 
 const GAME_STATE_QUERY = gql`
-  query GameState($gameId: ID!) {
+  query GameState($gameId: ID!, $playerId: ID) {
     game(id: $gameId) {
       id
       state

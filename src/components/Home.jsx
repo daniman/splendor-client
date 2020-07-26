@@ -9,10 +9,7 @@ import { Link } from 'react-router-dom';
 import { CREATE_GAME_MUTATION } from '../gql/mutations';
 import { Small } from './Lobby';
 
-import * as Types from '../types';
-
-export const Home: React.FC<{subscribeToNewGames: any, data: Types.AllGames | undefined, loading: boolean, error:any}> =
- ({ subscribeToNewGames, data, loading, error }) => {
+export const Home = ({ subscribeToNewGames, data, loading, error }) => {
   useEffect(() => subscribeToNewGames());
 
   const [ createGame, { loading: createLoading, error: createError }] = 

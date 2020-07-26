@@ -127,6 +127,7 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
           >
             {canAct && (
               <TurnBuilder
+                globalBank={data.game.bank}
                 gameId={game.id}
                 goldAvailableInBank={
                   !!game.bank.find((b) => b.gemColor === 'YELLOW')
