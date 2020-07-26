@@ -6,18 +6,19 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
 // pick appropriate GraphQL server based on context
+
 const host = document.location.hostname;
-const gql_server = host.indexOf('splendoor.netlify.app') === -1
-  ? `//${host}:4000`
-  : 'https://splendoor.herokuapp.com/graphql';
+const isDev = host.indexOf('localhost') > -1;
+const gql_server = isDev ? `//${host}:4000` : 'https://splendoor.herokuapp.com/graphql';
 
 // create an http link:
 const httpLink = new HttpLink({ uri: gql_server });
 
 // create a websocket link
-const protocol = host.indexOf('splendoor.netlify.app') === -1 ? 'ws' : 'wss';
+const protocol = isDev ? 'ws' : 'wss';
+const port = isDev ? ':4000' : '';
 const wsLink = new WebSocketLink({
-  uri: `${protocol}://${host}:4000/graphql`,
+  uri: `${protocol}://${host}${port}/graphql`,
   options: {
     reconnect: true
   }
