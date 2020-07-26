@@ -15,8 +15,9 @@ const gql_server = host.indexOf('splendoor.netlify.app') === -1
 const httpLink = new HttpLink({ uri: gql_server });
 
 // create a websocket link
+const protocol = host.indexOf('splendoor.netlify.app') === -1 ? 'ws' : 'wss';
 const wsLink = new WebSocketLink({
-  uri: `ws://${host}:4000/graphql`,
+  uri: `${protocol}://${host}:4000/graphql`,
   options: {
     reconnect: true
   }
