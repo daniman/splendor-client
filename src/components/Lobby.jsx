@@ -10,13 +10,11 @@ import { JOIN_GAME_MUTATION, START_GAME_MUTATION } from '../gql/mutations';
 import { playWav } from '../modules/playWav';
 import { cookie } from '../modules/cookie';
 
-import * as Types from '../types';
-
-export const Small: React.FC = ({ children }) => (
+export const Small = ({ children }) => (
   <i style={{ fontSize: 12, opacity: 0.8, fontWeight: 400 }}>{children}</i>
 );
 
-export const Lobby: React.FC <{game: Types.Lobby_game}> = ({game}) => {
+export const Lobby = ({ game }) => {
   const [joinGame, { loading: joinLoading, error: joinError }] = useMutation(JOIN_GAME_MUTATION);
   const [startGame, { loading: startLoading, error: startError }] = 
     useMutation(START_GAME_MUTATION, { variables: { gameId: game?.id} });
