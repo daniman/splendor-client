@@ -9,16 +9,15 @@ import { getMainDefinition } from "apollo-utilities";
 
 const host = document.location.hostname;
 const isDev = host.indexOf('localhost') > -1;
-const gql_server = isDev ? `//${host}:4000` : 'https://splendoor.herokuapp.com/graphql';
+const gql_server = isDev ? `${host}:4000/graphql` : 'splendoor.herokuapp.com/graphql';
 
 // create an http link:
-const httpLink = new HttpLink({ uri: gql_server });
+const httpLink = new HttpLink({ uri: `//${gql_server }`});
 
 // create a websocket link
 const protocol = isDev ? 'ws' : 'wss';
-const port = isDev ? ':4000' : '';
 const wsLink = new WebSocketLink({
-  uri: `${protocol}://${host}${port}/graphql`,
+  uri: `${protocol}:${gql_server}`,
   options: {
     reconnect: true
   }
