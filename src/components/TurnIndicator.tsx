@@ -10,9 +10,18 @@ export const TurnIndicator: React.FC<{
   players: Types.GameBoard_game_players[];
   localPlayerId: string | null;
 }> = ({ name, state, players, localPlayerId }) => {
-  const winningPlayer = players.filter(
+  let potentialWinners = players.filter(
     (p) => p.score === Math.max(...players.map((q) => q.score))
-  )[0].id;
+  );
+
+  // Attempt a tiebreak based on fewest cards purchased
+  if (potentialWinners.length > 1) {
+    potentialWinners = potentialWinners.filter(
+      (p) => p.purchasedCards.length === Math.min(...potentialWinners.map((q) => q.purchasedCards.length))
+    )
+  }
+
+  const winningPlayers = potentialWinners;
 
   return (
     <div
@@ -36,11 +45,20 @@ export const TurnIndicator: React.FC<{
         {state === Types.GameState.COMPLETE ? (
           <span>
             <span role="img" aria-label="trophy">
-              🏆
-            </span>{' '}
-            <code>{winningPlayer}</code> has won{' '}
+              { winningPlayers.length === 1 ? '🏆' : '😐' }
+            </span>
+            { winningPlayers.length === 1 &&
+              <span>
+                <code>{winningPlayers[0].id}</code> has won{' '}
+              </span>
+            }
+            { winningPlayers.length > 1 &&
+              <span>
+                The game has ended in a tie{' '}
+              </span>
+            }
             <span role="img" aria-label="trophy">
-              🏆
+              { winningPlayers.length === 1 ? '🏆' : '😐' }
             </span>
           </span>
         ) : !!localPlayerId ? (
