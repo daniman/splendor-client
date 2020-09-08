@@ -1,53 +1,25 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import React, { useState, useEffect } from 'react';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import { Button } from '@apollo/space-kit/Button';
 import { colors } from '@apollo/space-kit/colors';
 import { Modal } from '@apollo/space-kit/Modal';
 import { TextField } from '@apollo/space-kit/TextField';
+import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { CREATE_GAME_MUTATION } from '../gql/mutations';
 import { Small } from './Lobby';
 
-import * as Types from '../types';
+export const Home = ({ subscribeToNewGames, data, loading, error }) => {
+  useEffect(() => subscribeToNewGames());
 
-const ALL_GAMES_QUERY = gql`
-  query AllGames {
-    allGames {
-      id
-      name
-      state
-      players {
-        id
-      }
-    }
-  }
-`;
-
-const CREATE_GAME_MUTATION = gql`
-  mutation CreateGame($name: String!) {
-    newGame(name: $name) {
-      id
-      name
-    }
-  }
-`;
-
-export const Home: React.FC = () => {
-  const { data, loading, error } = useQuery<Types.AllGames>(ALL_GAMES_QUERY, {
-    pollInterval: 3000,
-  });
-  const [
-    createGame,
-    { loading: createLoading, error: createError },
-  ] = useMutation<Types.JoinGame>(CREATE_GAME_MUTATION, {
-    refetchQueries: [{ query: ALL_GAMES_QUERY }],
-  });
+  const [ createGame, { loading: createLoading, error: createError }] = 
+    useMutation(CREATE_GAME_MUTATION);
   const [gameName, setGameName] = useState('');
   const [open, setOpen] = useState(false);
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
-  if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
   if (!data || !data.allGames) return <div>No game list was found :(</div>;
+  if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
 
   const onClose = () => {
     setOpen(false);
@@ -63,7 +35,7 @@ export const Home: React.FC = () => {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          {data.allGames.map(({ id, name, state, players }, i) => (
+          {data.allGames.map(({ id, name, state, players }) => (
             <h3
               key={id}
               style={{ color: 'white', marginTop: 0, marginBottom: 10 }}
