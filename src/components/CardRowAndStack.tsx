@@ -22,6 +22,7 @@ export const CardRowAndStack: React.FC<{
           onSelect={(card: Types.CardSelection) => {
             if (onSelect) onSelect(card);
           }}
+          availableForPurchase={true}
         />
       )
     )}
