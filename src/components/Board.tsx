@@ -19,6 +19,7 @@ import { usePrevious } from '../modules/usePrevious';
 
 import * as Types from '../types';
 import { TopOfDeck } from './CardRowAndStack';
+import { GameStateProvider } from './useGameState';
 
 export const Board = ({ subscribeToGame, playerId, data, loading, error }: {
   subscribeToGame: () => void;
@@ -64,17 +65,21 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }: {
   */
 
   const game = data?.game;
+  const me = game?.players.find((p => p.id === playerId));
 
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
   else if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
-  else if (!game) return null;
+  else if (!game || !me) return null;
   else if (data && data.game) {
     const canAct = !!playerId && game.state !== Types.GameState.COMPLETE && playerId === game.currentTurn?.id;
     const activePlayer = game.currentTurn || game.players[0];
     const showingPlayer = game.players.find((p => p.id === showingPlayerId)) ?? game.players[0];
-  
+
     return (
-      <>
+      <GameStateProvider gameState={{
+        ...game,
+        me,
+      }}>
         <Helmet>
           <title>
             {game.name} {canAct ? `| 👋 it's your turn!` : ''}
@@ -192,7 +197,7 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }: {
             <MoveLog turns={game.turns} />
           </div>
         </div>
-      </>
+      </GameStateProvider>
     );
   } else return (<></>)
 }
