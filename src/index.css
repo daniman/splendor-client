@@ -72,12 +72,18 @@ code {
   margin-left: 0px;
   flex: 0 0 auto;
   width: 84px;
-  height: 100px;
+  height: 80px;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
+}
+
+@media only screen and (min-height: 800px) {
+  .card {
+    height: 100px;
+  }
 }
 
 .card > .top {
