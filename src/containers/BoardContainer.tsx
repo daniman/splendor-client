@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GAME_BOARD_QUERY } from '../gql/queries';
 import { GAME_BOARD_SUBSCRIPTION } from '../gql/subscriptions';
-import { Board } from '../components/Board.jsx';
+import { Board } from '../components/Board';
 import * as Types from '../types';
 
 export const BoardContainer: React.FC<{ gameId: string; playerId: string }> = ({

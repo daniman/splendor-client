@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { ApolloError } from '@apollo/client';
 import { LoadingSpinner } from '@apollo/space-kit/Loaders';
 import moment from 'moment';
 import { TurnBuilder } from './TurnBuilder';
@@ -17,8 +18,15 @@ import { GameCardStacks } from './GameCardStacks';
 import { usePrevious } from '../modules/usePrevious';
 
 import * as Types from '../types';
+import { TopOfDeck } from './CardRowAndStack';
 
-export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
+export const Board = ({ subscribeToGame, playerId, data, loading, error }: {
+  subscribeToGame: () => void;
+  playerId: string;
+  data: Types.GameBoard | undefined;
+  loading: boolean;
+  error: ApolloError | undefined;
+}) => {
   useEffect(() => subscribeToGame());
 
   const turn = data?.game?.currentTurn?.id;
@@ -44,9 +52,9 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
   }, [playerId, prevTurn, turn, lastTurn]);
   
   const [showingPlayerId, setShowingPlayerId] = useState(playerId);
-  const [turnCoinState, setTurnCoinState] = useState([]);
-  const [returnCoinState, setReturnCoinState] = useState([]);
-  const [turnCardState, setTurnCardState] = useState(null);
+  const [turnCoinState, setTurnCoinState] = useState<Types.GemColor[]>([]);
+  const [returnCoinState, setReturnCoinState] = useState<Types.GemColor[]>([]);
+  const [turnCardState, setTurnCardState] = useState<Types.CardSelection | TopOfDeck | null>(null);
 
   /* compute points available to purchase cards and attract nobles for the SHOWING PLAYER
   * this can be used for client-side validation of purchases and/or
@@ -55,13 +63,15 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
   * const { purchasingPoints, noblePoints } = playerResources(showingPlayer.bank, showingPlayer.purchasedCards);
   */
 
+  const game = data?.game;
+
   if (loading) return <LoadingSpinner theme="dark" size="small" />;
   else if (error) return <div style={{ color: 'red' }}>{error.message}</div>;
+  else if (!game) return null;
   else if (data && data.game) {
-    const game = data.game;
     const canAct = !!playerId && game.state !== Types.GameState.COMPLETE && playerId === game.currentTurn?.id;
     const activePlayer = game.currentTurn || game.players[0];
-    const showingPlayer = showingPlayerId ? game.players.find((p => p.id === showingPlayerId)) : game.players[0];
+    const showingPlayer = game.players.find((p => p.id === showingPlayerId)) ?? game.players[0];
   
     return (
       <>
@@ -129,12 +139,6 @@ export const Board = ({ subscribeToGame, playerId, data, loading, error }) => {
               <TurnBuilder
                 globalBank={data.game.bank}
                 gameId={game.id}
-                goldAvailableInBank={
-                  !!game.bank.find((b) => b.gemColor === 'YELLOW')
-                    ? game.bank.find((b) => b.gemColor === 'YELLOW')
-                        .quantity > 0
-                    : false
-                }
                 activePlayer={activePlayer}
                 turnCardState={turnCardState}
                 setTurnCardState={setTurnCardState}
