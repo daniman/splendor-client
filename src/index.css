@@ -138,6 +138,6 @@ code {
 
 .moveLog {
   height: 25ex;
-  overflow: scroll;
+  overflow: auto;
   line-height: 2.5ex;
 }
