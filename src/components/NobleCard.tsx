@@ -26,7 +26,7 @@ export const NobleCard: React.FC<{
             key={gemColor}
             value={quantity}
             color={colors[gemColor]}
-            style={{ marginRight: 4 }}
+            style={{ marginRight: 4, borderRadius: 2 }}
           />
         ))}
     </div>
