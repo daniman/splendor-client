@@ -28,6 +28,7 @@ export const ReservedCards: React.FC<{
                       canAct && setTurnCardState(c);
                     }}
                     style={{ marginLeft: 0, marginRight: 10 }}
+                    availableForPurchase={true}
                   />
                 )
               ) : (
