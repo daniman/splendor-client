@@ -2,8 +2,10 @@ import React from 'react';
 import * as Types from '../types';
 
 type GameState = Types.GameBoard_game & {
-  me: Types.GameBoard_game_players
-}
+  me: Types.GameBoard_game_players & {
+    purchasingPower: Record<Types.GemColor, number>;
+  };
+};
 
 const GameStateContext = React.createContext<GameState | null | undefined>(
   undefined
