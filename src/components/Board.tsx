@@ -21,14 +21,12 @@ import * as Types from '../types';
 import { TopOfDeck } from './CardRowAndStack';
 import { GameStateProvider } from './useGameState';
 
-export const Board = ({ subscribeToGame, playerId, data, loading, error }: {
-  subscribeToGame: () => void;
+export const Board = ({ playerId, data, loading, error }: {
   playerId: string;
   data: Types.GameBoard | undefined;
   loading: boolean;
   error: ApolloError | undefined;
 }) => {
-  useEffect(() => subscribeToGame());
 
   const turn = data?.game?.currentTurn?.id;
   const lastTurn = data?.game?.turns.slice(-1)[0];
