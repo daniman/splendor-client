@@ -70,8 +70,7 @@ export const Card: React.FC<{
                   ? Math.max(
                       0,
                       quantity -
-                        (me.bank.find((myBank) => myBank.gemColor === gemColor)
-                          ?.quantity ?? 0)
+                        (me.purchasingPower[gemColor])
                     )
                   : quantity
               }

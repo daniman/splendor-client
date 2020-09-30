@@ -76,7 +76,10 @@ export const Board = ({ playerId, data, loading, error }: {
     return (
       <GameStateProvider gameState={{
         ...game,
-        me,
+        me: {
+          ...me,
+          purchasingPower: getPlayerPurchasingPower(me),
+        },
       }}>
         <Helmet>
           <title>
@@ -199,3 +202,32 @@ export const Board = ({ playerId, data, loading, error }: {
     );
   } else return (<></>)
 }
+
+const getPlayerPurchasingPower = ({
+  bank,
+  purchasedCards,
+}: Types.GameBoard_game_players) => {
+
+  const purchasingPowerFromGems: Record<Types.GemColor, number> = bank.reduce(
+    (partialPurchasingPower, gemCategory) => ({
+      ...partialPurchasingPower,
+      [gemCategory.gemColor]: gemCategory.quantity,
+    }),
+    {
+      BLACK: 0,
+      BLUE: 0,
+      GREEN: 0,
+      RED: 0,
+      WHITE: 0,
+      YELLOW: 0,
+    }
+  );
+
+  return purchasedCards.reduce((partialPurchasingPower, card) => {
+    if (!card.gemColor) return partialPurchasingPower;
+    return {
+      ...partialPurchasingPower,
+      [card.gemColor]: partialPurchasingPower[card.gemColor] + 1,
+    };
+  }, purchasingPowerFromGems);
+};
