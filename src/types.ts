@@ -130,9 +130,18 @@ export interface PurchaseCard_game_takeTurn_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface PurchaseCard_game_takeTurn_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface PurchaseCard_game_takeTurn_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_turns_PurchaseCard_card_cost[];
 }
 
 export interface PurchaseCard_game_takeTurn_turns_PurchaseCard {
@@ -143,10 +152,18 @@ export interface PurchaseCard_game_takeTurn_turns_PurchaseCard {
   card: PurchaseCard_game_takeTurn_turns_PurchaseCard_card | null;
 }
 
+export interface PurchaseCard_game_takeTurn_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface PurchaseCard_game_takeTurn_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: PurchaseCard_game_takeTurn_turns_ReserveCard_card_cost[];
 }
 
 export interface PurchaseCard_game_takeTurn_turns_ReserveCard {
@@ -362,9 +379,18 @@ export interface ReserveCardFromStack_game_takeTurn_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface ReserveCardFromStack_game_takeTurn_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface ReserveCardFromStack_game_takeTurn_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCardFromStack_game_takeTurn_turns_PurchaseCard_card_cost[];
 }
 
 export interface ReserveCardFromStack_game_takeTurn_turns_PurchaseCard {
@@ -375,10 +401,18 @@ export interface ReserveCardFromStack_game_takeTurn_turns_PurchaseCard {
   card: ReserveCardFromStack_game_takeTurn_turns_PurchaseCard_card | null;
 }
 
+export interface ReserveCardFromStack_game_takeTurn_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface ReserveCardFromStack_game_takeTurn_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCardFromStack_game_takeTurn_turns_ReserveCard_card_cost[];
 }
 
 export interface ReserveCardFromStack_game_takeTurn_turns_ReserveCard {
@@ -595,9 +629,18 @@ export interface ReserveCard_game_takeTurn_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface ReserveCard_game_takeTurn_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface ReserveCard_game_takeTurn_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCard_game_takeTurn_turns_PurchaseCard_card_cost[];
 }
 
 export interface ReserveCard_game_takeTurn_turns_PurchaseCard {
@@ -608,10 +651,18 @@ export interface ReserveCard_game_takeTurn_turns_PurchaseCard {
   card: ReserveCard_game_takeTurn_turns_PurchaseCard_card | null;
 }
 
+export interface ReserveCard_game_takeTurn_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface ReserveCard_game_takeTurn_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: ReserveCard_game_takeTurn_turns_ReserveCard_card_cost[];
 }
 
 export interface ReserveCard_game_takeTurn_turns_ReserveCard {
@@ -856,9 +907,18 @@ export interface TakeCoins_game_takeTurn_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface TakeCoins_game_takeTurn_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface TakeCoins_game_takeTurn_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: TakeCoins_game_takeTurn_turns_PurchaseCard_card_cost[];
 }
 
 export interface TakeCoins_game_takeTurn_turns_PurchaseCard {
@@ -869,10 +929,18 @@ export interface TakeCoins_game_takeTurn_turns_PurchaseCard {
   card: TakeCoins_game_takeTurn_turns_PurchaseCard_card | null;
 }
 
+export interface TakeCoins_game_takeTurn_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface TakeCoins_game_takeTurn_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: TakeCoins_game_takeTurn_turns_ReserveCard_card_cost[];
 }
 
 export interface TakeCoins_game_takeTurn_turns_ReserveCard {
@@ -1115,9 +1183,18 @@ export interface GameBoard_game_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface GameBoard_game_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GameBoard_game_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_turns_PurchaseCard_card_cost[];
 }
 
 export interface GameBoard_game_turns_PurchaseCard {
@@ -1128,10 +1205,18 @@ export interface GameBoard_game_turns_PurchaseCard {
   card: GameBoard_game_turns_PurchaseCard_card | null;
 }
 
+export interface GameBoard_game_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GameBoard_game_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameBoard_game_turns_ReserveCard_card_cost[];
 }
 
 export interface GameBoard_game_turns_ReserveCard {
@@ -1457,9 +1542,18 @@ export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card_cost[];
 }
 
 export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard {
@@ -1470,10 +1564,18 @@ export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard {
   card: GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card | null;
 }
 
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard_card_cost[];
 }
 
 export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard {
@@ -1803,9 +1905,18 @@ export interface GameSelection_turns_TakeGems {
   gems: GemColor[];
 }
 
+export interface GameSelection_turns_PurchaseCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GameSelection_turns_PurchaseCard_card {
   __typename: "Card";
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameSelection_turns_PurchaseCard_card_cost[];
 }
 
 export interface GameSelection_turns_PurchaseCard {
@@ -1816,10 +1927,18 @@ export interface GameSelection_turns_PurchaseCard {
   card: GameSelection_turns_PurchaseCard_card | null;
 }
 
+export interface GameSelection_turns_ReserveCard_card_cost {
+  __typename: "CostUnit";
+  gemColor: GemColor;
+  quantity: number;
+}
+
 export interface GameSelection_turns_ReserveCard_card {
   __typename: "Card";
-  pointValue: number;
+  id: string;
   gemColor: GemColor | null;
+  pointValue: number;
+  cost: GameSelection_turns_ReserveCard_card_cost[];
 }
 
 export interface GameSelection_turns_ReserveCard {

@@ -49,14 +49,13 @@ const GAME_FRAGMENT = gql`
       }
       ... on PurchaseCard {
         card {
-          gemColor
+          ...CardSelection
         }
       }
       ... on ReserveCard {
         cardType
         card {
-          pointValue
-          gemColor
+          ...CardSelection
         }
       }
     }
