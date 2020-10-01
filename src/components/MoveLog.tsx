@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import * as Types from '../types';
 import { Small } from './Lobby';
+import { colors } from '../config/colors';
 
 export const MoveLog: React.FC<{
   turns: Types.GameBoard_game_turns[];
@@ -23,7 +24,28 @@ export const MoveLog: React.FC<{
             <code>{t.playerId}</code>{' '}
             {t.__typename === 'TakeGems' ? (
               <span>
-                <Small>took</Small> <code>{t.gems.join(', ')}</code>{' '}
+                <Small>took</Small>{" "}
+                <code>
+                  {t.gems.map((gemColor) => (
+                    <>
+                    <div
+                      key={gemColor}
+                      style={{
+                        display: "inline-block",
+                        marginLeft: 4,
+                        marginRight: 2,
+                        height: 10,
+                        width: 10,
+                        borderRadius: 5,
+                        backgroundColor: !!gemColor
+                          ? colors[gemColor]
+                          : "#FFFFFF",
+                      }}
+                    />
+                    <span style={{ marginLeft: 2, color: colors[gemColor] }}>{gemColor}</span>
+                    </>
+                  ))}
+                </code>{" "}
                 <Small>gems</Small>
               </span>
             ) : t.__typename === 'PurchaseCard' ? (
