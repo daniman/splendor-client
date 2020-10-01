@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { GAME_FRAGMENT } from './fragments';
 
 const ALL_GAMES_SUBSCRIPTION = gql`
-  subscription allGamesPub {
+  subscription ALL_GAMES_SUBSCRIPTION {
     allGamesPub {
       id
       name
@@ -15,7 +15,7 @@ const ALL_GAMES_SUBSCRIPTION = gql`
 `;
 
 const GAME_BOARD_SUBSCRIPTION = gql`
-  subscription gameMutation($gameId: ID!, $playerId: ID) {
+  subscription GAME_BOARD_SUBSCRIPTION($gameId: ID!, $playerId: ID) {
     gameMutation(id: $gameId) {
       ...GameSelection
       turns {
@@ -27,7 +27,7 @@ const GAME_BOARD_SUBSCRIPTION = gql`
 `;
 
 const LOBBY_SUBSCRIPTION = gql`
-  subscription gameMutation($gameId: ID!) {
+  subscription LOBBY_SUBSCRIPTION($gameId: ID!) {
     gameMutation(id: $gameId) {
       id
       name

@@ -1037,7 +1037,6 @@ export interface AllGames_allGames {
 }
 
 export interface AllGames {
-  allGamesPub: any;
   allGames: AllGames_allGames[];
 }
 
@@ -1264,6 +1263,7 @@ export interface GameBoard {
 
 export interface GameBoardVariables {
   gameId: string;
+  playerId?: string | null;
 }
 
 /* tslint:disable */
@@ -1272,21 +1272,22 @@ export interface GameBoardVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetGameState
+// GraphQL query operation: GameStateQuery
 // ====================================================
 
-export interface GetGameState_game {
+export interface GameStateQuery_game {
   __typename: "Game";
   id: string;
   state: GameState;
 }
 
-export interface GetGameState {
-  game: GetGameState_game | null;
+export interface GameStateQuery {
+  game: GameStateQuery_game | null;
 }
 
-export interface GetGameStateVariables {
+export interface GameStateQueryVariables {
   gameId: string;
+  playerId?: string | null;
 }
 
 /* tslint:disable */
@@ -1361,24 +1362,24 @@ export interface LobbyVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL subscription operation: allGamesPub
+// GraphQL subscription operation: ALL_GAMES_SUBSCRIPTION
 // ====================================================
 
-export interface allGamesPub_allGamesPub_players {
+export interface ALL_GAMES_SUBSCRIPTION_allGamesPub_players {
   __typename: "Player";
   id: string;
 }
 
-export interface allGamesPub_allGamesPub {
+export interface ALL_GAMES_SUBSCRIPTION_allGamesPub {
   __typename: "Game";
   id: string;
   name: string;
   state: GameState;
-  players: allGamesPub_allGamesPub_players[];
+  players: ALL_GAMES_SUBSCRIPTION_allGamesPub_players[];
 }
 
-export interface allGamesPub {
-  allGamesPub: allGamesPub_allGamesPub;
+export interface ALL_GAMES_SUBSCRIPTION {
+  allGamesPub: ALL_GAMES_SUBSCRIPTION_allGamesPub;
 }
 
 /* tslint:disable */
@@ -1387,68 +1388,68 @@ export interface allGamesPub {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL subscription operation: gameMutation
+// GraphQL subscription operation: GAME_BOARD_SUBSCRIPTION
 // ====================================================
 
-export interface gameMutation_gameMutation_currentTurn_bank {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_currentTurn_nobles_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_nobles_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_currentTurn_nobles {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_nobles {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_currentTurn_nobles_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_nobles_cost[];
 }
 
-export interface gameMutation_gameMutation_currentTurn_reservedCards_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_reservedCards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_currentTurn_reservedCards {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_reservedCards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_currentTurn_reservedCards_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_reservedCards_cost[];
 }
 
-export interface gameMutation_gameMutation_currentTurn_purchasedCards_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_purchasedCards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_currentTurn_purchasedCards {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_purchasedCards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_currentTurn_purchasedCards_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_purchasedCards_cost[];
 }
 
-export interface gameMutation_gameMutation_currentTurn {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn {
   __typename: "Player";
   id: string;
   score: number;
-  bank: gameMutation_gameMutation_currentTurn_bank[];
-  nobles: gameMutation_gameMutation_currentTurn_nobles[];
-  reservedCards: (gameMutation_gameMutation_currentTurn_reservedCards | null)[];
-  purchasedCards: gameMutation_gameMutation_currentTurn_purchasedCards[];
+  bank: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_bank[];
+  nobles: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_nobles[];
+  reservedCards: (GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_reservedCards | null)[];
+  purchasedCards: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn_purchasedCards[];
 }
 
-export interface gameMutation_gameMutation_turns_TakeGems {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_TakeGems {
   __typename: "TakeGems";
   playerId: string;
   type: TurnType;
@@ -1456,153 +1457,153 @@ export interface gameMutation_gameMutation_turns_TakeGems {
   gems: GemColor[];
 }
 
-export interface gameMutation_gameMutation_turns_PurchaseCard_card {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card {
   __typename: "Card";
   gemColor: GemColor | null;
 }
 
-export interface gameMutation_gameMutation_turns_PurchaseCard {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard {
   __typename: "PurchaseCard";
   playerId: string;
   type: TurnType;
   when: string;
-  card: gameMutation_gameMutation_turns_PurchaseCard_card | null;
+  card: GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard_card | null;
 }
 
-export interface gameMutation_gameMutation_turns_ReserveCard_card {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard_card {
   __typename: "Card";
   pointValue: number;
   gemColor: GemColor | null;
 }
 
-export interface gameMutation_gameMutation_turns_ReserveCard {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard {
   __typename: "ReserveCard";
   playerId: string;
   type: TurnType;
   when: string;
   cardType: CardStackType | null;
-  card: gameMutation_gameMutation_turns_ReserveCard_card | null;
+  card: GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard_card | null;
 }
 
-export type gameMutation_gameMutation_turns = gameMutation_gameMutation_turns_TakeGems | gameMutation_gameMutation_turns_PurchaseCard | gameMutation_gameMutation_turns_ReserveCard;
+export type GAME_BOARD_SUBSCRIPTION_gameMutation_turns = GAME_BOARD_SUBSCRIPTION_gameMutation_turns_TakeGems | GAME_BOARD_SUBSCRIPTION_gameMutation_turns_PurchaseCard | GAME_BOARD_SUBSCRIPTION_gameMutation_turns_ReserveCard;
 
-export interface gameMutation_gameMutation_players_bank {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_players_nobles_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_nobles_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_players_nobles {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_nobles {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_players_nobles_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_players_nobles_cost[];
 }
 
-export interface gameMutation_gameMutation_players_reservedCards_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_reservedCards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_players_reservedCards {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_reservedCards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_players_reservedCards_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_players_reservedCards_cost[];
 }
 
-export interface gameMutation_gameMutation_players_purchasedCards_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_purchasedCards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_players_purchasedCards {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players_purchasedCards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_players_purchasedCards_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_players_purchasedCards_cost[];
 }
 
-export interface gameMutation_gameMutation_players {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_players {
   __typename: "Player";
   id: string;
   score: number;
-  bank: gameMutation_gameMutation_players_bank[];
-  nobles: gameMutation_gameMutation_players_nobles[];
-  reservedCards: (gameMutation_gameMutation_players_reservedCards | null)[];
-  purchasedCards: gameMutation_gameMutation_players_purchasedCards[];
+  bank: GAME_BOARD_SUBSCRIPTION_gameMutation_players_bank[];
+  nobles: GAME_BOARD_SUBSCRIPTION_gameMutation_players_nobles[];
+  reservedCards: (GAME_BOARD_SUBSCRIPTION_gameMutation_players_reservedCards | null)[];
+  purchasedCards: GAME_BOARD_SUBSCRIPTION_gameMutation_players_purchasedCards[];
 }
 
-export interface gameMutation_gameMutation_bank {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_bank {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_nobles_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_nobles_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_nobles {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_nobles {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_nobles_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_nobles_cost[];
 }
 
-export interface gameMutation_gameMutation_cardStacks_cards_cost {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks_cards_cost {
   __typename: "CostUnit";
   gemColor: GemColor;
   quantity: number;
 }
 
-export interface gameMutation_gameMutation_cardStacks_cards {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks_cards {
   __typename: "Card";
   id: string;
   gemColor: GemColor | null;
   pointValue: number;
-  cost: gameMutation_gameMutation_cardStacks_cards_cost[];
+  cost: GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks_cards_cost[];
 }
 
-export interface gameMutation_gameMutation_cardStacks {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks {
   __typename: "CardStack";
   type: CardStackType;
   remaining: number;
-  cards: gameMutation_gameMutation_cardStacks_cards[];
+  cards: GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks_cards[];
 }
 
-export interface gameMutation_gameMutation {
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation {
   __typename: "Game";
   id: string;
   name: string;
   state: GameState;
-  currentTurn: gameMutation_gameMutation_currentTurn | null;
-  turns: gameMutation_gameMutation_turns[];
-  players: gameMutation_gameMutation_players[];
-  bank: gameMutation_gameMutation_bank[];
-  nobles: gameMutation_gameMutation_nobles[];
-  cardStacks: gameMutation_gameMutation_cardStacks[];
+  currentTurn: GAME_BOARD_SUBSCRIPTION_gameMutation_currentTurn | null;
+  turns: GAME_BOARD_SUBSCRIPTION_gameMutation_turns[];
+  players: GAME_BOARD_SUBSCRIPTION_gameMutation_players[];
+  bank: GAME_BOARD_SUBSCRIPTION_gameMutation_bank[];
+  nobles: GAME_BOARD_SUBSCRIPTION_gameMutation_nobles[];
+  cardStacks: GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks[];
 }
 
-export interface gameMutation {
-  gameMutation: gameMutation_gameMutation;
+export interface GAME_BOARD_SUBSCRIPTION {
+  gameMutation: GAME_BOARD_SUBSCRIPTION_gameMutation;
 }
 
-export interface gameMutationVariables {
+export interface GAME_BOARD_SUBSCRIPTIONVariables {
   gameId: string;
   playerId?: string | null;
 }
@@ -1613,27 +1614,27 @@ export interface gameMutationVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL subscription operation: gamePlayers
+// GraphQL subscription operation: LOBBY_SUBSCRIPTION
 // ====================================================
 
-export interface gamePlayers_gameMutation_players {
+export interface LOBBY_SUBSCRIPTION_gameMutation_players {
   __typename: "Player";
   id: string;
 }
 
-export interface gamePlayers_gameMutation {
+export interface LOBBY_SUBSCRIPTION_gameMutation {
   __typename: "Game";
   id: string;
   name: string;
   state: GameState;
-  players: gamePlayers_gameMutation_players[];
+  players: LOBBY_SUBSCRIPTION_gameMutation_players[];
 }
 
-export interface gamePlayers {
-  gameMutation: gamePlayers_gameMutation;
+export interface LOBBY_SUBSCRIPTION {
+  gameMutation: LOBBY_SUBSCRIPTION_gameMutation;
 }
 
-export interface gamePlayersVariables {
+export interface LOBBY_SUBSCRIPTIONVariables {
   gameId: string;
 }
 

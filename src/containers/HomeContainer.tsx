@@ -15,7 +15,7 @@ export const HomeContainer: React.FC = () => {
       loading={loading}
       error={error}
       subscribeToNewGames={() => {
-        subscribeToMore({
+        subscribeToMore<Types.ALL_GAMES_SUBSCRIPTION>({
           document: ALL_GAMES_SUBSCRIPTION,
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data) return prev;
