@@ -14,7 +14,7 @@ import { LOBBY_SUBSCRIPTION } from '../gql/subscriptions';
 import * as Types from '../types';
 
 export const GameContainer: React.FC= () => {
-  const { gameId } = useParams();
+  const { gameId } = useParams<{ gameId: string }>();
   const { subscribeToMore, data, loading, error } = useQuery<Types.Lobby, Types.LobbyVariables>(LOBBY_QUERY, {
     variables: { gameId },
   });
@@ -26,7 +26,7 @@ export const GameContainer: React.FC= () => {
       error={error}
       gameId={gameId}
       subscribeToGame = {() => {
-        subscribeToMore({
+        subscribeToMore<Types.LOBBY_SUBSCRIPTION>({
           document: LOBBY_SUBSCRIPTION,
           variables: { gameId },
           updateQuery: (prev, { subscriptionData }) => {

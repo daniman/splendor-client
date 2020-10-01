@@ -16,7 +16,7 @@ export const BoardContainer: React.FC<{ gameId: string; playerId: string }> = ({
     }
   );
 
-  useEffect(() => subscribeToMore({
+  useEffect(() => subscribeToMore<Types.GAME_BOARD_SUBSCRIPTION>({
     document: GAME_BOARD_SUBSCRIPTION,
     variables: { gameId, playerId },
     updateQuery: (prev, { subscriptionData }) => {
