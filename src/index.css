@@ -132,6 +132,29 @@ code {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.mini-move-log-card {
+  position: relative;
+  margin-left: 6px;
+  width: 20px;
+  height: 1em;
+  display: inline-block;
+  perspective: 1000px;
+}
+
+.mini-move-log-card:hover {
+  z-index: 1;
+}
+.mini-move-log-card:hover .card {
+  transform: scale(0.7) translateY(-50%) translateX(-30%);
+}
+
+.mini-move-log-card .card {
+  position: absolute;
+  transform: scale(0.2) translateY(-200%) translateX(0);
+  transform-origin: center left;
+  pointer-events: none;
+}
+
 .dots {
   height: 6px;
   width: 6px;
