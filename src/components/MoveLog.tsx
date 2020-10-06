@@ -53,6 +53,11 @@ export const MoveLog: React.FC<{
                 <Small>purchased a</Small>{" "}
                 <code>{t.card ? t.card.gemColor : "mysterious"}</code>{" "}
                 <Small>card</Small>
+                {t.card && (
+                  <span className="mini-move-log-card">
+                    <Card card={t.card} />
+                  </span>
+                )}
               </span>
             ) : (
               <span>
