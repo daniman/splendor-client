@@ -13,13 +13,21 @@ export const CardRowAndStack: React.FC<{
   onSelect?: (c: Types.CardSelection | TopOfDeck) => void;
 }> = ({ cards, turnCardState, level, remaining, onSelect }) => (
   <div style={{ display: 'flex', marginBottom: 10 }}>
-    <AnimatePresence>
-      {cards.map((card, i) => (
+    {cards.map((card, i) => (
+      <AnimatePresence exitBeforeEnter>
         <motion.div
           key={card.id}
-          initial={false}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            transition: { easings: "easeIn" }
+          }}
+          exit={{
+            opacity: 0,
+            y: 10,
+            transition: { easings: "easeOut" }
+          }}
         >
           {turnCardState &&
           (turnCardState as Types.CardSelection).id === card.id ? (
@@ -34,8 +42,8 @@ export const CardRowAndStack: React.FC<{
             />
           )}
         </motion.div>
-      ))}
-    </AnimatePresence>
+      </AnimatePresence>
+    ))}
     <div
       className="clickable secret card"
       style={{
