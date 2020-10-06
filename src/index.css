@@ -145,7 +145,8 @@ code {
   z-index: 1;
 }
 .mini-move-log-card:hover .card {
-  transform: scale(0.7) translateY(-50%) translateX(-30%);
+  transform: scale(0.7) translateY(-25%) translateX(-30%);
+  box-shadow: 0 0 30px 30px rgba(18, 21, 26, 0.3);
 }
 
 .mini-move-log-card .card {
