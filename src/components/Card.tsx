@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { CostIndicator } from './CostIndicator';
 import { colors, darkColors } from '../config/colors';
-import * as Types from '../types';
 import { useGameState } from './useGameState';
+import { canBuy } from '../modules/canBuy';
+import * as Types from '../types';
 
 export const PlaceholderCard: React.FC<{
   label?: any;
@@ -35,11 +36,14 @@ export const Card: React.FC<{
   const { gemColor, pointValue, cost } = card;
   const { me } = useGameState();
   const [shouldShowAffordability, setShouldShowAffordability] = useState(false);
+  const cbClass = canBuy(cost, me) ? 'canBuy card' : 'card';
+  ;
+
 
   return (
     <div
       title={title || ''}
-      className={!!onSelect ? 'clickable card' : 'card'}
+      className={!!onSelect ? `clickable ${cbClass}` : cbClass}
       style={{
         backgroundColor: `${gemColor ? darkColors[gemColor] : '#FFFFFF'}`,
         ...style,
@@ -59,7 +63,7 @@ export const Card: React.FC<{
           }}
         />
       </div>
-      <div className="bottom">
+      <div className={"bottom"}>
         {cost
           .filter((c) => c.quantity > 0)
           .map(({ gemColor, quantity }, i) => (
