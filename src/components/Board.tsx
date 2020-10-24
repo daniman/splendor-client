@@ -132,6 +132,8 @@ export const Board = ({ playerId, data, loading, error }: {
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}
             />
+
+            <MoveLog turns={game.turns} />
           </div>
           <div
             className="col-lg-6 col-md-6 col-sm-12 col-xs-12"
@@ -191,11 +193,6 @@ export const Board = ({ playerId, data, loading, error }: {
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}
             />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-6">
-            <MoveLog turns={game.turns} />
           </div>
         </div>
       </GameStateProvider>
