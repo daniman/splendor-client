@@ -9,7 +9,7 @@ export const MoveLog: React.FC<{
   turns: Types.GameBoard_game_turns[];
 }> = ({ turns }) => (
   <div>
-    <h3 style={{ marginTop: 20 }}>Turn Log:</h3>
+    <h3 style={{ marginTop: 0 }}>Turn Log:</h3>
     <div className="moveLog">
       {turns
         .slice()
