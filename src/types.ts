@@ -1123,17 +1123,11 @@ export interface TakeCoinsVariables {
 // GraphQL mutation operation: NewMessage
 // ====================================================
 
-export interface NewMessage_game_newMessage_messages {
+export interface NewMessage_game_newMessage {
   __typename: "Message";
   when: string;
   playerId: string;
   text: string;
-}
-
-export interface NewMessage_game_newMessage {
-  __typename: "Game";
-  id: string;
-  messages: NewMessage_game_newMessage_messages[];
 }
 
 export interface NewMessage_game {

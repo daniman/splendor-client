@@ -109,12 +109,9 @@ const NEW_MESSAGE_MUTATION = gql`
   mutation NewMessage($gameId: ID!, $playerId: ID!, $text: String!) {
     game(id: $gameId) {
       newMessage(playerId: $playerId, text: $text){
-        id
-        messages {
-          when
-          playerId
-          text
-        }
+        when
+        playerId
+        text
       }
     }
   }
