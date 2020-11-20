@@ -76,6 +76,11 @@ const GAME_FRAGMENT = gql`
         ...CardSelection
       }
     }
+    messages {
+      when
+      playerId
+      text
+    }
   }
   ${PLAYER_FRAGMENT}
   ${CARD_FRAGMENT}

@@ -26,15 +26,6 @@ const GAME_BOARD_QUERY = gql`
   ${GAME_FRAGMENT}
 `;
 
-const GAME_STATE_QUERY = gql`
-  query GameStateQuery($gameId: ID!, $playerId: ID) {
-    game(id: $gameId) {
-      id
-      state
-    }
-  }
-`;
-
 const GAME_TURN_QUERY = gql`
   query GamePage($gameId: ID!) {
     game(id: $gameId) {
@@ -64,4 +55,4 @@ const LOBBY_QUERY = gql`
   }
 `;
 
-export { ALL_GAMES_QUERY, GAME_BOARD_QUERY, GAME_STATE_QUERY, GAME_TURN_QUERY, LOBBY_QUERY };
+export { ALL_GAMES_QUERY, GAME_BOARD_QUERY, GAME_TURN_QUERY, LOBBY_QUERY };

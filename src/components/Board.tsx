@@ -6,6 +6,7 @@ import moment from 'moment';
 import { TurnBuilder } from './TurnBuilder';
 import { Bank } from './Bank';
 import { canSelectFromBank } from '../modules/coinRules';
+import { Messages } from './Messages';
 import { MoveLog } from './MoveLog';
 import { Miniboard } from './Miniboard';
 import { NobleCards } from './NobleCards';
@@ -193,6 +194,7 @@ export const Board = ({ playerId, data, loading, error }: {
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}
             />
+            <Messages messages={game.messages} />
           </div>
         </div>
       </GameStateProvider>

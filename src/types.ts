@@ -276,6 +276,13 @@ export interface PurchaseCard_game_takeTurn_cardStacks {
   cards: PurchaseCard_game_takeTurn_cardStacks_cards[];
 }
 
+export interface PurchaseCard_game_takeTurn_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface PurchaseCard_game_takeTurn {
   __typename: "Game";
   id: string;
@@ -287,6 +294,7 @@ export interface PurchaseCard_game_takeTurn {
   bank: PurchaseCard_game_takeTurn_bank[];
   nobles: PurchaseCard_game_takeTurn_nobles[];
   cardStacks: PurchaseCard_game_takeTurn_cardStacks[];
+  messages: PurchaseCard_game_takeTurn_messages[];
 }
 
 export interface PurchaseCard_game {
@@ -525,6 +533,13 @@ export interface ReserveCardFromStack_game_takeTurn_cardStacks {
   cards: ReserveCardFromStack_game_takeTurn_cardStacks_cards[];
 }
 
+export interface ReserveCardFromStack_game_takeTurn_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface ReserveCardFromStack_game_takeTurn {
   __typename: "Game";
   id: string;
@@ -536,6 +551,7 @@ export interface ReserveCardFromStack_game_takeTurn {
   bank: ReserveCardFromStack_game_takeTurn_bank[];
   nobles: ReserveCardFromStack_game_takeTurn_nobles[];
   cardStacks: ReserveCardFromStack_game_takeTurn_cardStacks[];
+  messages: ReserveCardFromStack_game_takeTurn_messages[];
 }
 
 export interface ReserveCardFromStack_game {
@@ -775,6 +791,13 @@ export interface ReserveCard_game_takeTurn_cardStacks {
   cards: ReserveCard_game_takeTurn_cardStacks_cards[];
 }
 
+export interface ReserveCard_game_takeTurn_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface ReserveCard_game_takeTurn {
   __typename: "Game";
   id: string;
@@ -786,6 +809,7 @@ export interface ReserveCard_game_takeTurn {
   bank: ReserveCard_game_takeTurn_bank[];
   nobles: ReserveCard_game_takeTurn_nobles[];
   cardStacks: ReserveCard_game_takeTurn_cardStacks[];
+  messages: ReserveCard_game_takeTurn_messages[];
 }
 
 export interface ReserveCard_game {
@@ -1053,6 +1077,13 @@ export interface TakeCoins_game_takeTurn_cardStacks {
   cards: TakeCoins_game_takeTurn_cardStacks_cards[];
 }
 
+export interface TakeCoins_game_takeTurn_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface TakeCoins_game_takeTurn {
   __typename: "Game";
   id: string;
@@ -1064,6 +1095,7 @@ export interface TakeCoins_game_takeTurn {
   bank: TakeCoins_game_takeTurn_bank[];
   nobles: TakeCoins_game_takeTurn_nobles[];
   cardStacks: TakeCoins_game_takeTurn_cardStacks[];
+  messages: TakeCoins_game_takeTurn_messages[];
 }
 
 export interface TakeCoins_game {
@@ -1080,6 +1112,43 @@ export interface TakeCoinsVariables {
   playerId: string;
   gemList?: GemColor[] | null;
   returnGemList?: GemColor[] | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: NewMessage
+// ====================================================
+
+export interface NewMessage_game_newMessage_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
+export interface NewMessage_game_newMessage {
+  __typename: "Game";
+  id: string;
+  messages: NewMessage_game_newMessage_messages[];
+}
+
+export interface NewMessage_game {
+  __typename: "GameMutation";
+  newMessage: NewMessage_game_newMessage | null;
+}
+
+export interface NewMessage {
+  game: NewMessage_game | null;
+}
+
+export interface NewMessageVariables {
+  gameId: string;
+  playerId: string;
+  text: string;
 }
 
 /* tslint:disable */
@@ -1329,6 +1398,13 @@ export interface GameBoard_game_cardStacks {
   cards: GameBoard_game_cardStacks_cards[];
 }
 
+export interface GameBoard_game_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface GameBoard_game {
   __typename: "Game";
   id: string;
@@ -1340,6 +1416,7 @@ export interface GameBoard_game {
   bank: GameBoard_game_bank[];
   nobles: GameBoard_game_nobles[];
   cardStacks: GameBoard_game_cardStacks[];
+  messages: GameBoard_game_messages[];
 }
 
 export interface GameBoard {
@@ -1347,30 +1424,6 @@ export interface GameBoard {
 }
 
 export interface GameBoardVariables {
-  gameId: string;
-  playerId?: string | null;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GameStateQuery
-// ====================================================
-
-export interface GameStateQuery_game {
-  __typename: "Game";
-  id: string;
-  state: GameState;
-}
-
-export interface GameStateQuery {
-  game: GameStateQuery_game | null;
-}
-
-export interface GameStateQueryVariables {
   gameId: string;
   playerId?: string | null;
 }
@@ -1688,6 +1741,13 @@ export interface GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks {
   cards: GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks_cards[];
 }
 
+export interface GAME_BOARD_SUBSCRIPTION_gameMutation_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface GAME_BOARD_SUBSCRIPTION_gameMutation {
   __typename: "Game";
   id: string;
@@ -1699,6 +1759,7 @@ export interface GAME_BOARD_SUBSCRIPTION_gameMutation {
   bank: GAME_BOARD_SUBSCRIPTION_gameMutation_bank[];
   nobles: GAME_BOARD_SUBSCRIPTION_gameMutation_nobles[];
   cardStacks: GAME_BOARD_SUBSCRIPTION_gameMutation_cardStacks[];
+  messages: GAME_BOARD_SUBSCRIPTION_gameMutation_messages[];
 }
 
 export interface GAME_BOARD_SUBSCRIPTION {
@@ -2051,6 +2112,13 @@ export interface GameSelection_cardStacks {
   cards: GameSelection_cardStacks_cards[];
 }
 
+export interface GameSelection_messages {
+  __typename: "Message";
+  when: string;
+  playerId: string;
+  text: string;
+}
+
 export interface GameSelection {
   __typename: "Game";
   id: string;
@@ -2062,6 +2130,7 @@ export interface GameSelection {
   bank: GameSelection_bank[];
   nobles: GameSelection_nobles[];
   cardStacks: GameSelection_cardStacks[];
+  messages: GameSelection_messages[];
 }
 
 /* tslint:disable */
