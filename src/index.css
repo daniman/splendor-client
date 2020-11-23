@@ -176,3 +176,8 @@ code {
   overflow: auto;
   line-height: 2.5ex;
 }
+
+.newMessage {
+  color: rgb(18, 21, 26);
+  width: 30em;
+}
