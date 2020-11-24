@@ -13,7 +13,7 @@ export const GameCardStacks: React.FC<{
   <div style={{ position: 'relative', marginBottom: 40 }}>
     {cardStacks.map(({ type, remaining, cards }) => (
       <CardRowAndStack
-        key={`${type}`}
+        key={`${type}-${remaining}`}
         cards={cards}
         turnCardState={turnCardState}
         remaining={remaining}

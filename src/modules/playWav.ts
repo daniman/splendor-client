@@ -1,3 +1,7 @@
 export const playWav = (name: string) => {
-  new Audio(`./${name}.wav`).play();
+  try {
+    new Audio(`./${name}.wav`).play();
+  } catch(e){
+    console.log(e)
+  }
 }

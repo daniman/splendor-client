@@ -178,6 +178,32 @@ code {
 }
 
 .newMessage {
+  margin-top: 10px;
   color: rgb(18, 21, 26);
-  width: 30em;
+  width: 90%;
+}
+
+.messages {
+  height: 7.5em;
+  width: 90%;
+  overflow-y: auto;
+  overflow-x: wrap;
+  scrollbar-face-color: white;
+  scrollbar-color: white;
+}
+
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: darkgray;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+  background: gray;
 }

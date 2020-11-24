@@ -18,3 +18,5 @@ or
 $ npm run codegen:prod
 ```
 Depending on whether you want to get the schema from your local development server (typical) or from production.
+
+Sound files sourced from https://themushroomkingdom.net/media/smb3/wav
