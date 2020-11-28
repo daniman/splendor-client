@@ -4,6 +4,19 @@ This app uses Apollo Client and talks to [this simple GraphQL server](https://gi
 
 To run the app:
 ```
-npm install
-npm start
+$ npm install
+$ npm start
 ```
+
+This app uses TypeScript. the `types.ts` file is machine generated from the GraphQL server created by `splendor-server`. Changes to the GraphQL schema can be reflected in the types file by running:
+
+```
+$ npm run codegen:local
+```
+or
+```
+$ npm run codegen:prod
+```
+Depending on whether you want to get the schema from your local development server (typical) or from production.
+
+Sound files sourced from https://themushroomkingdom.net/media/smb3/wav

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, PlaceholderCard } from './Card';
+import { Dots } from './Dots';
 import * as Types from '../types';
 import { AnimatePresence, motion } from 'framer-motion';
+//import { createFileLevelUniqueName } from 'typescript';
 
 export type TopOfDeck = { type: Types.CardStackType };
 
@@ -11,12 +13,14 @@ export const CardRowAndStack: React.FC<{
   level: Types.CardStackType;
   remaining: number;
   onSelect?: (c: Types.CardSelection | TopOfDeck) => void;
-}> = ({ cards, turnCardState, level, remaining, onSelect }) => (
+}> = ({ cards, turnCardState, level, remaining, onSelect }) => {
+return (
   <div style={{ display: 'flex', marginBottom: 10 }}>
-    {cards.map((card, i) => (
+    {cards.map((card) => (
       <AnimatePresence exitBeforeEnter>
         <motion.div
           key={card.id}
+          id={card.id}
           initial={{ opacity: 0, y: -10 }}
           animate={{
             opacity: 1,
@@ -39,6 +43,7 @@ export const CardRowAndStack: React.FC<{
                 if (onSelect) onSelect(card);
               }}
               availableForPurchase={true}
+              key={card.id}
             />
           )}
         </motion.div>
@@ -64,11 +69,7 @@ export const CardRowAndStack: React.FC<{
       >
         <code>{remaining}</code>
       </div>
-      <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
-        {new Array(level.length).fill(0).map((_j, i) => (
-          <div className='dots' key={i} />
-        ))}
-      </div>
+      <Dots count={level.length} />
     </div>
   </div>
-);
+)};

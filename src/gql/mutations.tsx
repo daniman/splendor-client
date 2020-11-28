@@ -105,12 +105,25 @@ const TAKE_COINS_MUTATION = gql`
   ${GAME_FRAGMENT}
 `;
 
-export { 
+const NEW_MESSAGE_MUTATION = gql`
+  mutation NewMessage($gameId: ID!, $playerId: ID!, $text: String!) {
+    game(id: $gameId) {
+      newMessage(playerId: $playerId, text: $text){
+        when
+        playerId
+        text
+      }
+    }
+  }
+`;
+
+export {
   CREATE_GAME_MUTATION,
   JOIN_GAME_MUTATION,
+  NEW_MESSAGE_MUTATION,
   PURCHASE_CARD_MUTATION,
-  RESERVE_CARD_FROM_STACK_MUTATION, 
-  RESERVE_CARD_MUTATION, 
+  RESERVE_CARD_FROM_STACK_MUTATION,
+  RESERVE_CARD_MUTATION,
   START_GAME_MUTATION,
-  TAKE_COINS_MUTATION 
+  TAKE_COINS_MUTATION,
 };
