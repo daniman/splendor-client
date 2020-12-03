@@ -75,10 +75,10 @@ export const Messages: React.FC<{
         onChange={(e) => setText(e.target.value)}
       />
       <p className="messageInstructions">
-        You can direct a message to a specific player by putting{' '}
+        You can direct a message to a specific player by using{' '}
         <code>@username</code> anywhere in the message or you can{' '}
-        <em>exclude</em> a player by putting <code>^username</code> anywhere in
-        the message. User names autocomplete.
+        <em>exclude</em> a player with <code>^username</code>. User names
+        autocomplete.
       </p>
     </div>
   );
