@@ -12,6 +12,5 @@ export const autocompletePlayerName = (
       matchingPlayer = el.id;
     }
   });
-  if (nFound === 1) return matchingPlayer;
-  else return '';
+  return nFound === 1 ? matchingPlayer : '';
 };
