@@ -77,7 +77,7 @@ export const Messages: React.FC<{
       <p className="messageInstructions">
         You can direct a message to a specific player by putting{' '}
         <code>@username</code> anywhere in the message or you can{' '}
-        <em>exclude</em> a player by putting <code>^username</code> anythwere in
+        <em>exclude</em> a player by putting <code>^username</code> anywhere in
         the message. User names autocomplete.
       </p>
     </div>
