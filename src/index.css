@@ -180,12 +180,12 @@ code {
 .newMessage {
   margin-top: 10px;
   color: rgb(18, 21, 26);
-  width: 88%;
+  width: 80%;
 }
 
 .messages {
   height: 7.5em;
-  width: 90%;
+  width: 83%;
   overflow-y: auto;
   overflow-x: wrap;
   scrollbar-face-color: white;
