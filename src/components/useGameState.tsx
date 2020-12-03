@@ -25,7 +25,7 @@ export const GameStateProvider: React.FC<{
 export const useGameState = () => {
   const context = React.useContext(GameStateContext);
   if (!context) {
-    throw new Error('useGameState must be used within an GameStateProvider');
+    throw new Error('useGameState must be used within a GameStateProvider');
   }
   return context;
 };

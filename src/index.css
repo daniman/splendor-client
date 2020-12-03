@@ -175,6 +175,7 @@ code {
   height: 25ex;
   overflow: auto;
   line-height: 2.5ex;
+  background-color:  rgba(255, 255, 255, 0.05);
 }
 
 .newMessage {
@@ -190,6 +191,17 @@ code {
   overflow-x: wrap;
   scrollbar-face-color: white;
   scrollbar-color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.message {
+  display: block;
+}
+
+.messageInstructions {
+  font-size: small;
+  line-height: 1.2em;
+  width: 90%;
 }
 
 ::-webkit-scrollbar {
