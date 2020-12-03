@@ -145,17 +145,8 @@ export const Board = ({
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}
             />
-
-            <Messages messages={game.messages} gameId={game.id} playerId={playerId}/>
           </div>
-          <div
-            className="col-lg-6 col-md-6 col-sm-12 col-xs-12"
-            // style={
-            //   canAct
-            //     ? { border: '2px dotted yellow' }
-            //     : { border: '1px dotted grey' }
-            // }
-          >
+          <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             {canAct && (
               <TurnBuilder
                 globalBank={data.game.bank}
@@ -207,6 +198,18 @@ export const Board = ({
               turnCardState={turnCardState}
               setTurnCardState={setTurnCardState}
             />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <Messages
+              messages={game.messages}
+              gameId={game.id}
+              playerId={playerId}
+              players={game.players}
+            />
+          </div>
+          <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <MoveLog turns={game.turns} />
           </div>
         </div>
