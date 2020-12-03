@@ -181,7 +181,7 @@ code {
 .newMessage {
   margin-top: 10px;
   color: rgb(18, 21, 26);
-  width: 90%;
+  width: 88%;
 }
 
 .messages {
@@ -196,6 +196,13 @@ code {
 
 .message {
   display: block;
+  clear: both;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.message .fromMe {
+  float: right;
 }
 
 .messageInstructions {
